@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { 
   Box, 
   Button, 
@@ -12,7 +13,11 @@ import {
   Tab, 
   Tabs, 
   Text } from 'grommet';
-import { CircleInformation, Close, Edit } from 'grommet-icons';
+import { 
+  Checkmark, 
+  CircleInformation, 
+  Close, 
+  Edit } from 'grommet-icons';
 
 // Components
 import EditPatientModal from '../../components/EditPatientModal';
@@ -40,11 +45,33 @@ const Patient = () => {
       });
   }, []);
 
+  // Function to handle the reactivation of a patient acc
+  const onReactivation = async e => {
+    const reactivate_patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/reactivate/${patientId}`;
+
+    // Try to send user data to the server 
+    try {
+      axios.put(reactivate_patient_url)
+      .then((response) => {
+        toast.success(response.data.message);
+      }, (error) => {
+        toast.error(error.message);
+      });   
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
   return (
     <Box align="start" justify="start" direction="column" pad="small" fill>
-      <Heading level="2" textAlign="center">
+      <Heading level="2" textAlign="center" color={patient.patient_inactive ? "border" : "black"}>
         {patient.patient_name}
       </Heading>
+      {patient.patient_inactive && (
+        <Heading level="4" textAlign="center" color="red" margin="none" gap="none">
+          {`Patient is deactivated: ${patient.patient_reason_inactive}`}
+        </Heading>)
+      }
       <Tabs justify="start">
         <Tab 
           title="Info" 
@@ -147,16 +174,30 @@ const Patient = () => {
             gap="small" 
             margin={{"top":"medium"}}
           >
-            <Button 
-              label="Deactivate Patient" 
-              icon={<Close />} 
-              size="medium" 
-              hoverIndicator={{"color":"neutral-4","dark":true}}   
-              color="status-critical" 
-              reverse 
-              primary 
-              onClick={() => setShowPatientDeactivate(true)} 
-            />
+            {
+              patient.patient_inactive ? (
+                <Button 
+                  label="Reactivate Patient" 
+                  icon={<Checkmark />}
+                  reverse 
+                  primary 
+                  size="medium" 
+                  hoverIndicator
+                  color="status-ok"
+                  onClick={() => onReactivation()} 
+                />) : (
+                  <Button 
+                  label="Deactivate Account" 
+                  icon={<Close />} 
+                  reverse 
+                  primary 
+                  size="medium" 
+                  hoverIndicator={{"color":"neutral-4","dark":true}}   
+                  color="status-critical" 
+                  onClick={() => setShowPatientDeactivate(true)} 
+                />
+                )
+            }
             <Button 
               label="Edit Patient" 
               icon={<Edit />} 
@@ -174,7 +215,7 @@ const Patient = () => {
       )}
 
       {showPatientDeactivate && (
-        <WarningModal closeForm={closeForms} type="patient" />
+        <WarningModal closeForm={closeForms} type="patient" patientId={patientId}/>
       )}
     </Box>
   )
