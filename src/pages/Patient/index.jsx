@@ -170,7 +170,7 @@ const Patient = () => {
         </Tab>
       </Tabs>
       {showPatientEdit && (
-        <EditPatientModal closeForm={closeForms} />
+        <EditPatientModal closeForm={closeForms} data={patient} patient={patientId} />
       )}
 
       {showPatientDeactivate && (

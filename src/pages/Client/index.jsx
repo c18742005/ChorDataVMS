@@ -167,7 +167,7 @@ const Client = () => {
         </Tab>
       </Tabs>
       {showClientEdit && (
-        <EditClientModal closeForm={closeForms} />
+        <EditClientModal closeForm={closeForms} data={client} client={clientId} />
       )}
 
       {showPatientAdd && (

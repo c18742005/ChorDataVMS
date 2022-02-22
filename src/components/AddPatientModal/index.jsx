@@ -48,7 +48,7 @@ const AddPatientModal = (props) => {
         patient_age: patient_age,
         patient_sex: patient_sex,
         patient_color: patient_color,
-        patient_microchip: patient_color,
+        patient_microchip: patient_microchip,
         patient_client_id: client_id
       })
       .then((response) => {
