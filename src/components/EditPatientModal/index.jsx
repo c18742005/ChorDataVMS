@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { Species } from '../AddPatientModal/species';
 import { 
   Box, 
   Button, 
@@ -83,7 +84,7 @@ const EditPatientModal = (props) => {
           </FormField>
           <FormField name="patient_species" required>
             <Select 
-              options={["Canine","Feline"]} 
+              options={Species} 
               closeOnChange 
               placeholder="Species" 
               plain
@@ -92,13 +93,13 @@ const EditPatientModal = (props) => {
             />
           </FormField>
           <FormField name="patient_breed" required>
-            <Select 
-              options={["Bernese","Bichon"]} 
-              closeOnChange 
+            <TextInput 
               placeholder="Breed" 
+              size="medium" 
+              type="text"
               plain 
-              name="patient_breed"
-              value={patient_breed}
+              name="patient_breed" 
+              value={patient_breed} 
             />
           </FormField>
           <FormField name="patient_age" required>
