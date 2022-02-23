@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { Counties } from './counties';
 import { 
   Box, 
   Button, 
@@ -114,7 +115,7 @@ const AddClientForm = (props) => {
           </FormField>
           <FormField  name="client_county" required>
             <Select 
-              options={["Tipperary","Wicklow"]} 
+              options={Counties} 
               closeOnChange 
               placeholder="County" 
               plain 

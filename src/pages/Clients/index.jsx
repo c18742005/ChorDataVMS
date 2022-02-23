@@ -39,13 +39,16 @@ const Clients = () => {
       >
         <SearchBar />
         <Button 
-          label="Add User" 
+          label="Add User"
           icon={<UserAdd />} 
-          hoverIndicator 
-          margin={{"left":"medium"}} 
-          secondary 
           reverse 
-          onClick={() => setShowClientAdd( true )} />
+          primary 
+          color="status-ok" 
+          hoverIndicator 
+          size="small"  
+          margin={{"left":"medium"}} 
+          onClick={() => setShowClientAdd(true)} 
+        />
       </Box>
       <ClientTable data={ clients } />
       { // Show add client modal if necessary
