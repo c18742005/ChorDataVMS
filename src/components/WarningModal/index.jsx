@@ -29,6 +29,8 @@ const WarningModal = (props) => {
         {client_reason_inactive: reason_inactive}
       )
       .then((response) => {
+        props.changeActiveState(reason_inactive);
+        props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
         toast.error(error.message);
@@ -48,6 +50,7 @@ const WarningModal = (props) => {
         {patient_reason_inactive: reason_inactive}
       )
       .then((response) => {
+        props.changeActiveState(reason_inactive);
         props.closeForm()
         toast.success(response.data.message);
       }, (error) => {

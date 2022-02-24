@@ -52,6 +52,7 @@ const EditPatientModal = (props) => {
         patient_microchip: patient_microchip
       })
       .then((response) => {
+        props.updatePatient(values);
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
@@ -152,4 +153,4 @@ const EditPatientModal = (props) => {
   )
 }
 
-export default EditPatientModal
+export default EditPatientModal 

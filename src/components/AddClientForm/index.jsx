@@ -53,10 +53,19 @@ const AddClientForm = (props) => {
         client_clinic_id: client_clinic_id
       })
       .then((response) => {
+        props.addClient(response.data.body);
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
-        toast.error(error.message);
+        if(error.response.status === 422) {
+          const errors = error.response.data.errors
+
+          errors.forEach((err) => {
+            toast.error(err.msg);
+          })
+        } else {
+          toast.error(error.response.data);
+        }
       });   
     } catch (err) {
       console.error(err.message);

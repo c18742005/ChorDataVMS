@@ -6,7 +6,7 @@ import {
   Box, 
   Button, 
   DataTable, 
-  Heading, 
+  Heading,
   NameValueList, 
   NameValuePair, 
   Tab, 
@@ -40,6 +40,21 @@ const Client = () => {
     setShowClientDeactivate(false);
   }
 
+  const updateClient = (newData) => {
+    setClient(newData);
+  }
+
+  const updatePatients = (newPatient) => {
+    setPatients([...patients, newPatient])
+  }
+
+  const updateActiveState = (reason=null) => {
+    setClient({...client, 
+      client_inactive: !client.client_inactive,
+      client_reason_inactive: reason
+    })
+  }
+
   // Fetch clients data
   useEffect(() => {
     const client_url = `${process.env.REACT_APP_API_END_POINT}/api/clients/${clientId}`;
@@ -56,6 +71,8 @@ const Client = () => {
         const patient_data = res.data;
         setPatients(patient_data);
       })
+
+      console.log(client)
   }, []);
 
   // Function to handle the reactivation of a client acc
@@ -66,6 +83,7 @@ const Client = () => {
     try {
       axios.put(reactivate_client_url)
       .then((response) => {
+        updateActiveState();
         toast.success(response.data.message);
       }, (error) => {
         toast.error(error.message);
@@ -207,15 +225,29 @@ const Client = () => {
       </Tabs>
 
       {showClientEdit && (
-        <EditClientModal closeForm={closeForms} data={client} client={clientId} />
+        <EditClientModal 
+          closeForm={closeForms} 
+          data={client} 
+          client={clientId} 
+          updateClient={updateClient}
+        />
       )}
 
       {showPatientAdd && (
-        <AddPatientModal closeForm={closeForms} client={clientId} />
+        <AddPatientModal 
+          closeForm={closeForms} 
+          client={clientId} 
+          addPatient={updatePatients}
+        />
       )}
 
       {showClientDeactivate && (
-        <WarningModal closeForm={closeForms} type="client" clientId={clientId}/>
+        <WarningModal 
+          closeForm={closeForms} 
+          type="client" 
+          clientId={clientId} 
+          changeActiveState={updateActiveState}
+        />
       )}
     </Box>
   )

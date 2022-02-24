@@ -52,6 +52,7 @@ const EditClientModal = (props) => {
         client_email: client_email
       })
       .then((response) => {
+        props.updateClient(values);
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {

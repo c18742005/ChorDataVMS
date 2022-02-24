@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { 
   Anchor, 
   Box, 
@@ -10,10 +12,67 @@ import {
   TextInput } from 'grommet';
 import { AddCircle } from 'grommet-icons';
 
-const Register = () => {
+const Register = ({ setAuth }) => {
+  const defaultValues = {
+    staff_username: "",
+    staff_password: "",
+    staff_role: "",
+    staff_clinic_id: ""
+  };
+
+  const [values, setValues] = useState(defaultValues);
+
+  const { 
+    staff_username,
+    staff_password,
+    staff_role,
+    staff_clinic_id } = values;
+
+  // Function to handle submission of the add staff form
+  const onSubmitForm = async e => {
+    e.preventDefault();
+    const register_staff_url = `${process.env.REACT_APP_API_END_POINT}/api/register`;
+
+    // Try to send user data to the server 
+    try {
+      axios.post(register_staff_url, {
+        username: staff_username,
+        password: staff_password,
+        role: staff_role,
+        clinic_id: staff_clinic_id
+      })
+      .then((response) => {
+        toast.success(response.data.message);
+
+        const parseRes = response.data
+
+        if (parseRes.token) {
+          localStorage.setItem("token", parseRes.token);
+          setAuth(true);
+          toast.success("Registered Successfully");
+        } else {
+          setAuth(false);
+          toast.error(parseRes);
+        }
+      }, (error) => {
+        if(error.response.status === 422) {
+          const errors = error.response.data.errors
+
+          errors.forEach((err) => {
+            toast.error(err.msg);
+          })
+        } else {
+          toast.error(error.response.data);
+        }
+      });   
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
   return (
     <Box 
-      fill="vertical" 
+      fill={true}
       overflow="auto" 
       align="center" 
       flex="grow"
@@ -49,25 +108,30 @@ const Register = () => {
           align="center" 
           gap="none"
         >
-          <Form>
-            <FormField name="Username" required>
-              <TextInput name="Username" placeholder="Username" type="text" />
+          <Form
+            onSubmit={onSubmitForm}
+            onChange={(nextValue) => {
+              setValues(nextValue);
+            }}
+          >
+            <FormField name="staff_username" required>
+              <TextInput name="staff_username" placeholder="Username" type="text" />
             </FormField>
-            <FormField name="Password" required>
-              <TextInput name="Password" placeholder="Password" type="password" />
+            <FormField name="staff_password" required>
+              <TextInput name="staff_password" placeholder="Password" type="password" />
             </FormField>
-            <FormField name="ClinicID" required>
-              <TextInput name="ClinicID" placeholder="Clinic ID" type="text" />
+            <FormField name="staff_clinic_id" required>
+              <TextInput name="staff_clinic_id" placeholder="Clinic ID" type="text" />
             </FormField>
-            <FormField required>
+            <FormField name="staff_role" required>
               <Select 
                 options={[
-                  "Surgeon",
+                  "Vet",
                   "Nurse",
-                  "ACCA",
+                  "ACA",
                   "Receptionist"]} 
                 placeholder="Job Role" 
-                name="JobRole" 
+                name="staff_role" 
                 closeOnChange />
             </FormField>
             <Box align="center" justify="center">
@@ -82,7 +146,7 @@ const Register = () => {
           justify="center" 
           gap="small" 
           pad="small">
-          <Link to="/"><Anchor label="Login" /></Link>
+          <Anchor label="Login" href={`${process.env.REACT_APP_HOST}/login`}/>
         </CardFooter>
       </Card>
     </Box>

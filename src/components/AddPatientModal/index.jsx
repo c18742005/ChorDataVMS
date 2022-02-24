@@ -53,6 +53,7 @@ const AddPatientModal = (props) => {
         patient_client_id: client_id
       })
       .then((response) => {
+        props.addPatient(response.data.body)
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {

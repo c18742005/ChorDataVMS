@@ -27,11 +27,22 @@ const Patient = () => {
   const { patientId } = useParams();
   const [showPatientEdit, setShowPatientEdit] = useState(false);
   const [showPatientDeactivate, setShowPatientDeactivate] = useState(false);
-  const [patient, setPatient] = useState([]);
+  const [patient, setPatient] = useState({});
 
   const closeForms = () => {
     setShowPatientEdit(false);
     setShowPatientDeactivate(false);
+  }
+
+  const updatePatient = (newData) => {
+    setPatient(newData);
+  }
+
+  const updateActiveState = (reason=null) => {
+    setPatient({...patient, 
+      patient_inactive: !patient.patient_inactive,
+      patient_reason_inactive: reason
+    })
   }
 
   // Fetch patient data
@@ -53,6 +64,7 @@ const Patient = () => {
     try {
       axios.put(reactivate_patient_url)
       .then((response) => {
+        updateActiveState();
         toast.success(response.data.message);
       }, (error) => {
         toast.error(error.message);
@@ -211,11 +223,21 @@ const Patient = () => {
         </Tab>
       </Tabs>
       {showPatientEdit && (
-        <EditPatientModal closeForm={closeForms} data={patient} patient={patientId} />
+        <EditPatientModal 
+          closeForm={closeForms} 
+          data={patient} 
+          patient={patientId} 
+          updatePatient={updatePatient}
+        />
       )}
 
       {showPatientDeactivate && (
-        <WarningModal closeForm={closeForms} type="patient" patientId={patientId}/>
+        <WarningModal 
+          closeForm={closeForms} 
+          type="patient" 
+          patientId={patientId} 
+          changeActiveState={updateActiveState}
+        />
       )}
     </Box>
   )

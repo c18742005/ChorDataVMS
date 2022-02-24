@@ -16,6 +16,10 @@ const Clients = () => {
     setShowClientAdd(false);
   }
 
+  const updateClients = (newClient) => {
+    setClients([...clients, newClient])
+  }
+
   // Fetch clients data
   useEffect(() => {
     const url = `${process.env.REACT_APP_API_END_POINT}/api/clients/`;
@@ -24,6 +28,7 @@ const Clients = () => {
       .then(res => {
         const clients = res.data;
         setClients(clients)
+        console.log(clients)
       })
 
   }, []);
@@ -53,7 +58,7 @@ const Clients = () => {
       <ClientTable data={ clients } />
       { // Show add client modal if necessary
         showClientAdd && (
-          <AddClientForm closeForm={ closeForms } />
+          <AddClientForm closeForm={ closeForms } addClient={updateClients} />
       )}
     </Box>
   )

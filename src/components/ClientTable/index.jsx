@@ -31,7 +31,7 @@ const ClientTable = (props) => {
         "header":{"color":"brand"},
         "body":["white", "border"]
       }} 
-      sortable 
+      sortable
       resizeable 
       paginate
       step={10}

@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { 
   Anchor, 
   Box, 
@@ -9,10 +11,60 @@ import {
   TextInput } from 'grommet';
 import { Lock } from 'grommet-icons';
 
-const Login = () => {
+const Login = ({ setAuth }) => {
+  const defaultValues = {
+    staff_username: "",
+    staff_password: ""
+  };
+
+  const [values, setValues] = useState(defaultValues);
+
+  const { 
+    staff_username,
+    staff_password } = values;
+
+  // Function to handle submission of the login form
+  const onSubmitForm = async e => {
+    e.preventDefault();
+    const login_staff_url = `${process.env.REACT_APP_API_END_POINT}/api/login`;
+
+    // Try to send user data to the server 
+    try {
+      axios.post(login_staff_url, {
+        username: staff_username,
+        password: staff_password
+      })
+      .then((response) => {
+        toast.success(response.data.message);
+        const parseRes = response.data
+
+        if (parseRes.token) {
+          localStorage.setItem("token", parseRes.token);
+          setAuth(true);
+          toast.success("Logged In Successfully");
+        } else {
+          setAuth(false);
+          toast.error(parseRes);
+        }
+      }, (error) => {
+        if(error.response.status === 422) {
+          const errors = error.response.data.errors
+
+          errors.forEach((err) => {
+            toast.error(err.msg);
+          })
+        } else {
+          toast.error(error.response.data);
+        }
+      });   
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
   return (
     <Box 
-      fill="vertical" 
+      fill={true}
       overflow="auto" 
       align="center" 
       flex="grow"
@@ -48,12 +100,17 @@ const Login = () => {
           align="center" 
           gap="none"
         >
-          <Form>
-            <FormField name="Username" required>
-              <TextInput name="Username" placeholder="Username" type="text" />
+          <Form
+            onSubmit={onSubmitForm}
+            onChange={(nextValue) => {
+              setValues(nextValue);
+            }}
+          >
+            <FormField name="staff_username" required>
+              <TextInput name="staff_username" placeholder="Username" type="text" />
             </FormField>
-            <FormField name="Password" required>
-              <TextInput name="Password" placeholder="Password" type="password" />
+            <FormField name="staff_password" required>
+              <TextInput name="staff_password" placeholder="Password" type="password" />
             </FormField>        
             <Box align="center" justify="center">
               <Button label="Login" primary type="submit" margin="small" />
@@ -67,7 +124,7 @@ const Login = () => {
           justify="center" 
           gap="small" 
           pad="small">
-          <Link to="/register"><Anchor label="Register" /></Link>
+          <Anchor label="Register" href={`${process.env.REACT_APP_HOST}/register`}/>
         </CardFooter>
       </Card>
     </Box>
