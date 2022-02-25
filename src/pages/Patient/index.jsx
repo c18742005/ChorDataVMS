@@ -84,7 +84,7 @@ const Patient = () => {
           {`Patient is deactivated: ${patient.patient_reason_inactive}`}
         </Heading>)
       }
-      <Tabs justify="start">
+      <Tabs justify="start" fill="horizontal">
         <Tab 
           title="Info" 
           icon={<CircleInformation />} 

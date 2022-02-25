@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { 
@@ -68,6 +69,11 @@ const Register = ({ setAuth }) => {
     } catch (err) {
       console.error(err.message);
     }
+  }
+
+  const navigate = useNavigate();
+  const loginLink = () => {
+    navigate("/login");
   }
 
   return (
@@ -146,7 +152,7 @@ const Register = ({ setAuth }) => {
           justify="center" 
           gap="small" 
           pad="small">
-          <Anchor label="Login" href={`${process.env.REACT_APP_HOST}/login`}/>
+          <Anchor label="Login" onClick={loginLink}/>
         </CardFooter>
       </Card>
     </Box>

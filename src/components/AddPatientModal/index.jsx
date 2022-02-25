@@ -38,11 +38,11 @@ const AddPatientModal = (props) => {
   // Function to handle submission of the add patient form
   const onSubmitForm = async e => {
     e.preventDefault();
-    const add_client_url = `${process.env.REACT_APP_API_END_POINT}/api/patients`;
+    const add_patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients`;
 
     // Try to send user data to the server 
     try {
-      axios.post(add_client_url, {
+      axios.post(add_patient_url, {
         patient_name: patient_name,
         patient_species: patient_species,
         patient_breed: patient_breed,
@@ -57,7 +57,15 @@ const AddPatientModal = (props) => {
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
-        toast.error(error.message);
+        if(error.response.status === 422) {
+          const errors = error.response.data.errors
+
+          errors.forEach((err) => {
+            toast.error(err.msg);
+          })
+        } else {
+          toast.error(error.response.data);
+        }
       });   
     } catch (err) {
       console.error(err.message);

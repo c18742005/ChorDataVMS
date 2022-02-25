@@ -71,8 +71,6 @@ const Client = () => {
         const patient_data = res.data;
         setPatients(patient_data);
       })
-
-      console.log(client)
   }, []);
 
   // Function to handle the reactivation of a client acc
@@ -103,7 +101,7 @@ const Client = () => {
           {`Client is deactivated: ${client.client_reason_inactive}`}
         </Heading>)
       }
-      <Tabs justify="start">
+      <Tabs justify="start" fill="horizontal">
         <Tab title="Info" icon={<CircleInformation />} reverse>
           <Box 
             align="start" 

@@ -8,7 +8,7 @@ import ClientTable from '../../components/ClientTable'
 import SearchBar from '../../components/SearchBar'
 import AddClientForm from '../../components/AddClientForm'
 
-const Clients = () => {
+const Clients = ({ clinic }) => {
   const [showClientAdd, setShowClientAdd] = useState(false);
   const [clients, setClients] = useState([]);
 
@@ -22,19 +22,18 @@ const Clients = () => {
 
   // Fetch clients data
   useEffect(() => {
-    const url = `${process.env.REACT_APP_API_END_POINT}/api/clients/`;
+    const url = `${process.env.REACT_APP_API_END_POINT}/api/clients/clinic/${clinic}`;
 
     axios.get(url)
       .then(res => {
         const clients = res.data;
         setClients(clients)
-        console.log(clients)
       })
 
   }, []);
 
   return (
-    <Box align="center" justify="start" direction="column" pad="small">
+    <Box align="center" justify="start" direction="column" pad="small" fill="horizontal">
       <Box 
         align="center" 
         justify="between" 
@@ -44,7 +43,7 @@ const Clients = () => {
       >
         <SearchBar />
         <Button 
-          label="Add User"
+          label="Add Client"
           icon={<UserAdd />} 
           reverse 
           primary 
@@ -58,10 +57,14 @@ const Clients = () => {
       <ClientTable data={ clients } />
       { // Show add client modal if necessary
         showClientAdd && (
-          <AddClientForm closeForm={ closeForms } addClient={updateClients} />
+          <AddClientForm 
+            closeForm={closeForms} 
+            addClient={updateClients} 
+            clinic={clinic} 
+          />
       )}
     </Box>
   )
 }
 
-export default Clients
+export default Clients 

@@ -12,7 +12,7 @@ import {
   Select, 
   TextInput } from 'grommet';
 
-const AddClientForm = (props) => {
+const AddClientForm = ({ clinic, addClient, closeForm }) => {
   const defaultValues = {
     client_forename: "",
     client_surname: "",
@@ -24,7 +24,6 @@ const AddClientForm = (props) => {
   };
   
   const [values, setValues] = useState(defaultValues);
-  const client_clinic_id = 1;
 
   const { 
     client_forename,
@@ -50,11 +49,11 @@ const AddClientForm = (props) => {
         client_county: client_county,
         client_phone: client_phone,
         client_email: client_email,
-        client_clinic_id: client_clinic_id
+        client_clinic_id: clinic
       })
       .then((response) => {
-        props.addClient(response.data.body);
-        props.closeForm();
+        addClient(response.data.body);
+        closeForm();
         toast.success(response.data.message);
       }, (error) => {
         if(error.response.status === 422) {
@@ -73,7 +72,7 @@ const AddClientForm = (props) => {
   }
 
   return (
-    <Layer animate modal onClickOutside={props.closeForm} position="center">
+    <Layer animate modal onClickOutside={closeForm} position="center">
       <Heading level="2" textAlign="center">Add Client</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
         <Form 
@@ -154,7 +153,7 @@ const AddClientForm = (props) => {
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
             <Button label="Add" primary hoverIndicator type="submit"/>
-            <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={props.closeForm}/>
+            <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={closeForm}/>
           </Box>
         </Form>
       </Box>
@@ -162,4 +161,4 @@ const AddClientForm = (props) => {
   )
 }
 
-export default AddClientForm
+export default AddClientForm 

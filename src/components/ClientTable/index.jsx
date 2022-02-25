@@ -5,7 +5,7 @@ const ClientTable = (props) => {
   let navigate = useNavigate();
 
   return (
-    <Box align="end" justify="start" fill="horizontal" direction="column">
+    <Box align="center" justify="start" fill="horizontal" direction="column">
     <DataTable
       columns={[
         {
@@ -33,6 +33,7 @@ const ClientTable = (props) => {
       }} 
       sortable
       resizeable 
+      fill="horizontal"
       paginate
       step={10}
       onClickRow={({ datum }) => {navigate(`/client/${datum.client_id}`)}}

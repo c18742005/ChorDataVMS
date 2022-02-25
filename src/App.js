@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route } from "react-router-dom";
 import axios from 'axios';
 import { Box, Grommet, Heading } from 'grommet';
 import { useEffect, useState } from "react";
@@ -19,6 +19,7 @@ import Patient from "./pages/Patient";
 function App() {
   const [menuOpen, setMenuOpen] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState({});
 
   const handleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -41,8 +42,25 @@ function App() {
     }
   };
 
+  // Retrieve staff user info from api
+  const retrieveUser = async () => {
+    try {
+      axios.get(`${process.env.REACT_APP_API_END_POINT}/api/staff`, {
+        headers: {
+          'token': localStorage.token
+        }
+      })
+        .then(res => {
+          setUser(res.data)
+        });
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   useEffect(() => {
     checkAuthenticated();
+    retrieveUser();
   }, []);
 
   const setAuth = boolean => {
@@ -60,29 +78,70 @@ function App() {
       >
         {menuOpen ? (
           <Box align="stretch" justify="center" fill="vertical">
-            <SideBar />
+            <SideBar isAuth={isAuthenticated} />
           </Box>) : 
           (<></>)
         }
         
         <Box align="center" justify="start" direction="column" fill>
           <Box align="center" justify="start" direction="column" gap="none" fill>
-            <AppBar handleMenu={handleMenu} menuOpen={menuOpen} setAuth={setAuth} isAuth={isAuthenticated}/>
+            <AppBar 
+              handleMenu={handleMenu} 
+              menuOpen={menuOpen} 
+              setAuth={setAuth} 
+              isAuth={isAuthenticated}
+              user={user.staff_username}
+            />
             <Box align="start" justify="start" direction="column" pad="medium" fill>
               <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/clients" element={<Clients />} />
-                <Route path="/client/:clientId" element={<Client />} />
-                <Route path="/patient/:patientId" element={<Patient />} />
-                <Route path="/login" element={<Login setAuth={setAuth} />} />
-                <Route path="/register" element={<Register setAuth={setAuth} />} />
+                <Route path="/" element={
+                  isAuthenticated ? (
+                    <Dashboard />
+                  ) : (
+                    <Navigate to="/login" />
+                  )}  
+                />
+                <Route path="/clients" element={
+                  isAuthenticated ? (
+                    <Clients clinic={user.staff_clinic_id} />
+                  ) : (
+                    <Navigate to="/login" />
+                  )}
+                />
+                <Route path="/client/:clientId" element={
+                  isAuthenticated ? (
+                    <Client />
+                  ) : (
+                    <Navigate to="/login" />
+                  )}
+                />
+                <Route path="/patient/:patientId" element={
+                  isAuthenticated ? (
+                    <Patient />
+                  ) : (
+                    <Navigate to="/login" />
+                  )} 
+                />
+                <Route path="/login" element={
+                  isAuthenticated ? (
+                    <Navigate to="/" />
+                  ) : (
+                    <Login setAuth={setAuth} isAuth={isAuthenticated}/>
+                  )}  
+                />
+                <Route path="/register" element={
+                  isAuthenticated ? (
+                    <Navigate to="/" />
+                  ) : (
+                    <Register setAuth={setAuth} />
+                  )} 
+                />
                 <Route path="*" element={<Box><Heading level={3}>There's nothing here: 404!</Heading></Box>} />
               </Routes>
             </Box>
           </Box>
         </Box>
       </Box>
-      {console.log(process.env.REACT_APP_API_END_POINT)}
     </Grommet>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { 
   Anchor, 
@@ -38,7 +39,7 @@ const Login = ({ setAuth }) => {
         toast.success(response.data.message);
         const parseRes = response.data
 
-        if (parseRes.token) {
+        if (parseRes.token && parseRes.staff_info) {
           localStorage.setItem("token", parseRes.token);
           setAuth(true);
           toast.success("Logged In Successfully");
@@ -60,6 +61,12 @@ const Login = ({ setAuth }) => {
     } catch (err) {
       console.error(err.message);
     }
+  }
+
+  let navigate = useNavigate();
+  
+  const registerLink = () => {
+    navigate("/register");
   }
 
   return (
@@ -124,7 +131,7 @@ const Login = ({ setAuth }) => {
           justify="center" 
           gap="small" 
           pad="small">
-          <Anchor label="Register" href={`${process.env.REACT_APP_HOST}/register`}/>
+          <Anchor label="Register" onClick={registerLink}/>
         </CardFooter>
       </Card>
     </Box>

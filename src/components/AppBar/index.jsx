@@ -1,11 +1,32 @@
+import { toast } from 'react-toastify';
 import { Box, Button, Heading, Menu, Header } from 'grommet';
 import { UserSettings, LinkPrevious, Menu as MenuIcon } from 'grommet-icons';
+import { useNavigate } from 'react-router-dom';
 
+const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user } ) => {
+  const navigate = useNavigate(); 
+  const login = () =>{ 
+    navigate("/login");
+  }
 
-const AppBar = (props) => {
-
+  const logout = () => {
+    try {
+      localStorage.clear();
+      setAuth(false);
+      toast.success("Logged out successfully");
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+  
   return (
-    <Box align="center" justify="center" direction="row" gap="none" fill="horizontal">
+    <Box 
+      align="center" 
+      justify="center" 
+      direction="row" 
+      gap="none" 
+      fill="horizontal"
+    >
       <Header 
         align="center" 
         direction="row" 
@@ -15,15 +36,32 @@ const AppBar = (props) => {
         fill="horizontal" 
         pad={{"horizontal":"xsmall"}}
       >
-        <Button icon={props.menuOpen ? <LinkPrevious color='white'/> : <MenuIcon color='white'/>} hoverIndicator onClick={props.handleMenu} />
-        <Heading level="1" color="white" textAlign="center">
+        <Button icon={menuOpen ? 
+            (<LinkPrevious color='white'/>) : 
+            (<MenuIcon color='white'/>)
+          } 
+          hoverIndicator 
+          onClick={handleMenu} 
+        />
+        <Heading level="1" color="white" textAlign="center" margin="small">
           ChorData
         </Heading>
-        <Menu 
-          icon={<UserSettings color='white'/>} 
-          items={[{"label":"Current User: "},
-            {"label":"Logout"}]} 
-        />
+        {isAuth ? (
+          <Menu 
+            icon={<UserSettings color="white" />} 
+            items={[
+              {"label": "Current User: " + user},
+              {"label":"Logout", onClick: () => logout()}]
+            }
+          />) : (
+          <Button 
+            label="Login" 
+            hoverIndicator={{"color":"active"}} 
+            color="white"
+            primary
+            onClick={login}
+          />)
+        }
       </Header>
     </Box>
   )
