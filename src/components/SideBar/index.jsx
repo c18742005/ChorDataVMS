@@ -20,6 +20,7 @@ const SideBar = ({ isAuth }) => {
         const data = res.data;
         setClinic(data.clinic_name)
       })
+      .catch(e => console.log(e.response.data))
     } catch(err) {
       console.log(err);
     }

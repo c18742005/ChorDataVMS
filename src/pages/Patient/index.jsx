@@ -49,11 +49,16 @@ const Patient = () => {
   useEffect(() => {
     const patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/${patientId}`;
 
-    axios.get(patient_url)
-      .then(res => {
-        const patient_data = res.data;
-        setPatient(patient_data[0]);
-      });
+    try {
+      axios.get(patient_url)
+        .then(res => {
+          const patient_data = res.data;
+          setPatient(patient_data[0]);
+        })
+        .catch(e => console.log(e.response.data));
+    } catch(err) {
+      console.log(err);
+    }
   }, []);
 
   // Function to handle the reactivation of a patient acc

@@ -24,12 +24,16 @@ const Clients = ({ clinic }) => {
   useEffect(() => {
     const url = `${process.env.REACT_APP_API_END_POINT}/api/clients/clinic/${clinic}`;
 
-    axios.get(url)
-      .then(res => {
-        const clients = res.data;
-        setClients(clients)
-      })
-
+    try {
+      axios.get(url)
+        .then(res => {
+          const clients = res.data;
+          setClients(clients)
+        })
+        .catch((e) => console.log(e.response.data))
+    } catch(err) {
+      console.log(err);
+    }
   }, []);
 
   return (

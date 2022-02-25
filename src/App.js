@@ -36,7 +36,8 @@ function App() {
         .then(res => {
           const parseRes = res.data;
           parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
-        });
+        })
+        .catch(e => console.log(e.response.data))
     } catch (err) {
       console.error(err.message);
     }
@@ -52,7 +53,8 @@ function App() {
       })
         .then(res => {
           setUser(res.data)
-        });
+        })
+        .catch(e => console.log(e.response.data))
     } catch (err) {
       console.error(err.message);
     }

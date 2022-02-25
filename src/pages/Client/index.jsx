@@ -60,17 +60,23 @@ const Client = () => {
     const client_url = `${process.env.REACT_APP_API_END_POINT}/api/clients/${clientId}`;
     const patients_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/client/${clientId}`;
 
-    axios.get(client_url)
-      .then(res => {
-        const client_data = res.data;
-        setClient(client_data[0]);
-      });
+    try {
+      axios.get(client_url)
+        .then(res => {
+          const client_data = res.data;
+          setClient(client_data[0]);
+        })
+        .catch((e) => console.log(e.response.data))
 
-    axios.get(patients_url)
-      .then(res => {
-        const patient_data = res.data;
-        setPatients(patient_data);
-      })
+      axios.get(patients_url)
+        .then(res => {
+          const patient_data = res.data;
+          setPatients(patient_data);
+        })
+        .catch((e) => console.log(e.response.data))
+    } catch(err) {
+      console.log(err);
+    }
   }, []);
 
   // Function to handle the reactivation of a client acc
