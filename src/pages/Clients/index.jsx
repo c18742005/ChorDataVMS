@@ -29,7 +29,6 @@ const Clients = ({ clinic }) => {
       .then(res => {
         const clients = res.data;
         setClients(clients)
-        console.log(clients)
       })
     }
 
@@ -64,7 +63,7 @@ const Clients = ({ clinic }) => {
           <AddClientForm 
             closeForm={closeForms} 
             addClient={updateClients} 
-            staffUser={clinic} 
+            clinic={clinic} 
           />
       )}
     </Box>

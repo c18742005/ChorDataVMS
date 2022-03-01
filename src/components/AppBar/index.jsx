@@ -1,14 +1,12 @@
 import { toast } from 'react-toastify';
 import { Box, Button, Heading, Menu, Header } from 'grommet';
 import { UserSettings, LinkPrevious, Menu as MenuIcon } from 'grommet-icons';
-import { useNavigate } from 'react-router-dom';
 
-const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user } ) => {
-  const navigate = useNavigate(); 
-
+const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
   const logout = () => {
     try {
       localStorage.clear();
+      setUser({});
       setAuth(false);
       toast.success("Logged out successfully");
     } catch (err) {

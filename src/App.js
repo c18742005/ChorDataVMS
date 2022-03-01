@@ -94,6 +94,7 @@ function App() {
               setAuth={setAuth} 
               isAuth={isAuthenticated}
               user={user.staff_username}
+              setUser={setUser}
             />
             <Box align="start" justify="start" direction="column" pad="medium" fill>
               <Routes>
@@ -154,9 +155,6 @@ function App() {
             </Box>
           </Box>
         </Box>
-        {
-          console.log(user)
-        }
       </Box>
     </Grommet>
   );
