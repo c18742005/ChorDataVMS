@@ -11,6 +11,9 @@ import {
   Layer, 
   Select, 
   TextInput } from 'grommet';
+import { dog_breeds } from './dog_breeds';
+import { cat_breeds } from './cat_breeds';
+import { bird_breeds } from './bird_breeds';
 
 const AddPatientModal = (props) => {
   const defaultValues = {
@@ -24,6 +27,7 @@ const AddPatientModal = (props) => {
   };
 
   const [values, setValues] = useState(defaultValues);
+  const [breed, setBreed] = useState([])
   const client_id = props.client;
 
   const { 
@@ -42,7 +46,7 @@ const AddPatientModal = (props) => {
 
     // Try to send user data to the server 
     try {
-      axios.post(add_patient_url, {
+      await axios.post(add_patient_url, {
         patient_name: patient_name,
         patient_species: patient_species,
         patient_breed: patient_breed,
@@ -100,17 +104,32 @@ const AddPatientModal = (props) => {
               plain
               name="patient_species"
               value={patient_species} 
+              onChange={({ option }) => {
+                switch(option) {
+                  case 'Avian':
+                    setBreed(bird_breeds);
+                    break;
+                  case 'Canine':
+                    setBreed(dog_breeds);
+                    break;
+                  case 'Feline':
+                    setBreed(cat_breeds);
+                    break;
+                  default:
+                    setBreed([]);
+                }
+              }}
             />
           </FormField>
           <FormField name="patient_breed" required>
-            <TextInput 
-              placeholder="Breed" 
-              size="medium" 
-              type="text"
-              plain 
-              name="patient_breed" 
-              value={patient_breed} 
-            />
+          <Select
+            placeholder="Breed" 
+            size="medium" 
+            options={breed}
+            value={patient_breed}
+            name="patient_breed"
+            plain
+          />
           </FormField>
           <FormField name="patient_age" required>
             <TextInput 

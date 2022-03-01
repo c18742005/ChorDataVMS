@@ -36,7 +36,7 @@ const Register = ({ setAuth }) => {
 
     // Try to send user data to the server 
     try {
-      axios.post(register_staff_url, {
+      await axios.post(register_staff_url, {
         username: staff_username,
         password: staff_password,
         role: staff_role,

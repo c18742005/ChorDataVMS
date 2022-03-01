@@ -42,7 +42,7 @@ const EditClientModal = (props) => {
 
     // Try to send user data to the server 
     try {
-      axios.put(update_client_url, {
+      await axios.put(update_client_url, {
         client_forename: client_forename,
         client_surname: client_surname,
         client_address: client_address,

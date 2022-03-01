@@ -7,11 +7,11 @@ import axios from 'axios';
 const SideBar = ({ isAuth }) => {
   const [clinic, setClinic] = useState("");
 
-  const retrieveSideBarInfo = () => {
+  const retrieveSideBarInfo = async () => {
     try {
       const url = `${process.env.REACT_APP_API_END_POINT}/api/sidebar`;
 
-      axios.get(url, {
+      await axios.get(url, {
         headers: {
           "token": localStorage.getItem("token")
         }
@@ -20,7 +20,7 @@ const SideBar = ({ isAuth }) => {
         const data = res.data;
         setClinic(data.clinic_name)
       })
-      .catch(e => console.log(e.response.data))
+      .catch(err => console.log(err))
     } catch(err) {
       console.log(err);
     }

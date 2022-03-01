@@ -42,7 +42,7 @@ const EditPatientModal = (props) => {
 
     // Try to send user data to the server 
     try {
-      axios.put(update_patient_url, {
+      await axios.put(update_patient_url, {
         patient_name: patient_name,
         patient_species: patient_species,
         patient_breed: patient_breed,

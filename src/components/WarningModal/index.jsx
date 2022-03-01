@@ -25,7 +25,7 @@ const WarningModal = (props) => {
 
     // Try to send user data to the server 
     try {
-      axios.put(deactivate_client_url,
+      await axios.put(deactivate_client_url,
         {client_reason_inactive: reason_inactive}
       )
       .then((response) => {
@@ -46,7 +46,7 @@ const WarningModal = (props) => {
 
     // Try to send user data to the server 
     try {
-      axios.put(deactivate_patient_url,
+      await axios.put(deactivate_patient_url,
         {patient_reason_inactive: reason_inactive}
       )
       .then((response) => {

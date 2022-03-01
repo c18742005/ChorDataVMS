@@ -15,6 +15,7 @@ import SideBar from "./components/SideBar";
 import AppBar from "./components/AppBar";
 import Client from "./pages/Client";
 import Patient from "./pages/Patient";
+import Drugs from "./pages/Drugs";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(true);
@@ -28,7 +29,7 @@ function App() {
   // Check if the staff member has authenticated
   const checkAuthenticated = async () => {
     try {
-      axios.get(`${process.env.REACT_APP_API_END_POINT}/api/verify`, {
+      await axios.get(`${process.env.REACT_APP_API_END_POINT}/api/verify`, {
         headers: {
           'token': localStorage.token
         }
@@ -46,7 +47,7 @@ function App() {
   // Retrieve staff user info from api
   const retrieveUser = async () => {
     try {
-      axios.get(`${process.env.REACT_APP_API_END_POINT}/api/staff`, {
+      await axios.get(`${process.env.REACT_APP_API_END_POINT}/api/staff`, {
         headers: {
           'token': localStorage.token
         }
@@ -63,7 +64,7 @@ function App() {
   useEffect(() => {
     checkAuthenticated();
     retrieveUser();
-  }, []);
+  }, [isAuthenticated]);
 
   const setAuth = boolean => {
     setIsAuthenticated(boolean);
@@ -78,12 +79,12 @@ function App() {
         justify="start" 
         gap="none"
       >
-        {menuOpen ? (
+        { isAuthenticated && (
+          menuOpen && (
           <Box align="stretch" justify="center" fill="vertical">
             <SideBar isAuth={isAuthenticated} />
-          </Box>) : 
-          (<></>)
-        }
+          </Box>
+        ))}
         
         <Box align="center" justify="start" direction="column" fill>
           <Box align="center" justify="start" direction="column" gap="none" fill>
@@ -96,6 +97,20 @@ function App() {
             />
             <Box align="start" justify="start" direction="column" pad="medium" fill>
               <Routes>
+                <Route path="/login" element={
+                  isAuthenticated ? (
+                    <Navigate to="/" />
+                  ) : (
+                    <Login setAuth={setAuth} isAuth={isAuthenticated} />
+                  )}  
+                />
+                <Route path="/register" element={
+                  isAuthenticated ? (
+                    <Navigate to="/" />
+                  ) : (
+                    <Register setAuth={setAuth} />
+                  )} 
+                />
                 <Route path="/" element={
                   isAuthenticated ? (
                     <Dashboard />
@@ -124,18 +139,14 @@ function App() {
                     <Navigate to="/login" />
                   )} 
                 />
-                <Route path="/login" element={
+                <Route path="/drugs" element={
                   isAuthenticated ? (
-                    <Navigate to="/" />
+                    <Drugs 
+                      clinic_id={user.staff_clinic_id} 
+                      staff_id={user.staff_member_id}
+                    />
                   ) : (
-                    <Login setAuth={setAuth} isAuth={isAuthenticated}/>
-                  )}  
-                />
-                <Route path="/register" element={
-                  isAuthenticated ? (
-                    <Navigate to="/" />
-                  ) : (
-                    <Register setAuth={setAuth} />
+                    <Navigate to="/login" />
                   )} 
                 />
                 <Route path="*" element={<Box><Heading level={3}>There's nothing here: 404!</Heading></Box>} />
@@ -143,6 +154,9 @@ function App() {
             </Box>
           </Box>
         </Box>
+        {
+          console.log(user)
+        }
       </Box>
     </Grommet>
   );

@@ -22,18 +22,18 @@ const Clients = ({ clinic }) => {
 
   // Fetch clients data
   useEffect(() => {
-    const url = `${process.env.REACT_APP_API_END_POINT}/api/clients/clinic/${clinic}`;
+    const fetch_data = async () => {
+      const url = `${process.env.REACT_APP_API_END_POINT}/api/clients/clinic/${clinic}`;
 
-    try {
-      axios.get(url)
-        .then(res => {
-          const clients = res.data;
-          setClients(clients)
-        })
-        .catch((e) => console.log(e.response.data))
-    } catch(err) {
-      console.log(err);
+      await axios.get(url)
+      .then(res => {
+        const clients = res.data;
+        setClients(clients)
+        console.log(clients)
+      })
     }
+
+    fetch_data();
   }, []);
 
   return (
@@ -64,7 +64,7 @@ const Clients = ({ clinic }) => {
           <AddClientForm 
             closeForm={closeForms} 
             addClient={updateClients} 
-            clinic={clinic} 
+            staffUser={clinic} 
           />
       )}
     </Box>

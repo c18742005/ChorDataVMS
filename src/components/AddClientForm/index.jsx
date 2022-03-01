@@ -41,7 +41,7 @@ const AddClientForm = ({ clinic, addClient, closeForm }) => {
 
     // Try to send user data to the server 
     try {
-      axios.post(add_client_url, {
+      await axios.post(add_client_url, {
         client_forename: client_forename,
         client_surname: client_surname,
         client_address: client_address,

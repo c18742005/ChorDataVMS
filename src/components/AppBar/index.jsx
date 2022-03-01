@@ -5,9 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user } ) => {
   const navigate = useNavigate(); 
-  const login = () =>{ 
-    navigate("/login");
-  }
 
   const logout = () => {
     try {
@@ -30,36 +27,30 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user } ) => {
       <Header 
         align="center" 
         direction="row" 
-        justify="between" 
+        justify={isAuth ? "between" : "center"}
         gap="none" 
         background={{"color":"brand"}} 
         fill="horizontal" 
         pad={{"horizontal":"xsmall"}}
       >
-        <Button icon={menuOpen ? 
+        { isAuth && (
+          <Button icon={menuOpen ? 
             (<LinkPrevious color='white'/>) : 
-            (<MenuIcon color='white'/>)
-          } 
-          hoverIndicator 
-          onClick={handleMenu} 
-        />
+            (<MenuIcon color='white'/>)} 
+            hoverIndicator 
+            onClick={handleMenu} 
+          />
+        )}
         <Heading level="1" color="white" textAlign="center" margin="small">
           ChorData
         </Heading>
-        {isAuth ? (
+        {isAuth && (
           <Menu 
             icon={<UserSettings color="white" />} 
             items={[
               {"label": "Current User: " + user},
               {"label":"Logout", onClick: () => logout()}]
             }
-          />) : (
-          <Button 
-            label="Login" 
-            hoverIndicator={{"color":"active"}} 
-            color="white"
-            primary
-            onClick={login}
           />)
         }
       </Header>

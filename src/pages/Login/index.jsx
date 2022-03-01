@@ -31,7 +31,7 @@ const Login = ({ setAuth }) => {
 
     // Try to send user data to the server 
     try {
-      axios.post(login_staff_url, {
+      await axios.post(login_staff_url, {
         username: staff_username,
         password: staff_password
       })

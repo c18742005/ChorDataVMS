@@ -47,18 +47,22 @@ const Patient = () => {
 
   // Fetch patient data
   useEffect(() => {
-    const patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/${patientId}`;
+    const fetch_data = async () => {
+      const patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/${patientId}`;
 
-    try {
-      axios.get(patient_url)
-        .then(res => {
-          const patient_data = res.data;
-          setPatient(patient_data[0]);
-        })
-        .catch(e => console.log(e.response.data));
-    } catch(err) {
-      console.log(err);
+      try {
+        await axios.get(patient_url)
+          .then(res => {
+            const patient_data = res.data;
+            setPatient(patient_data[0]);
+          })
+          .catch(e => console.log(e.response.data));
+      } catch(err) {
+        console.log(err);
+      }
     }
+   
+    fetch_data();
   }, []);
 
   // Function to handle the reactivation of a patient acc
@@ -67,7 +71,7 @@ const Patient = () => {
 
     // Try to send user data to the server 
     try {
-      axios.put(reactivate_patient_url)
+      await axios.put(reactivate_patient_url)
       .then((response) => {
         updateActiveState();
         toast.success(response.data.message);
