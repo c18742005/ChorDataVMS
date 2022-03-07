@@ -96,4 +96,4 @@ export const cat_breeds = [
   "Turkish Angora",
   "Turkish Van",
   "Ukrainian Levkoy"
-]
+].sort()

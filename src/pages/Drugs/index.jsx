@@ -4,7 +4,6 @@ import {
   Anchor,
   Box, 
   Button, 
-  DataTable, 
   Heading,
   NameValueList, 
   NameValuePair, 
@@ -16,23 +15,30 @@ import {
 // Components
 import AddDrugStock from "../../components/AddDrugStock";
 import AdministerDrugModal from "../../components/AdministerDrugModal";
+import DrugStockTable from "../../components/DrugStockTable";
+import DrugLogTable from "../../components/DrugLogTable";
 
 const Drugs = ({ clinic_id, staff_id }) => {
-  const [showAddDrug, setShowAddDrug] = useState(false);
-  const [showAdminDrug, setShowAdminDrug] = useState(false);
-  const[drugs, setDrugs] = useState([]);
-  const [drug, setDrug] = useState({drug_name: "" });
-  const [drugNames, setDrugNames] = useState([]);
-
+  const [showAddDrug, setShowAddDrug] = useState(false); // Show add drug modal
+  const [showAdminDrug, setShowAdminDrug] = useState(false); // Show administer drug modal
+  const[drugs, setDrugs] = useState([]); // Hold state of drugs i.e. Drug name, ID, and side effect link
+  const [drug, setDrug] = useState({drug_name: ""}); // Set current drug selected
+ 
   useEffect(() => {
     const fetchData = async () => {
       const get_drugs_url = `${process.env.REACT_APP_API_END_POINT}/api/drugs`;
 
       try {
-        await axios.get(get_drugs_url)
+        await axios.get(
+          get_drugs_url,
+          {
+            headers: {
+              'token': localStorage.token
+            }
+          }
+        )
         .then(res => {
           setDrugs(res.data);
-          setDrugNames(res.data.map(drug => drug.drug_name))
         })
       } catch (error) {
         console.error(error.message);
@@ -59,7 +65,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
       <Select
         label="Select Drug" 
         value={drug.drug_name}
-        options={drugNames}
+        options={drugs.map((option) => option.drug_name)}
         onChange={({ option }) => {
           for(let item in drugs) {
             if(drugs[item].drug_name === option){
@@ -105,13 +111,11 @@ const Drugs = ({ clinic_id, staff_id }) => {
               flex="grow"
             >
                 <NameValueList layout="column">
-                  <NameValuePair name="Side Effects"> 
+                  <NameValuePair name="Side Effects:"> 
                     <Anchor href={drug.drug_link} target="_blank">{drug.drug_link}</Anchor>
                   </NameValuePair>
-                  <NameValuePair name="Amount in Stock">
-                    <Text>5 x 1000mg</Text>
-                  </NameValuePair>
                 </NameValueList>
+                <DrugStockTable clinicid={clinic_id} drugid={drug.drug_id} />
               </Box>
             </Tab>
             <Tab title="Drug Log">
@@ -125,70 +129,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
                 pad="medium" 
                 margin={{"top":"small"}} 
               >
-                <DataTable
-                  columns={[
-                    {
-                      header: <Text color="white" weight="bold">Drug Name</Text>, 
-                      primary: true, property: "drug_name"
-                    },
-                    {
-                      header: <Text color="white" weight="bold">Quantity Given</Text>, 
-                      property: "quantity_administered"},
-                    {
-                      header: <Text color="white" weight="bold">Patient</Text>,
-                      property: "patient", 
-                    },
-                    {
-                      header: <Text color="white" weight="bold">Batch #</Text>,
-                      property: "batch_number", 
-                    },
-                    {
-                      header: <Text color="white" weight="bold">Staff Member</Text>,
-                      property: "staff_administer"
-                    }]}
-                  data={[{
-                    "drug_name":"Paracetamol",
-                    "quantity_administered":5,
-                    "patient":"Jasmine",
-                    "batch_number":12345,
-                    "staff_administer":"ruth_ferrie"}, 
-                  {
-                    "drug_name":"Paracetamol",
-                    "quantity_administered":5,
-                    "patient":"Jasmine",
-                    "batch_number":12345,
-                    "staff_administer":"ruth_ferrie"
-                  }, 
-                  {
-                    "drug_name":"Paracetamol",
-                    "quantity_administered":5,
-                    "patient":"Jasmine",
-                    "batch_number":12345,
-                    "staff_administer":"ruth_ferrie"
-                  }, 
-                  {
-                    "drug_name":"Paracetamol",
-                    "quantity_administered":5,
-                    "patient":"Jasmine",
-                    "batch_number":12345,
-                    "staff_administer":"ruth_ferrie"
-                  }, {
-                    "drug_name":"Paracetamol",
-                    "quantity_administered":5,
-                    "patient":"Jasmine",
-                    "batch_number":12345,
-                    "staff_administer":"ruth_ferrie"
-                  },]} 
-                  background={{
-                    "header":{"color":"brand"},
-                    "body":["white", "border"]
-                  }} 
-                  pad="xsmall" 
-                  paginate 
-                  step={10}
-                  resizeable 
-                  sortable 
-                />
+                <DrugLogTable clinicId={clinic_id} drugId={drug.drug_id} />
               </Box>
             </Tab>
           </Tabs></>

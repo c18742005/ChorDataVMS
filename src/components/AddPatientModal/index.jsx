@@ -11,9 +11,12 @@ import {
   Layer, 
   Select, 
   TextInput } from 'grommet';
+
 import { dog_breeds } from './dog_breeds';
 import { cat_breeds } from './cat_breeds';
 import { bird_breeds } from './bird_breeds';
+import { reptile_breeds } from './reptile_breeds';
+import { rodent_breeds } from './rodent_breeds';
 
 const AddPatientModal = (props) => {
   const defaultValues = {
@@ -55,7 +58,11 @@ const AddPatientModal = (props) => {
         patient_color: patient_color,
         patient_microchip: patient_microchip,
         patient_client_id: client_id
-      })
+      },
+      {
+        headers: {
+          'token': localStorage.token
+      }})
       .then((response) => {
         props.addPatient(response.data.body)
         props.closeForm();
@@ -114,6 +121,12 @@ const AddPatientModal = (props) => {
                     break;
                   case 'Feline':
                     setBreed(cat_breeds);
+                    break;
+                  case 'Reptile':
+                    setBreed(reptile_breeds);
+                    break;
+                  case 'Rodent':
+                    setBreed(rodent_breeds);
                     break;
                   default:
                     setBreed([]);

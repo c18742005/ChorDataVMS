@@ -16,8 +16,8 @@ const AddDrugStock = (props) => {
   const defaultValues = {
     drug_expiry_date: new Date(),
     drug_batch_number: "",
-    drug_quantity_1: "",
-    drug_quantity_2: "",
+    drug_quantity: "",
+    drug_quantity_measure: "",
     drug_concentration_1: "",
     drug_concentration_2: ""
   };
@@ -29,8 +29,8 @@ const AddDrugStock = (props) => {
   const { 
     drug_expiry_date,
     drug_batch_number,
-    drug_quantity_1,
-    drug_quantity_2,
+    drug_quantity,
+    drug_quantity_measure,
     drug_concentration_1,
     drug_concentration_2
   } = values;
@@ -45,10 +45,16 @@ const AddDrugStock = (props) => {
       await axios.post(add_drug_url, {
         drug_expiry_date: drug_expiry_date,
         drug_batch_id: drug_batch_number,
-        drug_quantity: drug_quantity_1 + drug_quantity_2,
+        drug_quantity: drug_quantity,
+        drug_quantity_measure: drug_quantity_measure,
         drug_concentration: drug_concentration_1 + drug_concentration_2,
         drug_stock_drug_id: drug_id,
         drug_stock_clinic_id: clinic_id
+      },
+      {
+        headers: {
+          'token': localStorage.token
+        }
       })
       .then((response) => {
         props.closeForm();
@@ -98,21 +104,21 @@ const AddDrugStock = (props) => {
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap='medium'>
-            <FormField name="drug_quantity_1" required>
+            <FormField name="drug_quantity" required>
               <TextInput 
                 placeholder="Drug Quantity" 
                 size="medium" 
                 type="text"
                 plain 
-                name="drug_quantity_1" 
-                value={drug_quantity_1} 
+                name="drug_quantity" 
+                value={drug_quantity} 
               />
             </FormField>
-            <FormField name="drug_quantity_2" required>
+            <FormField name="drug_quantity_measure" required>
               <Select
                 options={['ml', 'ug', 'mg', 'tablet']}
-                name="drug_quantity_2" 
-                value={drug_quantity_2} 
+                name="drug_quantity_measure" 
+                value={drug_quantity_measure} 
                 placeholder="Measure" 
                 plain
                 size="medium" 

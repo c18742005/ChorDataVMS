@@ -7,6 +7,7 @@ import theme from './theme'
 
 import 'react-toastify/dist/ReactToastify.css';
 
+// Components
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from "./pages/Dashboard";
@@ -16,12 +17,14 @@ import AppBar from "./components/AppBar";
 import Client from "./pages/Client";
 import Patient from "./pages/Patient";
 import Drugs from "./pages/Drugs";
+import Xrays from "./pages/Xrays";
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState({});
+  const [menuOpen, setMenuOpen] = useState(true); // Set state of the sidebar
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Set state for user logging in
+  const [user, setUser] = useState({}); // Set user details
 
+  // Function to handle toggling the sidebar open and close
   const handleMenu = () => {
     setMenuOpen(!menuOpen);
   }
@@ -35,6 +38,7 @@ function App() {
         }
       })
         .then(res => {
+          // If response contains token then set auth to true
           const parseRes = res.data;
           parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
         })
@@ -61,11 +65,13 @@ function App() {
     }
   };
 
+  // Authenticate the user and retrieve there details
   useEffect(() => {
     checkAuthenticated();
     retrieveUser();
   }, [isAuthenticated]);
 
+  // Function to set the authentication status of a user
   const setAuth = boolean => {
     setIsAuthenticated(boolean);
   };
@@ -74,16 +80,15 @@ function App() {
     <Grommet theme={theme} full>
       <ToastContainer />
       <Box fill 
-        align="start" 
+        align="stretch" 
         direction="row" 
-        justify="start" 
+        justify="stretch" 
         gap="none"
+        flex="grow"
       >
         { isAuthenticated && (
           menuOpen && (
-          <Box align="stretch" justify="center" fill="vertical">
-            <SideBar isAuth={isAuthenticated} />
-          </Box>
+          <SideBar isAuth={isAuthenticated} />
         ))}
         
         <Box align="center" justify="start" direction="column" fill>
@@ -143,6 +148,16 @@ function App() {
                 <Route path="/drugs" element={
                   isAuthenticated ? (
                     <Drugs 
+                      clinic_id={user.staff_clinic_id} 
+                      staff_id={user.staff_member_id}
+                    />
+                  ) : (
+                    <Navigate to="/login" />
+                  )} 
+                />
+                <Route path="/xrays" element={
+                  isAuthenticated ? (
+                    <Xrays
                       clinic_id={user.staff_clinic_id} 
                       staff_id={user.staff_member_id}
                     />

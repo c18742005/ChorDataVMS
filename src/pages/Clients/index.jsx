@@ -25,7 +25,12 @@ const Clients = ({ clinic }) => {
     const fetch_data = async () => {
       const url = `${process.env.REACT_APP_API_END_POINT}/api/clients/clinic/${clinic}`;
 
-      await axios.get(url)
+      await axios.get(url,
+        {
+          headers: {
+            'token': localStorage.token
+        }}
+      )
       .then(res => {
         const clients = res.data;
         setClients(clients)

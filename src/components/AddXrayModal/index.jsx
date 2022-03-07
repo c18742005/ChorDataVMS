@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
-import { Counties } from './counties';
 import { 
   Box, 
   Button, 
@@ -12,7 +11,7 @@ import {
   Select, 
   TextInput } from 'grommet';
 
-const AddClientForm = ({ clinic, addClient, closeForm }) => {
+const AddXrayModal = ({ clinic, addClient, closeForm }) => {
   const defaultValues = {
     client_forename: "",
     client_surname: "",
@@ -77,7 +76,7 @@ const AddClientForm = ({ clinic, addClient, closeForm }) => {
 
   return (
     <Layer animate modal onClickOutside={closeForm} position="center">
-      <Heading level="2" textAlign="center">Add Client</Heading>
+      <Heading level="2" textAlign="center">Add Xray</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
         <Form 
           onSubmit={onSubmitForm}
@@ -127,7 +126,7 @@ const AddClientForm = ({ clinic, addClient, closeForm }) => {
           </FormField>
           <FormField  name="client_county" required>
             <Select 
-              options={Counties} 
+              options={[]} 
               closeOnChange 
               placeholder="County" 
               plain 
@@ -165,4 +164,4 @@ const AddClientForm = ({ clinic, addClient, closeForm }) => {
   )
 }
 
-export default AddClientForm 
+export default AddXrayModal

@@ -50,7 +50,11 @@ const EditClientModal = (props) => {
         client_county: client_county,
         client_phone: client_phone,
         client_email: client_email
-      })
+      },
+      {
+        headers: {
+          'token': localStorage.token
+      }})
       .then((response) => {
         props.updateClient(values);
         props.closeForm();

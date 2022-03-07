@@ -16,8 +16,8 @@ const AdministerDrugModal = (props) => {
   const defaultValues = {
     drug_date_given: new Date(),
     drug_batch_number: "",
-    drug_quantity_1: "",
-    drug_quantity_2: "",
+    drug_quantity: "",
+    drug_quantity_measure: "",
     patient_administered: 0
   };
 
@@ -33,7 +33,14 @@ const AdministerDrugModal = (props) => {
       const get_patients_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/clinic/${clinic_id}`;
 
       try {
-        await axios.get(get_patients_url)
+        await axios.get(
+          get_patients_url,
+          {
+            headers: {
+              'token': localStorage.token
+            }
+          }
+        )
         .then(res => {
           setPatients(res.data);
           setPatientNames(res.data.map(patient => patient.patient_name));
@@ -49,8 +56,8 @@ const AdministerDrugModal = (props) => {
   const { 
     drug_date_given,
     drug_batch_number,
-    drug_quantity_1,
-    drug_quantity_2,
+    drug_quantity,
+    drug_quantity_measure,
     patient_administered
   } = values;
 
@@ -64,9 +71,15 @@ const AdministerDrugModal = (props) => {
       axios.post(patient_drug_url, {
         drug_date_given: drug_date_given,
         drug_log_drug_stock_id: drug_batch_number,
-        drug_quantity_given: drug_quantity_1 + drug_quantity_2,
+        drug_quantity_given: drug_quantity,
+        drug_quantity_measure: drug_quantity_measure,
         drug_patient_id: patient,
         drug_staff_id: staff_id,
+      },
+      {
+        headers: {
+          'token': localStorage.token
+        }
       })
       .then((response) => {
         props.closeForm();
@@ -115,21 +128,21 @@ const AdministerDrugModal = (props) => {
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap='medium'>
-            <FormField name="drug_quantity_1" required>
+            <FormField name="drug_quantity" required>
               <TextInput 
                 placeholder="Drug Quantity" 
                 size="medium" 
                 type="text"
                 plain 
-                name="drug_quantity_1" 
-                value={drug_quantity_1} 
+                name="drug_quantity" 
+                value={drug_quantity} 
               />
             </FormField>
-            <FormField name="drug_quantity_2" required>
+            <FormField name="drug_quantity_measure" required>
               <Select
                 options={['ml', 'ug', 'mg', 'tablet']}
-                name="drug_quantity_2" 
-                value={drug_quantity_2} 
+                name="drug_quantity_measure" 
+                value={drug_quantity_measure} 
                 placeholder="Measure" 
                 plain
                 size="medium" 

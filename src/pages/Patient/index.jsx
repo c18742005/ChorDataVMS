@@ -51,7 +51,13 @@ const Patient = () => {
       const patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/${patientId}`;
 
       try {
-        await axios.get(patient_url)
+        await axios.get(
+          patient_url,
+          {
+            headers: {
+              'token': localStorage.token
+          }}
+        )
           .then(res => {
             const patient_data = res.data;
             setPatient(patient_data[0]);
@@ -71,7 +77,13 @@ const Patient = () => {
 
     // Try to send user data to the server 
     try {
-      await axios.put(reactivate_patient_url)
+      await axios.put(
+        reactivate_patient_url,
+        {
+          headers: {
+            'token': localStorage.token
+        }}
+      )
       .then((response) => {
         updateActiveState();
         toast.success(response.data.message);

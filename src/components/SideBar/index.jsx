@@ -36,14 +36,14 @@ const SideBar = ({ isAuth }) => {
   }
 
   return (
-      <Box align="center" justify="center" fill>
+      <>
         <Sidebar 
           align="stretch" 
           direction="column" 
           background={{"color":"brand"}} 
           justify="center" 
-          overflow="hidden"
-          fill
+          fill="vertical"
+          flex="shrink" 
         >
           <Heading level="3" textAlign="center" margin="small" color="white">
             {isAuth ? clinic : ""}
@@ -51,7 +51,7 @@ const SideBar = ({ isAuth }) => {
           <Nav 
             align="stretch" 
             direction="column" 
-            justify="center" 
+            justify="start" 
             gap="none" 
             fill="horizontal"
           >
@@ -75,7 +75,7 @@ const SideBar = ({ isAuth }) => {
             ))}
           </Nav>
         </Sidebar>
-      </Box>
+      </>
   )
 }
 

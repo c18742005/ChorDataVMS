@@ -62,14 +62,26 @@ const Client = () => {
       const patients_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/client/${clientId}`;
 
       try {
-        await axios.get(client_url)
+        await axios.get(
+          client_url,
+          {
+            headers: {
+              'token': localStorage.token
+          }}
+        )
           .then(res => {
             const client_data = res.data;
             setClient(client_data[0]);
           })
           .catch((e) => console.log(e.response.data))
 
-        await axios.get(patients_url)
+        await axios.get(
+          patients_url,
+          {
+            headers: {
+              'token': localStorage.token
+          }}
+        )
           .then(res => {
             const patient_data = res.data;
             setPatients(patient_data);
@@ -89,7 +101,9 @@ const Client = () => {
 
     // Try to send user data to the server 
     try {
-      axios.put(reactivate_client_url)
+      axios.put(
+        reactivate_client_url
+      )
       .then((response) => {
         updateActiveState();
         toast.success(response.data.message);

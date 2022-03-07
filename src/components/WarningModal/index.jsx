@@ -26,7 +26,11 @@ const WarningModal = (props) => {
     // Try to send user data to the server 
     try {
       await axios.put(deactivate_client_url,
-        {client_reason_inactive: reason_inactive}
+        {client_reason_inactive: reason_inactive},
+        {
+          headers: {
+            'token': localStorage.token
+        }}
       )
       .then((response) => {
         props.changeActiveState(reason_inactive);
@@ -47,7 +51,11 @@ const WarningModal = (props) => {
     // Try to send user data to the server 
     try {
       await axios.put(deactivate_patient_url,
-        {patient_reason_inactive: reason_inactive}
+        {patient_reason_inactive: reason_inactive},
+        {
+          headers: {
+            'token': localStorage.token
+        }}
       )
       .then((response) => {
         props.changeActiveState(reason_inactive);
@@ -62,7 +70,7 @@ const WarningModal = (props) => {
   }
 
   return (
-    <Layer animate modal responsive onClickOutside={ props.closeForm } >
+    <Layer animate modal onClickOutside={ props.closeForm } >
       <Heading level="3" color="status-critical" margin="small">
         Warning!
       </Heading>

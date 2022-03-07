@@ -50,6 +50,11 @@ const EditPatientModal = (props) => {
         patient_sex: patient_sex,
         patient_color: patient_color,
         patient_microchip: patient_microchip
+      },
+      {
+        headers: {
+          'token': localStorage.token
+        }
       })
       .then((response) => {
         props.updatePatient(values);
