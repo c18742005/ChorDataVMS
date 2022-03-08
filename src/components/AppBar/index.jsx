@@ -3,13 +3,15 @@ import { Box, Button, Heading, Menu, Header } from 'grommet';
 import { UserSettings, LinkPrevious, Menu as MenuIcon } from 'grommet-icons';
 
 const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
+  // function to handle a user logging out of the app
   const logout = () => {
     try {
-      localStorage.clear();
-      setUser({});
-      setAuth(false);
+      localStorage.clear(); // Remove token from local storage
+      setUser({});          // Set user state to empty object
+      setAuth(false);       // Set auth to false
       toast.success("Logged out successfully");
     } catch (err) {
+      // Display error with logging out
       console.error(err.message);
     }
   };
@@ -31,7 +33,8 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
         fill="horizontal" 
         pad={{"horizontal":"xsmall"}}
       >
-        { isAuth && (
+        { // Display button if user is authenticated
+        isAuth && (
           <Button icon={menuOpen ? 
             (<LinkPrevious color='white'/>) : 
             (<MenuIcon color='white'/>)} 
@@ -42,7 +45,8 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
         <Heading level="1" color="white" textAlign="center" margin="small">
           ChorData
         </Heading>
-        {isAuth && (
+        { // Display menu if user is authenticated
+        isAuth && (
           <Menu 
             icon={<UserSettings color="white" />} 
             items={[

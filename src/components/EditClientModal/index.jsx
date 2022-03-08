@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
-import { Counties } from '../AddClientForm/counties';
 import { 
   Box, 
   Button, 
@@ -11,6 +10,9 @@ import {
   Layer, 
   Select, 
   TextInput } from "grommet"
+
+// County data needed for form select
+import { Counties } from '../AddClientForm/counties';
 
 const EditClientModal = (props) => {
   const defaultValues = {
@@ -23,9 +25,13 @@ const EditClientModal = (props) => {
     client_email: props.data.client_email
   };
 
+  // Set state of form values
   const [values, setValues] = useState(defaultValues);
+
+  // Store client ID
   const client_id = props.client;
 
+  // Destructure values
   const { 
     client_forename,
     client_surname,
@@ -40,7 +46,7 @@ const EditClientModal = (props) => {
     e.preventDefault();
     const update_client_url = `${process.env.REACT_APP_API_END_POINT}/api/clients/${client_id}`;
 
-    // Try to send user data to the server 
+    // Try to send client data to the server 
     try {
       await axios.put(update_client_url, {
         client_forename: client_forename,
@@ -50,23 +56,26 @@ const EditClientModal = (props) => {
         client_county: client_county,
         client_phone: client_phone,
         client_email: client_email
-      },
-      {
+      }, {
         headers: {
           'token': localStorage.token
       }})
       .then((response) => {
+        // Success: update client state, close form and send success message
         props.updateClient(values);
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Check error type
         if(error.response.status === 422) {
+          // Display validation errors to user
           const errors = error.response.data.errors
 
           errors.forEach((err) => {
             toast.error(err.msg);
           })
         } else {
+          // Display single error message to user
           toast.error(error.response.data);
         }
       });   
@@ -79,7 +88,7 @@ const EditClientModal = (props) => {
     <Layer animate modal onClickOutside={props.closeForm} position="center">
       <Heading level="2" textAlign="center">Edit Client</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
-      <Form 
+        <Form 
           onSubmit={onSubmitForm}
           onChange={(nextValue) => {
             setValues(nextValue);
@@ -90,9 +99,9 @@ const EditClientModal = (props) => {
               placeholder="First Name" 
               size="medium" 
               type="text" 
-              plain 
               value={client_forename} 
               name="client_forename" 
+              plain 
             />
           </FormField>
           <FormField name="client_surname" required>
@@ -100,9 +109,9 @@ const EditClientModal = (props) => {
               placeholder="Surname" 
               size="medium" 
               type="text" 
-              plain 
               value={client_surname} 
               name="client_surname" 
+              plain 
             />
           </FormField>
           <FormField name="client_address" required>
@@ -110,9 +119,9 @@ const EditClientModal = (props) => {
               placeholder="Home Address" 
               size="medium" 
               type="text" 
-              plain 
               value={client_address} 
               name="client_address" 
+              plain 
             />
           </FormField>
           <FormField name="client_city" required>
@@ -120,9 +129,9 @@ const EditClientModal = (props) => {
               placeholder="City" 
               size="medium" 
               type="text" 
-              plain 
               value={client_city} 
               name="client_city" 
+              plain 
             />
           </FormField>
           <FormField  name="client_county" required>
@@ -130,9 +139,9 @@ const EditClientModal = (props) => {
               options={Counties} 
               closeOnChange 
               placeholder="County" 
-              plain 
               value={client_county} 
               name="client_county" 
+              plain 
             />
           </FormField>
           <FormField name="client_phone" required>
@@ -140,9 +149,9 @@ const EditClientModal = (props) => {
               placeholder="Phone Number" 
               size="medium" 
               type="text" 
-              plain 
               value={client_phone} 
               name="client_phone" 
+              plain 
             />
           </FormField>
           <FormField name="client_email" required>
@@ -150,14 +159,20 @@ const EditClientModal = (props) => {
               placeholder="Email" 
               size="medium" 
               type="text" 
-              plain 
               value={client_email} 
               name="client_email" 
+              plain 
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
             <Button label="Edit" primary hoverIndicator type="submit"/>
-            <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={props.closeForm}/>
+            <Button 
+              label="Cancel"
+              color="accent-4" 
+              onClick={props.closeForm}
+              primary 
+              hoverIndicator
+            />
           </Box>
         </Form>
       </Box>

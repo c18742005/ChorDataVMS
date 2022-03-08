@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
-import { Species } from './species';
 import { 
   Box, 
   Button, 
@@ -12,11 +11,13 @@ import {
   Select, 
   TextInput } from 'grommet';
 
+// Import data needed for species and breeds select
 import { dog_breeds } from './dog_breeds';
 import { cat_breeds } from './cat_breeds';
 import { bird_breeds } from './bird_breeds';
 import { reptile_breeds } from './reptile_breeds';
 import { rodent_breeds } from './rodent_breeds';
+import { Species } from './species';
 
 const AddPatientModal = (props) => {
   const defaultValues = {
@@ -29,10 +30,14 @@ const AddPatientModal = (props) => {
     patient_microchip: ""
   };
 
+  // Store the values of the form and the breed currently selected in state
   const [values, setValues] = useState(defaultValues);
   const [breed, setBreed] = useState([])
+
+  // Store the client ID
   const client_id = props.client;
 
+  // Destructure the values state
   const { 
     patient_name,
     patient_species,
@@ -47,7 +52,7 @@ const AddPatientModal = (props) => {
     e.preventDefault();
     const add_patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients`;
 
-    // Try to send user data to the server 
+    // Try to send patient data to the server 
     try {
       await axios.post(add_patient_url, {
         patient_name: patient_name,
@@ -58,23 +63,27 @@ const AddPatientModal = (props) => {
         patient_color: patient_color,
         patient_microchip: patient_microchip,
         patient_client_id: client_id
-      },
-      {
+      }, {
         headers: {
           'token': localStorage.token
       }})
       .then((response) => {
+        // Success: Add new patient to the patient state
+        // Close form and send a success message
         props.addPatient(response.data.body)
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Check error type
         if(error.response.status === 422) {
+          // Display validation errors to the user
           const errors = error.response.data.errors
 
           errors.forEach((err) => {
             toast.error(err.msg);
           })
         } else {
+          // Display single error to user
           toast.error(error.response.data);
         }
       });   
@@ -98,9 +107,9 @@ const AddPatientModal = (props) => {
               placeholder="Name" 
               size="medium" 
               type="text"
-              plain 
               name="patient_name" 
               value={patient_name} 
+              plain 
             />
           </FormField>
           <FormField name="patient_species" required>
@@ -108,10 +117,11 @@ const AddPatientModal = (props) => {
               options={Species} 
               closeOnChange 
               placeholder="Species" 
-              plain
               name="patient_species"
               value={patient_species} 
+              plain
               onChange={({ option }) => {
+                // Set the breed file depending on the species selected
                 switch(option) {
                   case 'Avian':
                     setBreed(bird_breeds);
@@ -135,23 +145,23 @@ const AddPatientModal = (props) => {
             />
           </FormField>
           <FormField name="patient_breed" required>
-          <Select
-            placeholder="Breed" 
-            size="medium" 
-            options={breed}
-            value={patient_breed}
-            name="patient_breed"
-            plain
-          />
+            <Select
+              placeholder="Breed" 
+              size="medium" 
+              options={breed}
+              value={patient_breed}
+              name="patient_breed"
+              plain
+            />
           </FormField>
           <FormField name="patient_age" required>
             <TextInput 
               placeholder="Age" 
               size="medium" 
               type="text" 
-              plain 
               name="patient_age"
               value={patient_age}
+              plain 
             />
           </FormField>
           <FormField name="patient_sex" required>
@@ -159,9 +169,9 @@ const AddPatientModal = (props) => {
               options={["MN", "FN", "M", "F"]} 
               closeOnChange 
               placeholder="Sex" 
-              plain 
               name="patient_sex"
               value={patient_sex}
+              plain 
             />
           </FormField>
           <FormField name="patient_color" required>
@@ -169,9 +179,9 @@ const AddPatientModal = (props) => {
               placeholder="Color" 
               size="medium" 
               type="text" 
-              plain 
               name="patient_color"
               value={patient_color}
+              plain 
             />
           </FormField>
           <FormField name="patient_microchip" required>
@@ -179,14 +189,20 @@ const AddPatientModal = (props) => {
               placeholder="Microchip Number" 
               size="medium" 
               type="text" 
-              plain 
               name="patient_microchip"
               value={patient_microchip}
+              plain 
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
             <Button label="Add" primary hoverIndicator type="submit"/>
-            <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={props.closeForm}/>
+            <Button 
+              label="Cancel"
+              color="accent-4"
+              onClick={props.closeForm}
+              primary 
+              hoverIndicator  
+            />
           </Box>
         </Form>
       </Box>

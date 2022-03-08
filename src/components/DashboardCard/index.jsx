@@ -1,13 +1,13 @@
 import { Box, Card, Heading } from "grommet"
 
-const DashboardCard = (props) => {
+const DashboardCard = ({ title, image }) => {
   return (
     <Card hoverIndicator fill>
       <Heading level="3" textAlign="center">
-        {props.title}
+        {title}
       </Heading>
       <Box align="center" justify="center">
-        {props.image}
+        {image}
       </Box>
     </Card>
   )

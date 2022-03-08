@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom"
-import { Box, DataTable, Text } from "grommet"
+import { useNavigate } from 'react-router-dom';
+import { Box, DataTable, Text } from 'grommet';
 
-const ClientTable = (props) => {
+const ClientTable = ({ data }) => {
   let navigate = useNavigate();
 
   return (
@@ -25,7 +25,7 @@ const ClientTable = (props) => {
           property: "client_phone"
         }
       ]}
-      data={props.data} 
+      data={data} 
       pad="small"
       background={{
         "header":{"color":"brand"},

@@ -1,6 +1,7 @@
 import { TextInput } from 'grommet';
 import { Search } from 'grommet-icons';
 
+// TO COMPLETE
 const SearchBar = () => {
   return (
     <TextInput 

@@ -21,13 +21,17 @@ const AdministerDrugModal = (props) => {
     patient_administered: 0
   };
 
+  // Set state of form values patients, and currently selected patient
   const [values, setValues] = useState(defaultValues);
   const [patients, setPatients] = useState({});
   const [patientNames, setPatientNames] = useState([]);
   const [patient, setPatient] = useState(0);
+
+  // Store clinic and staff IDs
   const clinic_id = props.clinic_id;
   const staff_id = props.staff_id;
 
+  // Fetch patients data 
   useEffect(() => {
     const fetchData = async () => {
       const get_patients_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/clinic/${clinic_id}`;
@@ -53,6 +57,7 @@ const AdministerDrugModal = (props) => {
     fetchData();
   }, []);
 
+  // Destructure values state
   const { 
     drug_date_given,
     drug_batch_number,
@@ -61,12 +66,12 @@ const AdministerDrugModal = (props) => {
     patient_administered
   } = values;
 
-  // Function to handle submission of the add drug form
+  // Function to handle submission of the administer drug form
   const onSubmitForm = async e => {
     e.preventDefault();
     const patient_drug_url = `${process.env.REACT_APP_API_END_POINT}/api/drugs/log`;
 
-    // Try to send user data to the server 
+    // Try to send drug data to the server 
     try {
       axios.post(patient_drug_url, {
         drug_date_given: drug_date_given,
@@ -82,16 +87,20 @@ const AdministerDrugModal = (props) => {
         }
       })
       .then((response) => {
+        // Success: close form and display success message
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Check error type
         if(error.response.status === 422) {
+          // Display validation errors to the user
           const errors = error.response.data.errors
 
           errors.forEach((err) => {
             toast.error(err.msg);
           })
         } else {
+          // Display single error to user
           toast.error(error.response.data);
         }
       });   

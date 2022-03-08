@@ -19,27 +19,27 @@ import DrugStockTable from "../../components/DrugStockTable";
 import DrugLogTable from "../../components/DrugLogTable";
 
 const Drugs = ({ clinic_id, staff_id }) => {
-  const [showAddDrug, setShowAddDrug] = useState(false); // Show add drug modal
-  const [showAdminDrug, setShowAdminDrug] = useState(false); // Show administer drug modal
-  const[drugs, setDrugs] = useState([]); // Hold state of drugs i.e. Drug name, ID, and side effect link
-  const [drug, setDrug] = useState({drug_name: ""}); // Set current drug selected
+  const [showAddDrug, setShowAddDrug] = useState(false); // Show add drug modal state
+  const [showAdminDrug, setShowAdminDrug] = useState(false); // Show administer drug modal state
+  const[drugs, setDrugs] = useState([]); // Hold drugs state
+  const [drug, setDrug] = useState({drug_name: ""}); // Hold current drug selected
  
+  // Fetch drug data from server
   useEffect(() => {
     const fetchData = async () => {
       const get_drugs_url = `${process.env.REACT_APP_API_END_POINT}/api/drugs`;
 
+      // Attempt to fetch drugs data
       try {
-        await axios.get(
-          get_drugs_url,
-          {
-            headers: {
-              'token': localStorage.token
-            }
+        await axios.get(get_drugs_url, {
+          headers: {
+            'token': localStorage.token
           }
-        )
-        .then(res => {
+        }).then(res => {
+          // Success: set drugs state
           setDrugs(res.data);
-        })
+        });
+
       } catch (error) {
         console.error(error.message);
       }
@@ -48,6 +48,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
     fetchData();
   }, []);
 
+  // Function to close add drug and administer drug modals
   const closeForms = () => {
     setShowAddDrug(false);
     setShowAdminDrug(false);
@@ -57,16 +58,17 @@ const Drugs = ({ clinic_id, staff_id }) => {
     <Box 
       align="start" 
       justify="start" 
-      fill 
       direction="column" 
       gap="small" 
       pad="small"
+      fill 
     >
       <Select
         label="Select Drug" 
         value={drug.drug_name}
         options={drugs.map((option) => option.drug_name)}
         onChange={({ option }) => {
+          // Loop through drugs state to find selected drug
           for(let item in drugs) {
             if(drugs[item].drug_name === option){
               setDrug(drugs[item])
@@ -74,7 +76,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
           }
         }}
       />
-      {
+      { // Only show data when a drug is selected otherwise show an info message
         drug.drug_name !== "" ? (<>
           <Heading level="2" >
             {drug.drug_name}
@@ -134,11 +136,14 @@ const Drugs = ({ clinic_id, staff_id }) => {
             </Tab>
           </Tabs></>
         ) : (
-          <Text color="status-critical" weight="bold">Please select a drug from the dropdown menu</Text>
+          <Text color="status-critical" weight="bold">
+            Please select a drug from the dropdown menu
+          </Text>
         )
       }
       
-      {showAddDrug && (
+      { // Show add drug modal if required
+      showAddDrug && (
         <AddDrugStock
           closeForm={closeForms} 
           clinic_id={clinic_id} 
@@ -146,7 +151,8 @@ const Drugs = ({ clinic_id, staff_id }) => {
         />
       )}
 
-      {showAdminDrug && (
+      { // Show administer drug modal if required
+      showAdminDrug && (
         <AdministerDrugModal
           closeForm={closeForms} 
           clinic_id={clinic_id} 

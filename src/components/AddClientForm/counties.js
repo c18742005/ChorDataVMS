@@ -1,3 +1,4 @@
+// File that holds the county names for the client form
 export const Counties = [
   "Antrim",
   "Armagh",

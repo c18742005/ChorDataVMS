@@ -8,7 +8,9 @@ import AddXrayModal from '../../components/AddXrayModal'
 import XrayTable from '../../components/XrayTable'
 
 const Xrays = ({ clinic_id, staff_id }) => {
+  // Set state of xray modal (show/hide)
   const [showXrayModal, setShowXrayModal] = useState(false);
+  // Set state of xrays for table
   const [xrays, setXrays] = useState([]);
 
   // Close the open xray modal
@@ -42,14 +44,14 @@ const Xrays = ({ clinic_id, staff_id }) => {
     const fetch_data = async () => {
       const url = `${process.env.REACT_APP_API_END_POINT}/api/xrays/clinic/${clinic_id}`;
 
-      await axios.get(url,
-        {
-          headers: {
-            'token': localStorage.token
-        }}
-      )
-      .then(res => {
+      await axios.get(url, {
+        headers: {
+          'token': localStorage.token
+      }}).then(res => {
+        // Success: store xray data in state
         const xrays = res.data;
+
+        // Format date to a string
         xrays.forEach(element => {
           element.xray_date = new Date(element.xray_date).toLocaleDateString("en-US");
         });
@@ -72,17 +74,22 @@ const Xrays = ({ clinic_id, staff_id }) => {
         <Button 
           label="Add X-Ray"
           icon={<Add />} 
-          reverse 
-          primary 
           color="status-ok" 
-          hoverIndicator 
           size="small"  
           margin={{"left":"medium"}} 
           onClick={() => setShowXrayModal(true)} 
+          hoverIndicator 
+          reverse 
+          primary 
         />
       </Box>
-      <XrayTable data={xrays} clinicId={clinic_id} staffId={staff_id} updateXray={updateXrays} />
-      { // Show add xray modal if necessary
+      <XrayTable 
+        data={xrays} 
+        clinicId={clinic_id} 
+        staffId={staff_id} 
+        updateXray={updateXrays} 
+      />
+      { // Show add xray modal if selected
         showXrayModal && (
           <AddXrayModal
             closeForm={closeForms} 

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { 
@@ -11,43 +11,51 @@ import {
   NameValuePair, 
   Tab, 
   Tabs, 
-  Text } from "grommet";
+  Text } from 'grommet';
 import { 
   AddCircle, 
   Checkmark,
   CircleInformation, 
   Close, 
-  Edit } from "grommet-icons";
+  Edit } from 'grommet-icons';
 
 // Components
-import EditClientModal from "../../components/EditClientModal";
-import AddPatientModal from "../../components/AddPatientModal";
-import WarningModal from "../../components/WarningModal";
+import EditClientModal from '../../components/EditClientModal';
+import AddPatientModal from '../../components/AddPatientModal';
+import WarningModal from '../../components/WarningModal';
 
 const Client = () => {
   const navigate = useNavigate();
   const { clientId } = useParams();
 
+  // Set state of patient add, client edit, and deactivate modals
   const [showClientEdit, setShowClientEdit] = useState(false);
   const [showClientDeactivate, setShowClientDeactivate] = useState(false);
   const [showPatientAdd, setShowPatientAdd] = useState(false);
+
+  // Set state of selected client
   const [client, setClient] = useState([]);
+  // Set state of patients
   const [patients, setPatients] = useState([]);
 
+  // Function to close modals
   const closeForms = () => {
     setShowClientEdit(false);
     setShowPatientAdd(false);
     setShowClientDeactivate(false);
   }
 
+  // Function to update the client state
   const updateClient = (newData) => {
     setClient(newData);
   }
 
+  // Function to update the patients state
   const updatePatients = (newPatient) => {
     setPatients([...patients, newPatient])
   }
 
+  // Function to update the active state of a client
   const updateActiveState = (reason=null) => {
     setClient({...client, 
       client_inactive: !client.client_inactive,
@@ -55,38 +63,31 @@ const Client = () => {
     })
   }
 
-  // Fetch clients data
+  // Fetch clients data from the server
   useEffect(() => {
     const fetch_data = async ()  => {
       const client_url = `${process.env.REACT_APP_API_END_POINT}/api/clients/${clientId}`;
       const patients_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/client/${clientId}`;
 
       try {
-        await axios.get(
-          client_url,
-          {
-            headers: {
-              'token': localStorage.token
-          }}
-        )
-          .then(res => {
-            const client_data = res.data;
-            setClient(client_data[0]);
-          })
-          .catch((e) => console.log(e.response.data))
+        await axios.get(client_url, {
+          headers: {
+            'token': localStorage.token
+        }}).then(res => {
+          // Success: set client state
+          const client_data = res.data;
+          setClient(client_data[0]);
+        }).catch((e) => console.log(e.response.data));
 
-        await axios.get(
-          patients_url,
-          {
-            headers: {
-              'token': localStorage.token
-          }}
-        )
-          .then(res => {
-            const patient_data = res.data;
-            setPatients(patient_data);
-          })
-          .catch((e) => console.log(e.response.data))
+        await axios.get(patients_url, {
+          headers: {
+            'token': localStorage.token
+        }}).then(res => {
+          // Success: set patients state
+          const patient_data = res.data;
+          setPatients(patient_data);
+        }).catch((e) => console.log(e.response.data));
+
       } catch(err) {
         console.log(err);
       }
@@ -99,15 +100,15 @@ const Client = () => {
   const onReactivation = async e => {
     const reactivate_client_url = `${process.env.REACT_APP_API_END_POINT}/api/clients/reactivate/${clientId}`;
 
-    // Try to send user data to the server 
+    // Try to update active state on server
     try {
-      axios.put(
-        reactivate_client_url
-      )
+      axios.put(reactivate_client_url)
       .then((response) => {
+        // Success: update active state of client
         updateActiveState();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Display error to user
         toast.error(error.message);
       });   
     } catch (err) {
@@ -182,16 +183,17 @@ const Client = () => {
                 {header:<Text color="white" weight="bold">Name</Text>, property: "patient_name", primary: true},
                 {header: <Text color="white" weight="bold">Age</Text>, property: "patient_age"},
                 {property: "patient_species", header: <Text color="white" weight="bold">Species</Text>},
-                {property: "patient_breed", header: <Text color="white" weight="bold">Breed</Text>}]}
-              data={patients} 
-              paginate 
-              step={10}
-              sortable 
-              resizeable 
-              fill="horizontal" 
-              pad="small" 
+                {property: "patient_breed", header: <Text color="white" weight="bold">Breed</Text>}
+              ]}
               background={{"header": {"color":"brand"}}} 
               onClickRow={({ datum }) => {navigate(`/patient/${datum.patient_id}`)}} 
+              data={patients} 
+              step={10}
+              fill="horizontal" 
+              pad="small" 
+              sortable 
+              resizeable 
+              paginate 
             />
           </Box>
         </Tab>
@@ -208,7 +210,8 @@ const Client = () => {
             gap="small" 
             margin={{"top":"medium"}}
           >
-            {
+            { // Display reactivate button if user is inactive 
+              // Display deactivate button if user is active
               client.client_inactive ? (
                 <Button 
                   label="Reactivate Account" 
@@ -223,30 +226,31 @@ const Client = () => {
                   <Button 
                   label="Deactivate Account" 
                   icon={<Close />} 
-                  reverse 
-                  primary 
-                  size="medium" 
                   hoverIndicator={{"color":"neutral-4","dark":true}}   
                   color="status-critical" 
                   onClick={() => setShowClientDeactivate(true)} 
+                  size="medium" 
+                  reverse 
+                  primary 
                 />
                 )
             }
             <Button 
               label="Edit Account" 
               icon={<Edit />} 
-              reverse 
-              primary 
               size="medium" 
-              hoverIndicator 
               color="accent-4" 
               onClick={() => setShowClientEdit(true)} 
+              reverse 
+              hoverIndicator 
+              primary 
             />
           </Box>
         </Tab>
       </Tabs>
 
-      {showClientEdit && (
+      { // Display client edit modal if required
+      showClientEdit && (
         <EditClientModal 
           closeForm={closeForms} 
           data={client} 
@@ -255,7 +259,8 @@ const Client = () => {
         />
       )}
 
-      {showPatientAdd && (
+      { // Display add patient modal if required
+      showPatientAdd && (
         <AddPatientModal 
           closeForm={closeForms} 
           client={clientId} 
@@ -263,7 +268,8 @@ const Client = () => {
         />
       )}
 
-      {showClientDeactivate && (
+      { // Display client deactivate modal if required
+      showClientDeactivate && (
         <WarningModal 
           closeForm={closeForms} 
           type="client" 

@@ -14,6 +14,9 @@ import {
 import { AddCircle } from 'grommet-icons';
 
 const Register = ({ setAuth }) => {
+  const navigate = useNavigate();
+
+  // Default values for state
   const defaultValues = {
     staff_username: "",
     staff_password: "",
@@ -21,15 +24,17 @@ const Register = ({ setAuth }) => {
     staff_clinic_id: ""
   };
 
+  // Hold form values in state
   const [values, setValues] = useState(defaultValues);
 
+  // Destructure state values
   const { 
     staff_username,
     staff_password,
     staff_role,
     staff_clinic_id } = values;
 
-  // Function to handle submission of the add staff form
+  // Function to handle submission of the register form
   const onSubmitForm = async e => {
     e.preventDefault();
     const register_staff_url = `${process.env.REACT_APP_API_END_POINT}/api/register`;
@@ -41,28 +46,33 @@ const Register = ({ setAuth }) => {
         password: staff_password,
         role: staff_role,
         clinic_id: staff_clinic_id
-      })
-      .then((response) => {
+      }).then((response) => {
+        // Success: display success message and store token
         toast.success(response.data.message);
 
         const parseRes = response.data
 
+        // If token is received store in local storage and set auth to true
         if (parseRes.token) {
           localStorage.setItem("token", parseRes.token);
           setAuth(true);
           toast.success("Registered Successfully");
         } else {
+          // Error: token was not received set auth to false and display error
           setAuth(false);
           toast.error(parseRes);
         }
       }, (error) => {
+        // Error: Check error type
         if(error.response.status === 422) {
+          // Display validation errors to user
           const errors = error.response.data.errors
 
           errors.forEach((err) => {
             toast.error(err.msg);
           })
         } else {
+          // Display single error to user
           toast.error(error.response.data);
         }
       });   
@@ -71,7 +81,7 @@ const Register = ({ setAuth }) => {
     }
   }
 
-  const navigate = useNavigate();
+  // Function to navigate to login page
   const loginLink = () => {
     navigate("/login");
   }
@@ -135,7 +145,8 @@ const Register = ({ setAuth }) => {
                   "Vet",
                   "Nurse",
                   "ACA",
-                  "Receptionist"]} 
+                  "Receptionist"
+                ]} 
                 placeholder="Job Role" 
                 name="staff_role" 
                 closeOnChange />

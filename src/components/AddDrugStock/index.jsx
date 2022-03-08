@@ -22,10 +22,14 @@ const AddDrugStock = (props) => {
     drug_concentration_2: ""
   };
 
+  // State to hold drug values
   const [values, setValues] = useState(defaultValues);
+
+  // Store drug and clinic IDs
   const drug_id = props.drug.drug_id
   const clinic_id = props.clinic_id;
 
+  // Destructure state values
   const { 
     drug_expiry_date,
     drug_batch_number,
@@ -40,7 +44,7 @@ const AddDrugStock = (props) => {
     e.preventDefault();
     const add_drug_url = `${process.env.REACT_APP_API_END_POINT}/api/drugs`;
 
-    // Try to send user data to the server 
+    // Try to send drug data to the server 
     try {
       await axios.post(add_drug_url, {
         drug_expiry_date: drug_expiry_date,
@@ -57,16 +61,20 @@ const AddDrugStock = (props) => {
         }
       })
       .then((response) => {
+        // Success: Close form and send success message
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Check type of error
         if(error.response.status === 422) {
+          // Send validation error to user
           const errors = error.response.data.errors
 
           errors.forEach((err) => {
             toast.error(err.msg);
           })
         } else {
+          // Send single error message to user
           toast.error(error.response.data);
         }
       });   
@@ -150,7 +158,13 @@ const AddDrugStock = (props) => {
           
           <Box align="center" justify="center" direction="row" gap="small">
             <Button label="Add" primary hoverIndicator type="submit"/>
-            <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={props.closeForm}/>
+            <Button 
+              label="Cancel"
+              color="accent-4" 
+              onClick={props.closeForm}
+              primary 
+              hoverIndicator 
+            />
           </Box>
         </Form>
       </Box>

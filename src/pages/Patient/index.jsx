@@ -25,19 +25,26 @@ import WarningModal from '../../components/WarningModal';
 
 const Patient = () => {
   const { patientId } = useParams();
+
+  // Set patient edit and deactivate modals (open/closed)
   const [showPatientEdit, setShowPatientEdit] = useState(false);
   const [showPatientDeactivate, setShowPatientDeactivate] = useState(false);
+  // Store patient state
   const [patient, setPatient] = useState({});
 
+  // Function to close modals if open
   const closeForms = () => {
     setShowPatientEdit(false);
     setShowPatientDeactivate(false);
   }
 
+  // Function to update patient state
   const updatePatient = (newData) => {
     setPatient(newData);
   }
 
+  // Function to update the active state of the patient
+  // If reason is not supplied then reason is set to null
   const updateActiveState = (reason=null) => {
     setPatient({...patient, 
       patient_inactive: !patient.patient_inactive,
@@ -45,24 +52,20 @@ const Patient = () => {
     })
   }
 
-  // Fetch patient data
+  // Fetch patient data from the server
   useEffect(() => {
     const fetch_data = async () => {
       const patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/${patientId}`;
 
       try {
-        await axios.get(
-          patient_url,
-          {
-            headers: {
-              'token': localStorage.token
-          }}
-        )
-          .then(res => {
-            const patient_data = res.data;
-            setPatient(patient_data[0]);
-          })
-          .catch(e => console.log(e.response.data));
+        await axios.get(patient_url, {
+          headers: {
+            'token': localStorage.token
+        }}).then(res => {
+          // Success: set patient state to the patient retrieved
+          const patient_data = res.data;
+          setPatient(patient_data[0]);
+        }).catch(e => console.log(e.response.data));
       } catch(err) {
         console.log(err);
       }
@@ -75,19 +78,17 @@ const Patient = () => {
   const onReactivation = async e => {
     const reactivate_patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/reactivate/${patientId}`;
 
-    // Try to send user data to the server 
+    // Try to update patient active state on the server 
     try {
-      await axios.put(
-        reactivate_patient_url,
-        {
-          headers: {
-            'token': localStorage.token
-        }}
-      )
-      .then((response) => {
+      await axios.put(reactivate_patient_url, {
+        headers: {
+          'token': localStorage.token
+      }}).then((response) => {
+        // Success: Update the active state of the patient and send success message
         updateActiveState();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Display error message to user
         toast.error(error.message);
       });   
     } catch (err) {
@@ -97,11 +98,20 @@ const Patient = () => {
 
   return (
     <Box align="start" justify="start" direction="column" pad="small" fill>
-      <Heading level="2" textAlign="center" color={patient.patient_inactive ? "border" : "black"}>
+      <Heading 
+        level="2" 
+        textAlign="center" 
+        color={patient.patient_inactive ? "border" : "black"}>
         {patient.patient_name}
       </Heading>
       {patient.patient_inactive && (
-        <Heading level="4" textAlign="center" color="red" margin="none" gap="none">
+        <Heading 
+          level="4" 
+          textAlign="center" 
+          color="red" 
+          margin="none" 
+          gap="none"
+        >
           {`Patient is deactivated: ${patient.patient_reason_inactive}`}
         </Heading>)
       }
@@ -158,28 +168,27 @@ const Patient = () => {
             margin={{"top":"medium"}}
           >
             <DataTable
-              columns={[
-                {header:<Text color="white" weight="bold">Procedure</Text>, property: "procedure", primary: true},
-                {header:<Text color="white" weight="bold">Date</Text>, property: "date"}
-              ]}
-              data={[
-                {
+              columns={[{ 
+                header:<Text color="white" weight="bold">Procedure</Text>, 
+                property: "procedure", 
+                primary: true
+              }, {
+                header:<Text color="white" weight="bold">Date</Text>, 
+                property: "date"
+              }]}
+              data={[{
                   "procedure": "Anaesthetic Monitoring",
                   "date": "02/02/2022"
-                },
-                {
+                }, {
                   "procedure": "Dental Chart",
                   "date": "01/01/2022"
-                },
-                {
+                }, {
                   "procedure": "X-Ray",
                   "date": "25/12/2021"
-                },
-                {
+                }, {
                   "procedure": "Drug Administered",
                   "date": "22/12/2021"
-                },
-                {
+                }, {
                   "procedure": "Drug Administered",
                   "date": "22/12/2021"
                 }
@@ -207,7 +216,8 @@ const Patient = () => {
             gap="small" 
             margin={{"top":"medium"}}
           >
-            {
+            { // Show reactivate button if patient is inactive
+              // Show deactivate button if patient is active
               patient.patient_inactive ? (
                 <Button 
                   label="Reactivate Patient" 
@@ -243,7 +253,8 @@ const Patient = () => {
           </Box>
         </Tab>
       </Tabs>
-      {showPatientEdit && (
+      { // Show patient edit modal if selected
+        showPatientEdit && (
         <EditPatientModal 
           closeForm={closeForms} 
           data={patient} 
@@ -252,7 +263,8 @@ const Patient = () => {
         />
       )}
 
-      {showPatientDeactivate && (
+      { // Show patient deactivate modal if selected
+        showPatientDeactivate && (
         <WarningModal 
           closeForm={closeForms} 
           type="patient" 

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
-import { Counties } from './counties';
 import { 
   Box, 
   Button, 
@@ -11,6 +10,9 @@ import {
   Layer, 
   Select, 
   TextInput } from 'grommet';
+
+// external data needed for dropdown 
+import { Counties } from './counties';
 
 const AddClientForm = ({ clinic, addClient, closeForm }) => {
   const defaultValues = {
@@ -23,8 +25,10 @@ const AddClientForm = ({ clinic, addClient, closeForm }) => {
     client_email: ""
   };
   
+  // State to hold form values
   const [values, setValues] = useState(defaultValues);
 
+  // Destructure values state
   const { 
     client_forename,
     client_surname,
@@ -39,7 +43,7 @@ const AddClientForm = ({ clinic, addClient, closeForm }) => {
     e.preventDefault();
     const add_client_url = `${process.env.REACT_APP_API_END_POINT}/api/clients`;
 
-    // Try to send user data to the server 
+    // Try to send client data to the server 
     try {
       await axios.post(add_client_url, {
         client_forename: client_forename,
@@ -56,17 +60,21 @@ const AddClientForm = ({ clinic, addClient, closeForm }) => {
           'token': localStorage.token
       }})
       .then((response) => {
+        // Success: Update clients state and close form
         addClient(response.data.body);
         closeForm();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Check error type
         if(error.response.status === 422) {
+          // Output validation errors to the user
           const errors = error.response.data.errors
 
           errors.forEach((err) => {
             toast.error(err.msg);
           })
         } else {
+          // Output single error to user
           toast.error(error.response.data);
         }
       });   
@@ -157,7 +165,13 @@ const AddClientForm = ({ clinic, addClient, closeForm }) => {
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
             <Button label="Add" primary hoverIndicator type="submit"/>
-            <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={closeForm}/>
+            <Button 
+              label="Cancel"
+              color="accent-4" 
+              onClick={closeForm}
+              primary 
+              hoverIndicator
+            />
           </Box>
         </Form>
       </Box>

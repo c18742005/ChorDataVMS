@@ -1,3 +1,4 @@
+// File that holds the items to be displayed in the sidebar
 import { Aid, Alert, Close, Favorite, Group, HomeRounded } from 'grommet-icons';
 
 export const Items = [

@@ -16,6 +16,7 @@ const WarningModal = (props) => {
     reason_inactive: ""
   };
 
+  // Set state values and reason client/patient is inactive
   const [values, setValues] = useState(defaultValues);
   const { reason_inactive } = values;
 
@@ -23,20 +24,20 @@ const WarningModal = (props) => {
   const deactivateClient = async e => {
     const deactivate_client_url = `${process.env.REACT_APP_API_END_POINT}/api/clients/deactivate/${props.clientId}`;
 
-    // Try to send user data to the server 
+    // Try to update client status on the server
     try {
-      await axios.put(deactivate_client_url,
-        {client_reason_inactive: reason_inactive},
-        {
-          headers: {
-            'token': localStorage.token
-        }}
-      )
-      .then((response) => {
+      await axios.put(deactivate_client_url, {
+        client_reason_inactive: reason_inactive
+      }, {
+        headers: {
+          'token': localStorage.token
+      }}).then((response) => {
+        // Success: Change active state, close form and send success message
         props.changeActiveState(reason_inactive);
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
+        // Display error to user
         toast.error(error.message);
       });   
     } catch (err) {
@@ -44,24 +45,24 @@ const WarningModal = (props) => {
     }
   }
 
-  // Function to handle the deactivation of a patient
+  // Function to handle the deactivation of a patient acc
   const deactivatePatient = async e => {
     const deactivate_patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/deactivate/${props.patientId}`;
 
-    // Try to send user data to the server 
+    // Try to update patient status on the server
     try {
-      await axios.put(deactivate_patient_url,
-        {patient_reason_inactive: reason_inactive},
-        {
-          headers: {
-            'token': localStorage.token
-        }}
-      )
-      .then((response) => {
+      await axios.put(deactivate_patient_url, {
+        patient_reason_inactive: reason_inactive
+      }, {
+        headers: {
+          'token': localStorage.token
+      }}).then((response) => {
+        // Success: Change active state of patient, close form and send success message
         props.changeActiveState(reason_inactive);
         props.closeForm()
         toast.success(response.data.message);
       }, (error) => {
+        // Display error message to user
         toast.error(error.message);
       });   
     } catch (err) {
@@ -87,11 +88,13 @@ const WarningModal = (props) => {
           <Select 
             options={props.type === "client" ? (
               ["Client Deceased","Client Relocating","Other"]) : (
-                ["Patient Deceased", "Patient Rehomed", "Client Relocating", "Other"])} 
+              ["Patient Deceased", "Patient Rehomed", "Client Relocating", "Other"])
+            } 
             placeholder="Reason"
             value={reason_inactive} 
             name="reason_inactive" 
-            closeOnChange />
+            closeOnChange 
+          />
         </FormField>
         <Box align="end" justify="end" pad="small" direction="row" gap="small">
           <Button 
@@ -103,7 +106,7 @@ const WarningModal = (props) => {
           />
           <Button 
             label="Cancel" 
-            onClick={ props.closeForm }
+            onClick={props.closeForm}
             primary 
             hoverIndicator 
           />

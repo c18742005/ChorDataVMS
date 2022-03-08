@@ -24,10 +24,12 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
     xray_clinic_id: 0
   };
   
+  // Set state for the form values, patients and current selected patient
   const [values, setValues] = useState(defaultValues);
   const [patients, setPatients] = useState([]);
   const [patientId, setPatientId] = useState(0);
 
+  // Fetch patient data
   useEffect(() => {
     const fetchData = async () => {
       const get_patients_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/clinic/${clinicId}`;
@@ -52,6 +54,7 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
     fetchData();
   }, []);
 
+  // Destructure state values
   const { 
     xray_date,
     xray_image_quality,
@@ -82,17 +85,22 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
           'token': localStorage.token
       }})
       .then((response) => {
+        // Success: Add new xray to state
+        // Close form and send success message
         addXray(response.data.body);
         closeForm();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Check error type
         if(error.response.status === 422) {
+          // Display validation errors to user
           const errors = error.response.data.errors
 
           errors.forEach((err) => {
             toast.error(err.msg);
           })
         } else {
+          // Display single error to user
           toast.error(error.response.data);
         }
       });   
@@ -124,9 +132,9 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
               options={["Over exposed", "Under exposed"]} 
               closeOnChange 
               placeholder="Image Quality" 
-              plain 
               value={xray_image_quality} 
               name="xray_image_quality" 
+              plain 
             />
           </FormField>
           <FormField name="xray_kV" required>
@@ -134,9 +142,9 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
               placeholder="kV" 
               size="medium" 
               type="text" 
-              plain 
               value={xray_kV} 
               name="xray_kV" 
+              plain 
             />
           </FormField>
           <FormField name="xray_mAs" required>
@@ -144,9 +152,9 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
               placeholder="mAs" 
               size="medium" 
               type="text" 
-              plain 
               value={xray_mAs} 
               name="xray_mAs" 
+              plain 
             />
           </FormField>
           <FormField name="xray_position" required>
@@ -154,9 +162,9 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
               placeholder="Position" 
               size="medium" 
               type="text" 
-              plain 
               value={xray_position} 
               name="xray_position" 
+              plain 
             />
           </FormField>
           <FormField  name="xray_patient_id" required>
@@ -164,9 +172,9 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
               options={patients.map((patient) => patient.patient_name)} 
               closeOnChange 
               placeholder="Patient" 
-              plain 
               value={xray_patient_id} 
               name="xray_patient_id" 
+              plain 
               onChange={({ option }) => {
                 for(let item in patients) {
                   if(patients[item].patient_name === option){
@@ -178,7 +186,13 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
             <Button label="Add" primary hoverIndicator type="submit"/>
-            <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={closeForm}/>
+            <Button 
+              label="Cancel" 
+              color="accent-4" 
+              onClick={closeForm}
+              primary 
+              hoverIndicator 
+            />
           </Box>
         </Form>
       </Box>

@@ -5,9 +5,12 @@ import { useState } from "react"
 import EditXrayModal from "../EditXrayModal";
 
 const XrayTable = ({ data, clinicId, staffId, updateXray }) => {
+  // Set state of modal (shown/hidden)
   const [editModal, setEditModal] = useState(false);
+  // Set state of xray selected
   const [xray, setXray] = useState({});
 
+  // Function to handle form closure
   const closeForms = () => {
     setXray({});
     setEditModal(false);
@@ -45,18 +48,18 @@ const XrayTable = ({ data, clinicId, staffId, updateXray }) => {
           "header":{"color":"brand"},
           "body":["white", "border"]
         }} 
-        sortable
-        resizeable 
         fill="horizontal"
         onClickRow={({ datum }) => {
           setXray(datum);
           setEditModal(true);
         }}
-        paginate
         step={10}
+        paginate
+        sortable
+        resizeable 
       />
 
-      {
+      { // Show edit xray modal if required
         editModal && (  
           <EditXrayModal
             closeForm={closeForms} 

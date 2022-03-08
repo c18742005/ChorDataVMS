@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
-import { Species } from '../AddPatientModal/species';
+import { useEffect, useState } from 'react';
 import { 
   Box, 
   Button, 
@@ -11,6 +10,14 @@ import {
   Layer, 
   Select, 
   TextInput } from 'grommet';
+
+// Data needed for species and breed select
+import { Species } from '../AddPatientModal/species';
+import { dog_breeds } from '../AddPatientModal/dog_breeds';
+import { cat_breeds } from '../AddPatientModal/cat_breeds';
+import { bird_breeds } from '../AddPatientModal/bird_breeds';
+import { reptile_breeds } from '../AddPatientModal/reptile_breeds';
+import { rodent_breeds } from '../AddPatientModal/rodent_breeds';
 
 const EditPatientModal = (props) => {
   const defaultValues = {
@@ -23,9 +30,14 @@ const EditPatientModal = (props) => {
     patient_microchip: props.data.patient_microchip
   };
 
+  // Store the values of the form and the breed currently selected in state
   const [values, setValues] = useState(defaultValues);
+  const [breed, setBreed] = useState([])
+
+  // Store patient ID
   const patient_id = props.patient;
 
+  // Destructure form values state
   const { 
     patient_name,
     patient_species,
@@ -35,12 +47,35 @@ const EditPatientModal = (props) => {
     patient_color,
     patient_microchip } = values;
 
+  // Set the breed file depending on the species selected
+  useEffect(() => {
+    switch(patient_species) {
+      case 'Avian':
+        setBreed(bird_breeds);
+        break;
+      case 'Canine':
+        setBreed(dog_breeds);
+        break;
+      case 'Feline':
+        setBreed(cat_breeds);
+        break;
+      case 'Reptile':
+        setBreed(reptile_breeds);
+        break;
+      case 'Rodent':
+        setBreed(rodent_breeds);
+        break;
+      default:
+        setBreed([]);
+    }
+  }, []);
+
    // Function to handle submission of the edit patient form
    const onSubmitForm = async e => {
     e.preventDefault();
     const update_patient_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/${patient_id}`;
 
-    // Try to send user data to the server 
+    // Try to send patient data to the server 
     try {
       await axios.put(update_patient_url, {
         patient_name: patient_name,
@@ -57,17 +92,22 @@ const EditPatientModal = (props) => {
         }
       })
       .then((response) => {
+        // Success: Update patient in the patient state
+        // Close form and send a success message
         props.updatePatient(values);
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Check error type
         if(error.response.status === 422) {
+          // Display validation errors to the user
           const errors = error.response.data.errors
 
           errors.forEach((err) => {
             toast.error(err.msg);
           })
         } else {
+          // Display single error to user
           toast.error(error.response.data);
         }
       });   
@@ -80,7 +120,7 @@ const EditPatientModal = (props) => {
     <Layer animate modal onClickOutside={props.closeForm} position="center">
       <Heading level="2" textAlign="center">Edit Patient</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
-      <Form
+        <Form
           onSubmit={onSubmitForm}
           onChange={(nextValue) => {
             setValues(nextValue);
@@ -91,9 +131,9 @@ const EditPatientModal = (props) => {
               placeholder="Name" 
               size="medium" 
               type="text"
-              plain 
               name="patient_name" 
               value={patient_name} 
+              plain 
             />
           </FormField>
           <FormField name="patient_species" required>
@@ -101,19 +141,41 @@ const EditPatientModal = (props) => {
               options={Species} 
               closeOnChange 
               placeholder="Species" 
-              plain
               name="patient_species"
               value={patient_species} 
+              plain
+              onChange={({ option }) => {
+                // Set the breed file depending on the species selected
+                switch(option) {
+                  case 'Avian':
+                    setBreed(bird_breeds);
+                    break;
+                  case 'Canine':
+                    setBreed(dog_breeds);
+                    break;
+                  case 'Feline':
+                    setBreed(cat_breeds);
+                    break;
+                  case 'Reptile':
+                    setBreed(reptile_breeds);
+                    break;
+                  case 'Rodent':
+                    setBreed(rodent_breeds);
+                    break;
+                  default:
+                    setBreed([]);
+                }
+              }}
             />
           </FormField>
           <FormField name="patient_breed" required>
-            <TextInput 
+            <Select
               placeholder="Breed" 
               size="medium" 
-              type="text"
-              plain 
-              name="patient_breed" 
-              value={patient_breed} 
+              options={breed}
+              value={patient_breed}
+              name="patient_breed"
+              plain
             />
           </FormField>
           <FormField name="patient_age" required>
@@ -121,9 +183,9 @@ const EditPatientModal = (props) => {
               placeholder="Age" 
               size="medium" 
               type="text" 
-              plain 
               name="patient_age"
               value={patient_age}
+              plain 
             />
           </FormField>
           <FormField name="patient_sex" required>
@@ -131,9 +193,9 @@ const EditPatientModal = (props) => {
               options={["MN", "FN", "M", "F"]} 
               closeOnChange 
               placeholder="Sex" 
-              plain 
               name="patient_sex"
               value={patient_sex}
+              plain 
             />
           </FormField>
           <FormField name="patient_color" required>
@@ -141,9 +203,9 @@ const EditPatientModal = (props) => {
               placeholder="Color" 
               size="medium" 
               type="text" 
-              plain 
               name="patient_color"
               value={patient_color}
+              plain 
             />
           </FormField>
           <FormField name="patient_microchip" required>
@@ -151,14 +213,20 @@ const EditPatientModal = (props) => {
               placeholder="Microchip Number" 
               size="medium" 
               type="text" 
-              plain 
               name="patient_microchip"
               value={patient_microchip}
+              plain 
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
             <Button label="Edit" primary hoverIndicator type="submit"/>
-            <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={props.closeForm}/>
+            <Button 
+              label="Cancel" 
+              color="accent-4" 
+              onClick={props.closeForm}
+              primary 
+              hoverIndicator
+            />
           </Box>
         </Form>
       </Box>

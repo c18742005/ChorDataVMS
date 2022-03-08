@@ -13,6 +13,7 @@ import {
   TextInput } from 'grommet';
 
 const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
+  // Set the default values for the state
   const defaultValues = {
     xray_date: data.xray_date,
     xray_image_quality: data.xray_image_quality,
@@ -22,23 +23,24 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
     xray_patient_name: data.patient_name
   };
   
+  // Set the state of the edit xray form values and patients
   const [values, setValues] = useState(defaultValues);
   const [patients, setPatients] = useState([]);
 
+  // Fetch clients data from the server
   useEffect(() => {
     const fetchData = async () => {
       const get_patients_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/clinic/${clinicId}`;
 
       try {
-        await axios.get(
-          get_patients_url,
-          {
+        await axios.get(get_patients_url, {
             headers: {
               'token': localStorage.token
             }
           }
         )
         .then(res => {
+          // Success: set patients state
           setPatients(res.data);
         })
       } catch (error) {
@@ -49,6 +51,7 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
     fetchData();
   }, []);
 
+  // Destructure form values state
   const { 
     xray_date,
     xray_image_quality,
@@ -57,7 +60,7 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
     xray_position,
     xray_patient_name } = values;
 
-  // Function to handle submission of the add xray form
+  // Function to handle submission of the edit xray form
   const onSubmitForm = async e => {
     e.preventDefault();
     let patient_id = 0;
@@ -81,23 +84,26 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
         xray_position: xray_position,
         xray_patient_id: patient_id,
         xray_staff_id: staffId
-      },
-      {
+      }, {
         headers: {
           'token': localStorage.token
       }})
       .then((response) => {
+        // Success: update the xray state, close the form and display success message
         updateXray(response.data.body);
         closeForm();
         toast.success(response.data.message);
       }, (error) => {
+        // Error: Check error type
         if(error.response.status === 422) {
+          // Display validation errors to user
           const errors = error.response.data.errors
 
           errors.forEach((err) => {
             toast.error(err.msg);
           })
         } else {
+          // Display single error message to user
           toast.error(error.response.data);
         }
       });   
@@ -129,8 +135,8 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
               name="xray_image_quality" 
               value={xray_image_quality} 
               options={["Over exposed", "Under exposed"]} 
-              closeOnChange 
               placeholder="Image Quality" 
+              closeOnChange 
               plain 
             />
           </FormField>

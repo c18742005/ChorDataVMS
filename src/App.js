@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer } from 'react-toastify';
 import theme from './theme'
 
+// CSS for toast containers
 import 'react-toastify/dist/ReactToastify.css';
 
 // Components
@@ -48,7 +49,7 @@ function App() {
     }
   };
 
-  // Retrieve staff user info from api
+  // Retrieve staff user info from backend
   const retrieveUser = async () => {
     try {
       await axios.get(`${process.env.REACT_APP_API_END_POINT}/api/staff`, {
@@ -65,7 +66,7 @@ function App() {
     }
   };
 
-  // Authenticate the user and retrieve there details
+  // Authenticate the user and retrieve their details
   useEffect(() => {
     checkAuthenticated();
     retrieveUser();
@@ -86,7 +87,8 @@ function App() {
         gap="none"
         flex="grow"
       >
-        { isAuthenticated && (
+        { // Load sidebar if user is authenticated
+         isAuthenticated && (
           menuOpen && (
           <SideBar isAuth={isAuthenticated} />
         ))}
