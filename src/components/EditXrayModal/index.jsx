@@ -12,21 +12,18 @@ import {
   Select, 
   TextInput } from 'grommet';
 
-const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
+const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
   const defaultValues = {
-    xray_date: new Date().toISOString(),
-    xray_image_quality: "",
-    xray_kV: "",
-    xray_mAs: "",
-    xray_position: "",
-    xray_patient_id: 0,
-    xray_staff_id: 0,
-    xray_clinic_id: 0
+    xray_date: data.xray_date,
+    xray_image_quality: data.xray_image_quality,
+    xray_kV: data.xray_kv,
+    xray_mAs: data.xray_mas,
+    xray_position: data.xray_position,
+    xray_patient_name: data.patient_name
   };
   
   const [values, setValues] = useState(defaultValues);
   const [patients, setPatients] = useState([]);
-  const [patientId, setPatientId] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,31 +55,39 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
     xray_kV,
     xray_mAs,
     xray_position,
-    xray_patient_id } = values;
+    xray_patient_name } = values;
 
   // Function to handle submission of the add xray form
   const onSubmitForm = async e => {
     e.preventDefault();
-    const add_xray_url = `${process.env.REACT_APP_API_END_POINT}/api/xrays`;
+    let patient_id = 0;
+
+    // Set the patient ID
+    for(let item in patients) {
+      if(patients[item].patient_name === xray_patient_name) {
+        patient_id = patients[item].patient_id;
+      }
+    }
+
+    const update_xray_url = `${process.env.REACT_APP_API_END_POINT}/api/xrays/${data.xray_id}`;
 
     // Try to send xray data to the server 
     try {
-      await axios.post(add_xray_url, {
+      await axios.put(update_xray_url, {
         xray_date: xray_date,
         xray_image_quality: xray_image_quality,
         xray_kV: xray_kV,
         xray_mAs: xray_mAs,
         xray_position: xray_position,
-        xray_patient_id: patientId,
-        xray_staff_id: staffId,
-        xray_clinic_id: clinicId
+        xray_patient_id: patient_id,
+        xray_staff_id: staffId
       },
       {
         headers: {
           'token': localStorage.token
       }})
       .then((response) => {
-        addXray(response.data.body);
+        updateXray(response.data.body);
         closeForm();
         toast.success(response.data.message);
       }, (error) => {
@@ -103,7 +108,7 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
 
   return (
     <Layer animate modal onClickOutside={closeForm} position="center">
-      <Heading level="2" textAlign="center">Add Xray</Heading>
+      <Heading level="2" textAlign="center">Edit Xray</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
         <Form 
           onSubmit={onSubmitForm}
@@ -113,72 +118,71 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
         >
           <FormField name="xray_date" label="X-ray Date Taken" required>
             <DateInput
-              format="yyyy/mm/dd"
-              value={(new Date(values.xray_date)).toISOString()}
               name="xray_date"
+              value={(new Date(values.xray_date)).toISOString()}
+              format="yyyy/mm/dd"
               placeholder='X-ray Date'
             />
           </FormField>
           <FormField  name="xray_image_quality" required>
             <Select 
+              name="xray_image_quality" 
+              value={xray_image_quality} 
               options={["Over exposed", "Under exposed"]} 
               closeOnChange 
               placeholder="Image Quality" 
               plain 
-              value={xray_image_quality} 
-              name="xray_image_quality" 
             />
           </FormField>
           <FormField name="xray_kV" required>
             <TextInput 
+              name="xray_kV" 
+              value={xray_kV} 
               placeholder="kV" 
               size="medium" 
               type="text" 
               plain 
-              value={xray_kV} 
-              name="xray_kV" 
             />
           </FormField>
           <FormField name="xray_mAs" required>
             <TextInput 
+              name="xray_mAs" 
+              value={xray_mAs} 
               placeholder="mAs" 
               size="medium" 
               type="text" 
               plain 
-              value={xray_mAs} 
-              name="xray_mAs" 
             />
           </FormField>
           <FormField name="xray_position" required>
             <TextInput 
+              name="xray_position" 
+              value={xray_position} 
               placeholder="Position" 
               size="medium" 
               type="text" 
               plain 
-              value={xray_position} 
-              name="xray_position" 
             />
           </FormField>
-          <FormField  name="xray_patient_id" required>
+          <FormField  name="xray_patient_name" required>
             <Select 
+              name="xray_patient_name" 
               options={patients.map((patient) => patient.patient_name)} 
-              closeOnChange 
               placeholder="Patient" 
-              plain 
-              value={xray_patient_id} 
-              name="xray_patient_id" 
-              onChange={({ option }) => {
-                for(let item in patients) {
-                  if(patients[item].patient_name === option){
-                    setPatientId(patients[item].patient_id)
-                  }
-                }
-              }}
+              value={xray_patient_name} 
+              plain
+              closeOnChange 
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
-            <Button label="Add" primary hoverIndicator type="submit"/>
-            <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={closeForm}/>
+            <Button type="submit" label="Edit" primary hoverIndicator />
+            <Button 
+              label="Close" 
+              hoverIndicator={{"color":"neutral-4","dark":true}} 
+              color="status-critical" 
+              onClick={closeForm} 
+              primary
+            />
           </Box>
         </Form>
       </Box>
@@ -186,4 +190,4 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
   )
 }
 
-export default AddXrayModal
+export default EditXrayModal

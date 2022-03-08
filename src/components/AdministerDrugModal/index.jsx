@@ -14,7 +14,7 @@ import {
 
 const AdministerDrugModal = (props) => {
   const defaultValues = {
-    drug_date_given: new Date(),
+    drug_date_given: new Date().toISOString(),
     drug_batch_number: "",
     drug_quantity: "",
     drug_quantity_measure: "",
