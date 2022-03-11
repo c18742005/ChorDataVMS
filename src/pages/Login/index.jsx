@@ -10,8 +10,13 @@ import {
   Form, FormField, 
   Heading,
   TextInput } from 'grommet';
-import { Lock } from 'grommet-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
 
+/*
+  props:
+    (Fn: App) setAuth: Function to set user authentication state to true/false
+*/
 const Login = ({ setAuth }) => {
   let navigate = useNavigate();
 
@@ -106,7 +111,7 @@ const Login = ({ setAuth }) => {
           overflow="hidden" 
           margin="xsmall"
         >
-          <Lock size="large" color="border" />
+          <FontAwesomeIcon icon={faLock} size='4x' style={{color: '#CCCCCC'}}/>
           <Heading level="2" textAlign="center" margin="xsmall">
             Login
           </Heading>

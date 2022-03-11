@@ -6,6 +6,10 @@ import axios from 'axios';
 // Data to be displayed in the sidebar
 import { Items } from './items'
 
+/*
+  props:
+    (Boolean) isAuth: True if user is authenticated otherwise false
+*/
 const SideBar = ({ isAuth }) => {
   // Set the state of the clinic
   const [clinic, setClinic] = useState("");
@@ -36,19 +40,29 @@ const SideBar = ({ isAuth }) => {
 
   // Function to style the sidebar links
   const linkStyle = {
-    textDecoration: 'none'
+    textDecoration: 'none',
+    color: '#fff'
   }
 
   return (
     <Sidebar 
+      data-testid="sideBar"
       align="stretch" 
       direction="column" 
       background={{"color":"brand"}} 
+      pad='none'
       justify="center" 
       fill="vertical"
-      flex="shrink" 
+      flex='shrink' 
     >
-      <Heading level="3" textAlign="center" margin="small" color="white">
+      <Heading 
+        id='sideBarHeading'
+        data-testid="sideBar-heading"
+        level="3" 
+        textAlign="center" 
+        margin="small" 
+        color="white"
+      >
         {isAuth ? clinic : ""}
       </Heading>
       <Nav 
@@ -66,6 +80,7 @@ const SideBar = ({ isAuth }) => {
             justify="start" 
             direction="row" 
             pad="small" 
+            fill="horizontal"
             hoverIndicator
           >
             {item.icon}

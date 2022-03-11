@@ -1,35 +1,48 @@
 // File that holds the items to be displayed in the sidebar
-import { Aid, Alert, Close, Favorite, Group, HomeRounded } from 'grommet-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faCross, 
+  faHeartPulse, 
+  faHome, 
+  faPills, 
+  faRadiation, 
+  faTooth, 
+  faUsers } from '@fortawesome/free-solid-svg-icons';
 
 export const Items = [
   {
     title: 'Dashboard',
     path: '/',
-    icon: <HomeRounded color="white" size="medium" />,
+    icon: <FontAwesomeIcon icon={faHome} />,
   },
   {
     title: 'Clients',
     path: '/clients',
-    icon: <Group color="white" size="medium" />,
+    icon: <FontAwesomeIcon icon={faUsers} />,
   },
   {
     title: 'Drug Record',
     path: '/drugs',
-    icon: <Aid color="white" size="medium" />,
+    icon: <FontAwesomeIcon icon={faPills} />,
   },
   {
     title: 'X-Ray Record',
     path: '/xrays',
-    icon: <Alert color="white" size="medium" />,
+    icon: <FontAwesomeIcon icon={faRadiation} />,
+  },
+  {
+    title: 'Dental Record',
+    path: '/dental',
+    icon: <FontAwesomeIcon icon={faTooth} />,
   },
   {
     title: 'Cremations',
     path: '/cremations',
-    icon: <Close color="white" size="medium" />,
+    icon: <FontAwesomeIcon icon={faCross} />,
   },
   {
     title: 'Anaesthetic Monitoring',
     path: '/anaesthetic',
-    icon: <Favorite color="white" size="medium" />,
+    icon: <FontAwesomeIcon icon={faHeartPulse} />,
   },
 ];

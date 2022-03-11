@@ -14,6 +14,13 @@ import {
 // County data needed for form select
 import { Counties } from '../AddClientForm/counties';
 
+/*
+  props:
+    (Object): data: Holds info about the client i.e. name, address, email
+    (String): client: ID of the client to edit
+    (Fn: Client) updateClient: Function to update a client in the client state
+    (Fn: Client) closeForm: Function to close the edit client modal
+*/
 const EditClientModal = (props) => {
   const defaultValues = {
     client_forename: props.data.client_forename,

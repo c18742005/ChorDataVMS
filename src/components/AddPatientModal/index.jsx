@@ -19,6 +19,12 @@ import { reptile_breeds } from './reptile_breeds';
 import { rodent_breeds } from './rodent_breeds';
 import { Species } from './species';
 
+/*
+  props:
+    (String) client: ID of the client
+    (Fn: Client) addPatient: Function to add patient to the client state
+    (Fn: Client) closeForm: Function to close the add patient modal
+*/
 const AddPatientModal = (props) => {
   const defaultValues = {
     patient_name: "",

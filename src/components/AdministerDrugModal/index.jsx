@@ -12,6 +12,13 @@ import {
   Select, 
   TextInput } from 'grommet';
 
+/*
+  props:
+    (String): clinic_id: ID of the clinic staff that is currently logged in 
+    (String): staff_id: ID of the staff member currently logged in
+    (Fn: Drugs) addLog: Function to add a log to the Drugs log state
+    (Fn: Drugs) closeForm: Function to close the add xray modal
+*/
 const AdministerDrugModal = (props) => {
   const defaultValues = {
     drug_date_given: new Date().toISOString(),
@@ -88,6 +95,7 @@ const AdministerDrugModal = (props) => {
       })
       .then((response) => {
         // Success: close form and display success message
+        props.addLog(response.data.body)
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {

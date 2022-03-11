@@ -1,35 +1,10 @@
 import { DataTable, Text } from 'grommet';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 
-const DrugLogTable = ({ drugId, clinicId }) => {
-  // set state values for drug log
-  const [drugLog, setDrugLog] = useState([]);
-
-  // Fetch drug log data
-  useEffect(() => {
-    const fetch_data = async () => {
-      const url = `${process.env.REACT_APP_API_END_POINT}/api/drugs/log/${drugId}/${clinicId}`;
-
-      await axios.get(url, {
-          headers: {
-            'token': localStorage.token
-          }
-        }
-      ).then(res => {
-        // Success: Format date and set drug log state
-        const drug = res.data;
-        drug.forEach(element => {
-          element.drug_date_administered = new Date(element.drug_date_administered).toLocaleDateString("en-US");
-        });
-       
-        setDrugLog(drug);
-      })
-    }
-
-    fetch_data();
-  }, [drugId]);
-
+/*
+  props:
+    (Array) data: Drug log entries to be displayed in table
+*/
+const DrugLogTable = ({ data }) => {
   return (
     <DataTable
       columns={[{
@@ -52,7 +27,7 @@ const DrugLogTable = ({ drugId, clinicId }) => {
           property: "staff_username"
         }
       ]}
-      data={drugLog} 
+      data={data} 
       pad="small"
       background={{
         "header":{"color":"brand"},
@@ -62,7 +37,6 @@ const DrugLogTable = ({ drugId, clinicId }) => {
       fill="horizontal"
       step={10}
       paginate
-      sortable
       resizeable 
     />
   )

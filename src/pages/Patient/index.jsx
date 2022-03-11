@@ -13,11 +13,8 @@ import {
   Tab, 
   Tabs, 
   Text } from 'grommet';
-import { 
-  Checkmark, 
-  CircleInformation, 
-  Close, 
-  Edit } from 'grommet-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faCircleInfo, faPencil, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 // Components
 import EditPatientModal from '../../components/EditPatientModal';
@@ -118,7 +115,7 @@ const Patient = () => {
       <Tabs justify="start" fill="horizontal">
         <Tab 
           title="Info" 
-          icon={<CircleInformation />} 
+          icon={<FontAwesomeIcon icon={faCircleInfo} />} 
           reverse
         >
           <Box 
@@ -221,7 +218,7 @@ const Patient = () => {
               patient.patient_inactive ? (
                 <Button 
                   label="Reactivate Patient" 
-                  icon={<Checkmark />}
+                  icon={<FontAwesomeIcon icon={faCheck} />}
                   reverse 
                   primary 
                   size="medium" 
@@ -231,7 +228,7 @@ const Patient = () => {
                 />) : (
                   <Button 
                   label="Deactivate Account" 
-                  icon={<Close />} 
+                  icon={<FontAwesomeIcon icon={faXmark} />} 
                   reverse 
                   primary 
                   size="medium" 
@@ -243,9 +240,10 @@ const Patient = () => {
             }
             <Button 
               label="Edit Patient" 
-              icon={<Edit />} 
+              icon={<FontAwesomeIcon icon={faPencil} />} 
               size="medium" 
               color="accent-4" 
+              disabled={patient.patient_inactive ? true : false}
               hoverIndicator 
               reverse 
               primary 

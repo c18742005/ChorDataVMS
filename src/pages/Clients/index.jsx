@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Button } from 'grommet';
-import { UserAdd } from 'grommet-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 // Components
 import ClientTable from '../../components/ClientTable'
 import SearchBar from '../../components/SearchBar'
 import AddClientForm from '../../components/AddClientForm'
 
+/*
+  props:
+    (String) clinic: ID of the clinic to retrieve clients from
+*/
 const Clients = ({ clinic }) => {
   // Set state of client add modal )open/close) and clients state
   const [showClientAdd, setShowClientAdd] = useState(false);
@@ -53,7 +58,7 @@ const Clients = ({ clinic }) => {
         <SearchBar />
         <Button 
           label="Add Client"
-          icon={<UserAdd />} 
+          icon={<FontAwesomeIcon icon={faUserPlus} size='2x' />} 
           color="status-ok" 
           size="small"  
           margin={{"left":"medium"}} 

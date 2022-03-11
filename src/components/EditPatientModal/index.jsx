@@ -19,6 +19,13 @@ import { bird_breeds } from '../AddPatientModal/bird_breeds';
 import { reptile_breeds } from '../AddPatientModal/reptile_breeds';
 import { rodent_breeds } from '../AddPatientModal/rodent_breeds';
 
+/*
+  props:
+    (Object) data: Holds info about the patient i.e. name, species, breed
+    (String) patient: ID of the patient to edit
+    (Fn: Patient) updatePatient: Function to update a patients info in the patient state
+    (Fn: Patient) closeForm: Function to close the edit patient modal
+*/
 const EditPatientModal = (props) => {
   const defaultValues = {
     patient_name: props.data.patient_name,

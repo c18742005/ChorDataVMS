@@ -1,11 +1,12 @@
 import { TextInput } from 'grommet';
-import { Search } from 'grommet-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 // TO COMPLETE
 const SearchBar = () => {
   return (
     <TextInput 
-      icon={<Search />} 
+      icon={<FontAwesomeIcon icon={faMagnifyingGlass} />} 
       placeholder="Search..." 
       size="medium" 
       textAlign="start" 

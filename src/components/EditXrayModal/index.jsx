@@ -12,6 +12,14 @@ import {
   Select, 
   TextInput } from 'grommet';
 
+/*
+  props:
+    (Object) data: Holds info about the xray i.e. date, quality, kV, mAs
+    (String) clinicId: ID of the clinic the Xray belongs to
+    (String) staffId: ID of the staff editing the xray
+    (Fn: XrayTable) updateXray: Function to update an Xray info in the xray state
+    (Fn: XrayTable) closeForm: Function to close the edit xray modal
+*/
 const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
   // Set the default values for the state
   const defaultValues = {
@@ -134,7 +142,7 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
             <Select 
               name="xray_image_quality" 
               value={xray_image_quality} 
-              options={["Over exposed", "Under exposed"]} 
+              options={["Overexposed", "Underexposed", "Good", "Excellent"]} 
               placeholder="Image Quality" 
               closeOnChange 
               plain 

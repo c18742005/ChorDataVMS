@@ -1,12 +1,18 @@
 import { Box, Button } from 'grommet';
-import { Add } from 'grommet-icons';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 //components
 import AddXrayModal from '../../components/AddXrayModal'
 import XrayTable from '../../components/XrayTable'
 
+/*
+  props:
+    (String) clinic_id: ID of the clinic the staff currently logged in is part of
+    (String) staff_id: ID of the staff currently logged in
+*/
 const Xrays = ({ clinic_id, staff_id }) => {
   // Set state of xray modal (show/hide)
   const [showXrayModal, setShowXrayModal] = useState(false);
@@ -20,6 +26,9 @@ const Xrays = ({ clinic_id, staff_id }) => {
 
   // Add a new xray to the state
   const addXrays = (newXray) => {
+    // Change the date to a formatted string
+    newXray.xray_date = new Date(newXray.xray_date).toLocaleDateString("en-US");
+    
     setXrays([...xrays, newXray])
   }
 
@@ -73,7 +82,7 @@ const Xrays = ({ clinic_id, staff_id }) => {
       >
         <Button 
           label="Add X-Ray"
-          icon={<Add />} 
+          icon={<FontAwesomeIcon icon={faPlus} size='2x' />} 
           color="status-ok" 
           size="small"  
           margin={{"left":"medium"}} 

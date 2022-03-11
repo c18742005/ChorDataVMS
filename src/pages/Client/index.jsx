@@ -12,12 +12,13 @@ import {
   Tab, 
   Tabs, 
   Text } from 'grommet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  AddCircle, 
-  Checkmark,
-  CircleInformation, 
-  Close, 
-  Edit } from 'grommet-icons';
+  faCheck, 
+  faCircleInfo, 
+  faPencil, 
+  faPlus, 
+  faUserSlash } from '@fortawesome/free-solid-svg-icons';
 
 // Components
 import EditClientModal from '../../components/EditClientModal';
@@ -127,7 +128,7 @@ const Client = () => {
         </Heading>)
       }
       <Tabs justify="start" fill="horizontal">
-        <Tab title="Info" icon={<CircleInformation />} reverse>
+        <Tab title="Info" icon={<FontAwesomeIcon icon={faCircleInfo} />} reverse>
           <Box 
             align="start" 
             justify="start" 
@@ -170,7 +171,7 @@ const Client = () => {
             <Button 
               label="Add Patient" 
               disabled={client.client_inactive ? true : false}
-              icon={<AddCircle />} 
+              icon={<FontAwesomeIcon icon={faPlus} size='2x'/>} 
               reverse 
               primary 
               color="status-ok" 
@@ -215,7 +216,7 @@ const Client = () => {
               client.client_inactive ? (
                 <Button 
                   label="Reactivate Account" 
-                  icon={<Checkmark />}
+                  icon={<FontAwesomeIcon icon={faCheck} />}
                   reverse 
                   primary 
                   size="medium" 
@@ -225,7 +226,7 @@ const Client = () => {
                 />) : (
                   <Button 
                   label="Deactivate Account" 
-                  icon={<Close />} 
+                  icon={<FontAwesomeIcon icon={faUserSlash} />} 
                   hoverIndicator={{"color":"neutral-4","dark":true}}   
                   color="status-critical" 
                   onClick={() => setShowClientDeactivate(true)} 
@@ -237,10 +238,11 @@ const Client = () => {
             }
             <Button 
               label="Edit Account" 
-              icon={<Edit />} 
+              icon={<FontAwesomeIcon icon={faPencil} />} 
               size="medium" 
               color="accent-4" 
               onClick={() => setShowClientEdit(true)} 
+              disabled={client.client_inactive ? true : false}
               reverse 
               hoverIndicator 
               primary 

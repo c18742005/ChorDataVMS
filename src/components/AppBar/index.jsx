@@ -1,7 +1,17 @@
 import { toast } from 'react-toastify';
 import { Box, Button, Heading, Menu, Header } from 'grommet';
-import { UserSettings, LinkPrevious, Menu as MenuIcon } from 'grommet-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faBars, faUserGear } from '@fortawesome/free-solid-svg-icons';
 
+/*
+  props:
+    (Boolean): isAuth: If the user is authenticated
+    (Boolean): menuOpen: If the menu is open/closed
+    (Obj) user: Object that holds user info i.e. id, role, username
+    (Fn: App): setAuth: Function to set isAuth state to true/false
+    (Fn: App) handleMenu: Function to set menuOpen state to true/false
+    (Fn: App) setUser: Function to change user state
+*/
 const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
   // function to handle a user logging out of the app
   const logout = () => {
@@ -18,6 +28,7 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
   
   return (
     <Box 
+      data-testid="appBar"
       align="center" 
       justify="center" 
       direction="row" 
@@ -25,6 +36,7 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
       fill="horizontal"
     >
       <Header 
+        data-testid="appBar-header"
         align="center" 
         direction="row" 
         justify={isAuth ? "between" : "center"}
@@ -36,19 +48,27 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
         { // Display button if user is authenticated
         isAuth && (
           <Button icon={menuOpen ? 
-            (<LinkPrevious color='white'/>) : 
-            (<MenuIcon color='white'/>)} 
+            (<FontAwesomeIcon icon={faArrowLeft} style={{color: "#FFF"}} size='lg' />) : 
+            (<FontAwesomeIcon icon={faBars} style={{color: "#FFF"}} size='lg' />)} 
             hoverIndicator 
             onClick={handleMenu} 
+            data-testid="appBar-button"
           />
         )}
-        <Heading level="1" color="white" textAlign="center" margin="small">
+        <Heading 
+          level="1" 
+          color="white" 
+          textAlign="center" 
+          margin="small"
+          data-testid="appBar-heading"
+        >
           ChorData
         </Heading>
         { // Display menu if user is authenticated
         isAuth && (
           <Menu 
-            icon={<UserSettings color="white" />} 
+            data-testid="appBar-menu"
+            icon={<FontAwesomeIcon icon={faUserGear} style={{color: "#FFF"}} size='lg' />} 
             items={[
               {"label": "Current User: " + user},
               {"label":"Logout", onClick: () => logout()}]

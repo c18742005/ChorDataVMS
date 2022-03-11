@@ -12,6 +12,13 @@ import {
   Select,
   TextInput } from 'grommet';
 
+/*
+  props:
+    (Obj) drug: Object that holds info about the drug to add stock to
+    (String): clinic_id: ID of the clinic the current staff belongs to
+    (Fn: Drugs) addStock: Function to add drug stock to the drugs state
+    (Fn: Drugs) closeForm: Function to close the drug stock modal
+*/
 const AddDrugStock = (props) => {
   const defaultValues = {
     drug_expiry_date: new Date(),
@@ -62,6 +69,7 @@ const AddDrugStock = (props) => {
       })
       .then((response) => {
         // Success: Close form and send success message
+        props.addStock(response.data.body);
         props.closeForm();
         toast.success(response.data.message);
       }, (error) => {

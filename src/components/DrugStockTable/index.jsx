@@ -1,34 +1,10 @@
 import { DataTable, Text } from 'grommet';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 
-const DrugStockTable = ({ clinicid, drugid }) => {
-  // Set state of current drug selected
-  const [drug, setDrug] = useState([]);
-
-  // Fetch drug data from server
-  useEffect(() => {
-    const fetch_data = async () => {
-      const url = `${process.env.REACT_APP_API_END_POINT}/api/drugs/${drugid}/${clinicid}`;
-
-      await axios.get(url, {
-          headers: {
-            'token': localStorage.token
-          }
-        }
-      ).then(res => {
-        // Success: Format date and set drug state
-        const drug = res.data;
-        drug.forEach(element => {
-          element.drug_expiry_date = new Date(element.drug_expiry_date).toLocaleDateString("en-US");
-        });
-       
-        setDrug(drug);
-      })
-    }
-
-    fetch_data();
-  }, [drugid]);
+/*
+  props:
+    (Array) data: Drug stock entries to be shown in the table
+*/
+const DrugStockTable = ({ data }) => {
 
   return (
     <DataTable
@@ -49,7 +25,7 @@ const DrugStockTable = ({ clinicid, drugid }) => {
           property: "drug_concentration"
         }
       ]}
-      data={drug} 
+      data={data} 
       pad="small"
       background={{
         "header":{"color":"brand"},

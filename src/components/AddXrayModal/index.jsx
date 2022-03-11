@@ -12,6 +12,13 @@ import {
   Select, 
   TextInput } from 'grommet';
 
+/*
+  props:
+    (String): clinicId: ID of the clinic staff that is currently logged in 
+    (String): staffId: ID of the staff member currently logged in
+    (Fn: Xrays) addXray: Function to add an xray to the Xray state
+    (Fn: Xrays) closeForm: Function to close the add xray modal
+*/
 const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
   const defaultValues = {
     xray_date: new Date().toISOString(),
@@ -129,7 +136,7 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
           </FormField>
           <FormField  name="xray_image_quality" required>
             <Select 
-              options={["Over exposed", "Under exposed"]} 
+              options={["Overexposed", "Underexposed", "Good", "Excellent"]} 
               closeOnChange 
               placeholder="Image Quality" 
               value={xray_image_quality} 

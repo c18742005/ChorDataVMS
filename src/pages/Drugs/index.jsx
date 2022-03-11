@@ -18,13 +18,20 @@ import AdministerDrugModal from "../../components/AdministerDrugModal";
 import DrugStockTable from "../../components/DrugStockTable";
 import DrugLogTable from "../../components/DrugLogTable";
 
+/*
+  props:
+    (String) clinic_id: ID of the clinic the staff currently logged in is part of
+    (String) staff_id: ID of the staff currently logged in
+*/
 const Drugs = ({ clinic_id, staff_id }) => {
   const [showAddDrug, setShowAddDrug] = useState(false); // Show add drug modal state
   const [showAdminDrug, setShowAdminDrug] = useState(false); // Show administer drug modal state
   const[drugs, setDrugs] = useState([]); // Hold drugs state
   const [drug, setDrug] = useState({drug_name: ""}); // Hold current drug selected
+  const [drugStock, setDrugStock] = useState([]); // Hold drug stock of current drug
+  const [drugLog, setDrugLog] = useState([]); // Hold log of current drug
  
-  // Fetch drug data from server
+  // Fetch drugs data from server
   useEffect(() => {
     const fetchData = async () => {
       const get_drugs_url = `${process.env.REACT_APP_API_END_POINT}/api/drugs`;
@@ -47,6 +54,64 @@ const Drugs = ({ clinic_id, staff_id }) => {
 
     fetchData();
   }, []);
+
+  // Fetch drug stock and log data from server
+  useEffect(() => {
+    if(drug.drug_name !== "") {
+      const fetch_data = async () => {
+        const drug_stock_url = `${process.env.REACT_APP_API_END_POINT}/api/drugs/${drug.drug_id}/${clinic_id}`;
+        const drug_log_url = `${process.env.REACT_APP_API_END_POINT}/api/drugs/log/${drug.drug_id}/${clinic_id}`;
+  
+        // Fetch the drug stock of the currently selected drug
+        await axios.get(drug_stock_url, {
+          headers: {
+            'token': localStorage.token
+          }
+        }).then(res => {
+          // Success: Format date and set drug state
+          const drug_stock = res.data;
+          drug_stock.forEach(element => {
+            element.drug_expiry_date = new Date(element.drug_expiry_date).toLocaleDateString("en-US");
+          });
+          
+          setDrugStock(drug_stock);
+        });
+
+        // Fetch the drug log of the currently selected drug
+        await axios.get(drug_log_url, {
+          headers: {
+            'token': localStorage.token
+          }
+        }).then(res => {
+          // Success: Format date and set drug log state
+          const drug_log = res.data;
+          drug_log.forEach(element => {
+            element.drug_date_administered = new Date(element.drug_date_administered).toLocaleDateString("en-US");
+          });
+        
+          setDrugLog(drug_log);
+        });
+      }
+  
+      fetch_data();
+    }
+  }, [drug]);
+
+  // Function to add stock to the drugStock state
+  const addToDrugStock = (newStock) => {
+    // Change the date to a formatted string
+    newStock.drug_expiry_date = new Date(newStock.drug_expiry_date).toLocaleDateString("en-US");
+
+    setDrugStock([...drugStock, newStock]);
+  }
+
+  // Function to add a log to the drugLog state
+  const addToDrugLog = (newLog) => {
+    // Change the date to a formatted string
+    newLog.drug_date_administered = new Date(newLog.drug_date_administered).toLocaleDateString("en-US");
+
+    setDrugLog([...drugLog, newLog]);
+  }
 
   // Function to close add drug and administer drug modals
   const closeForms = () => {
@@ -117,7 +182,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
                     <Anchor href={drug.drug_link} target="_blank">{drug.drug_link}</Anchor>
                   </NameValuePair>
                 </NameValueList>
-                <DrugStockTable clinicid={clinic_id} drugid={drug.drug_id} />
+                <DrugStockTable data={drugStock}/>
               </Box>
             </Tab>
             <Tab title="Drug Log">
@@ -131,7 +196,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
                 pad="medium" 
                 margin={{"top":"small"}} 
               >
-                <DrugLogTable clinicId={clinic_id} drugId={drug.drug_id} />
+                <DrugLogTable data={drugLog} />
               </Box>
             </Tab>
           </Tabs></>
@@ -147,6 +212,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
         <AddDrugStock
           closeForm={closeForms} 
           clinic_id={clinic_id} 
+          addStock={addToDrugStock}
           drug={drug}
         />
       )}
@@ -157,6 +223,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
           closeForm={closeForms} 
           clinic_id={clinic_id} 
           staff_id={staff_id}
+          addLog={addToDrugLog}
           drug={drug}
         />
       )}

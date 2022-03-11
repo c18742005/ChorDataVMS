@@ -4,6 +4,13 @@ import { useState } from "react"
 // Components
 import EditXrayModal from "../EditXrayModal";
 
+/*
+  props:
+    (Object) data: Holds info about the xray i.e. date, quality, kV, mAs
+    (String) clinicId: ID of the clinic the Xray belongs to
+    (String) staffId: ID of the staff editing the xray
+    (Fn: Xrays) updateXray: Function to update an Xray info in the xray state
+*/
 const XrayTable = ({ data, clinicId, staffId, updateXray }) => {
   // Set state of modal (shown/hidden)
   const [editModal, setEditModal] = useState(false);

@@ -11,6 +11,12 @@ import {
   Select, 
   Text } from 'grommet';
 
+  /*
+  props:
+    (String) clientId/patientId: ID of the client/patient to deactivate
+    (Fn: Patient/Client) changeActiveState: change the active state to true/false
+    (Fn: Patient/Client) closeForm: Function to close the warning modal
+*/
 const WarningModal = (props) => {
   const defaultValues = {
     reason_inactive: ""

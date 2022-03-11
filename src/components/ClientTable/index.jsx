@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, DataTable, Text } from 'grommet';
 
+/*
+  props:
+    (array) data: Array of clients and their information to be displayed
+*/
 const ClientTable = ({ data }) => {
   let navigate = useNavigate();
 

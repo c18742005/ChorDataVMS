@@ -14,6 +14,12 @@ import {
 // external data needed for dropdown 
 import { Counties } from './counties';
 
+/*
+  props:
+    (String) clinic: ID of the clinic current staff is part of
+    (Fn: Clients) addClient: Function to add a client to the Clients state
+    (Fn: Clients) closeForm: Function to close the add client modal
+*/
 const AddClientForm = ({ clinic, addClient, closeForm }) => {
   const defaultValues = {
     client_forename: "",

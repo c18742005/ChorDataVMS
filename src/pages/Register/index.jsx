@@ -11,8 +11,13 @@ import {
   Heading,
   Select,
   TextInput } from 'grommet';
-import { AddCircle } from 'grommet-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
+/*
+  props:
+    (Fn: App) setAuth: Function to set user authentication state to true/false
+*/
 const Register = ({ setAuth }) => {
   const navigate = useNavigate();
 
@@ -112,7 +117,7 @@ const Register = ({ setAuth }) => {
           overflow="hidden" 
           margin="xsmall"
         >
-          <AddCircle size="large" color="border" />
+          <FontAwesomeIcon icon={faPlus} size='4x' style={{color: '#CCCCCC'}}/>
           <Heading level="2" textAlign="center" margin="xsmall">
             Register
           </Heading>
