@@ -95,7 +95,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
   
       fetch_data();
     }
-  }, [drug]);
+  }, [drug, drugLog]);
 
   // Function to add stock to the drugStock state
   const addToDrugStock = (newStock) => {

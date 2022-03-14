@@ -34,6 +34,7 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
   // Set the state of the edit xray form values and patients
   const [values, setValues] = useState(defaultValues);
   const [patients, setPatients] = useState([]);
+  const [patientId, setPatientId] = useState(0);
 
   // Fetch clients data from the server
   useEffect(() => {
@@ -71,14 +72,6 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
   // Function to handle submission of the edit xray form
   const onSubmitForm = async e => {
     e.preventDefault();
-    let patient_id = 0;
-
-    // Set the patient ID
-    for(let item in patients) {
-      if(patients[item].patient_name === xray_patient_name) {
-        patient_id = patients[item].patient_id;
-      }
-    }
 
     const update_xray_url = `${process.env.REACT_APP_API_END_POINT}/api/xrays/${data.xray_id}`;
 
@@ -90,7 +83,7 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
         xray_kV: xray_kV,
         xray_mAs: xray_mAs,
         xray_position: xray_position,
-        xray_patient_id: patient_id,
+        xray_patient_id: patientId,
         xray_staff_id: staffId
       }, {
         headers: {
@@ -181,11 +174,23 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
           <FormField  name="xray_patient_name" required>
             <Select 
               name="xray_patient_name" 
-              options={patients.map((patient) => patient.patient_name)} 
+              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
               placeholder="Patient" 
               value={xray_patient_name} 
               plain
               closeOnChange 
+              onChange={({ option }) => {
+                let sep = " - "
+                let name = option.substring(0, option.indexOf(sep));
+                let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
+                // Loop through patients state to find selected drug
+                for(let item in patients) {
+                  if(patients[item].patient_name === name 
+                    && patients[item].patient_microchip === microchip){
+                    setPatientId(patients[item].patient_id)
+                  }
+                }
+              }}
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">

@@ -32,7 +32,7 @@ export const Items = [
   },
   {
     title: 'Dental Record',
-    path: '/dental',
+    path: '/dentals',
     icon: <FontAwesomeIcon icon={faTooth} />,
   },
   {

@@ -28,10 +28,9 @@ const AdministerDrugModal = (props) => {
     patient_administered: 0
   };
 
-  // Set state of form values patients, and currently selected patient
+  // Set state of form values, patients, and currently selected patient
   const [values, setValues] = useState(defaultValues);
-  const [patients, setPatients] = useState({});
-  const [patientNames, setPatientNames] = useState([]);
+  const [patients, setPatients] = useState([]);
   const [patient, setPatient] = useState(0);
 
   // Store clinic and staff IDs
@@ -54,7 +53,6 @@ const AdministerDrugModal = (props) => {
         )
         .then(res => {
           setPatients(res.data);
-          setPatientNames(res.data.map(patient => patient.patient_name));
         })
       } catch (error) {
         console.error(error.message);
@@ -168,18 +166,25 @@ const AdministerDrugModal = (props) => {
           </Box>
           <FormField name="patient_administered" required>
             <Select
-              options={patientNames}
+              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))}
               placeholder="Patient Receiving" 
               size="medium" 
               plain 
               name="patient_administered" 
               value={patient_administered}
               onChange={({ option }) => {
+                let sep = " - "
+                let name = option.substring(0, option.indexOf(sep));
+                let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
+
+                // Loop through patients and find correct patient
                 for(let item in patients) {
-                  if(patients[item].patient_name === option){
+                  if(patients[item].patient_name === name 
+                    && patients[item].patient_microchip === microchip){
                     setPatient(patients[item].patient_id)
                   }
                 }
+                
               }}
             />
           </FormField>

@@ -176,15 +176,20 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
           </FormField>
           <FormField  name="xray_patient_id" required>
             <Select 
-              options={patients.map((patient) => patient.patient_name)} 
+              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
               closeOnChange 
               placeholder="Patient" 
               value={xray_patient_id} 
               name="xray_patient_id" 
               plain 
               onChange={({ option }) => {
+                let sep = " - "
+                let name = option.substring(0, option.indexOf(sep));
+                let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
+                // Loop through patients state to find selected drug
                 for(let item in patients) {
-                  if(patients[item].patient_name === option){
+                  if(patients[item].patient_name === name 
+                    && patients[item].patient_microchip === microchip){
                     setPatientId(patients[item].patient_id)
                   }
                 }
