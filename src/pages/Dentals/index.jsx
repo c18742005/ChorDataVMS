@@ -102,7 +102,7 @@ const Dentals = ({ clinic_id }) => {
                 ) : (
                   <FelineDentalMap patient_id={patient_id} />
                 )}
-              <Box align="center" justify="center">
+              <Box align="center" justify="center" alignSelf="center">
                 <ImageLegend />
               </Box>
             </Box>
