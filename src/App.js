@@ -19,7 +19,6 @@ import Client from "./pages/Client";
 import Patient from "./pages/Patient";
 import Drugs from "./pages/Drugs";
 import Xrays from "./pages/Xrays";
-import Dental from "./pages/Dental";
 import Dentals from "./pages/Dentals";
 
 function App() {

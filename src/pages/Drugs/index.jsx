@@ -130,6 +130,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
     >
       <Select
         label="Select Drug" 
+        placeholder="Select Drug"
         value={drug.drug_name}
         options={drugs.map((option) => option.drug_name)}
         onChange={({ option }) => {
