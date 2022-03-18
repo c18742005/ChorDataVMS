@@ -7,8 +7,7 @@ import { Box,
 
 // Components
 import ImageLegend from "../../components/ImageLegend";
-import CanineDentalMap from "../../components/CanineDentalMap";
-import FelineDentalMap from "../../components/FelineDentalMap";
+import DentalMap from "../../components/DentalMap";
 
 const Dentals = ({ clinic_id }) => {
 
@@ -92,21 +91,17 @@ const Dentals = ({ clinic_id }) => {
       />
       {
         patient_species !== "" ? (
-          <>
+          <Box fill>
             <Heading level="2">
               {`${patient_name}'s Dental`}
             </Heading>
             <Box align="start" justify="start" direction="row" gap="medium" responsive>
-                {patient_species === "Canine" ? (
-                  <CanineDentalMap patient_id={patient_id} />
-                ) : (
-                  <FelineDentalMap patient_id={patient_id} />
-                )}
-              <Box align="center" justify="center" alignSelf="center">
+              <DentalMap patient_id={patient_id} species={patient_species} />
+              <Box align="center" justify="center" alignSelf="center" responsive>
                 <ImageLegend />
               </Box>
             </Box>
-          </>
+          </Box>
         ) : (
           <Text color="status-critical" weight="bold">
             Please select a patient from the dropdown menu

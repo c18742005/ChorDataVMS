@@ -1,22 +1,17 @@
 import { Box, Button, Text } from 'grommet';
 import axios from 'axios';
 import { useEffect, useState } from "react";
-import ImageMapper from 'react-img-mapper';
-import SRC from '../../assets/CanineDentalChart.png';
-import areas from "./canineDental.json";
-import ToothModal from "../../components/ToothModal";
+import {ReactComponent as CanineDental}  from '../../assets/CanineDental.svg';
+import {ReactComponent as FelineDental}  from '../../assets/FelineDental.svg';
+import './style.css';
+
+import ToothModal from "../ToothModal";
 import { toast } from 'react-toastify';
 
-const CanineDentalMap = ({ patient_id }) => {
+const DentalMap = ({ patient_id, species }) => {
   const [teeth, setTeeth] = useState([]);
   const [tooth, setTooth] = useState({});
-  const [map, setMap] = useState(areas);
   const [showToothModal, setShowToothModal] = useState(false);
-
-  let MAP = {
-    name: "my-map",
-    areas: map
-  };
   
   // Decide which patient dental to load
   useEffect(() => {
@@ -43,64 +38,73 @@ const CanineDentalMap = ({ patient_id }) => {
     loadTeeth();
   }, [patient_id]);
 
-  // Decide which patient dental to load
+  // Decide which colors to load
   useEffect(() => {
     const loadColors = () => {
-      let mapCpy = map;
+      let svgTeeth = document.querySelectorAll("#dental > *");
 
-      areas.forEach(area => {
-        teeth.forEach(tooth => {
-          if(area.id === tooth.tooth_id) {
+      // Loop through each tooth and each svg tooth
+      svgTeeth.forEach(svgTooth => {
+        const toothId = svgTooth.getAttribute("id");
+        teeth.forEach((tooth) => {
+          // If the tooth matches the svg tooth area then color the tooth
+          if(tooth.tooth_id === parseInt(toothId)) {
+            // Check which color to color the tooth
             switch(tooth.tooth_problem) {
               case "Gingivitis":
-                area.preFillColor = "#DC3202";
+                svgTooth.style.fill = "#FF3F3F"
                 break;
               case "Recession":
-                area.preFillColor = "#F0C856";
+                svgTooth.style.fill = "#FFFF00"
                 break;
               case "Missing":
-                area.preFillColor = "#000000";
+                svgTooth.style.fill = "#000000"
                 break;
               case "Extracted":
-                area.preFillColor = "#CCCCCC";
+                svgTooth.style.fill = "#CCCCCC"
                 break;
               case "Wear":
-                area.preFillColor = "#EC7004";
+                svgTooth.style.fill = "#FFAA14"
                 break;
               case "Fracture":
-                area.preFillColor = "#04749D";
+                svgTooth.style.fill = "#01739D"
                 break;
               case "Furcation":
-                area.preFillColor = "#078376";
+                svgTooth.style.fil = "#02C781"
                 break;
               case "FORL":
-                area.preFillColor = "#3E158C";
+                svgTooth.style.fill = "#3D148C"
                 break;
               default:
-                area.preFillColor = "#FFFFFF";
+                svgTooth.style.fill = "#FFFFFF"
             }
           }
-        })
+        });
 
-        area.lineWidth = 3;
-        area.strokeColor = "black"
-      })
-
-      setMap(mapCpy);
+        // Add an onclick listener to open modal on clicking a tooth
+        svgTooth.addEventListener("click", () => {
+          const toothId = parseInt(svgTooth.getAttribute("id"));
+          clicked(toothId)
+        });
+      });
     }
 
     loadColors();
   }, [teeth]);
 
-  const clicked = area => {
+  // Function to control what happens when a tooth is clicked
+  const clicked = tooth_id => {
+    // Loop through each tooth to find selected tooth
     teeth.forEach(tooth => {
-      if(area.id === tooth.tooth_id) {
+      // Once found set that tooth to be selected and show the tooth modal
+      if(tooth_id === tooth.tooth_id) {
         setTooth(tooth);
         setShowToothModal(true);
       }
     })
   }
 
+  // Function to update the selected tooth
   const updateTooth = (updatedTooth) => {
     // Find the index of the tooth to update
     let index = teeth.findIndex(tooth => tooth.tooth_id === updatedTooth.tooth_id);
@@ -119,7 +123,7 @@ const CanineDentalMap = ({ patient_id }) => {
   }
 
   // Function to add a new dental
-  const addDental = async (id) => {
+  const addDental = async () => {
     const add_dental_url = `${process.env.REACT_APP_API_END_POINT}/api/dentals/${patient_id}`;
       
     // Attempt to add dental data
@@ -156,17 +160,11 @@ const CanineDentalMap = ({ patient_id }) => {
   return (
     <Box>
       { teeth.length !== 0 ? (
-        <ImageMapper 
-          src={SRC}
-          map={MAP}
-          active={true}
-          natural={true}
-          responsive={true}
-          parentWidth={400}
-          fillColor="rgba(0, 0, 0, .3)"
-          strokeColor="black"
-          onClick={(area => clicked(area))}
-        />
+          species === "Canine" ? (
+            <CanineDental width="100%" />
+          ) : (
+            <FelineDental width="100%" />
+          )
       ) : (
         <Box fill direction='column' justify='center' align='end' gap='small'>
           <Text color="status-critical" weight="bold">
@@ -193,4 +191,4 @@ const CanineDentalMap = ({ patient_id }) => {
   )
 }
 
-export default CanineDentalMap
+export default DentalMap

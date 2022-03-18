@@ -1,0 +1,33 @@
+<svg id="dental" viewBox="0 0 778 1368" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <polygon id="101" points="386, 83, 394, 63, 389, 51, 375, 55, 372, 65, 377, 78" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="102" points="359, 87, 369, 86, 369, 64, 366, 54, 359, 50, 349, 53, 350, 71" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="103" points="349, 95, 345, 62, 336, 59, 327, 67, 324, 79, 325, 92, 333, 99" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="104" points="236, 58, 233, 155, 238, 185, 273, 194, 292, 164, 293, 145, 276, 89, 252, 50" fill="white" stroke-width="4" stroke="black" />
+  <circle id="105" cx="229" cy="243" r="21" stroke="black" stroke-width="4" fill="white" />
+  <polygon id="106" points="172, 374, 192, 321, 209, 302, 231, 304, 238, 316, 212, 369, 193, 380, 179, 382" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="107" points="96, 495, 153, 389, 172, 381, 196, 394, 219, 420, 211, 438, 170, 449, 154, 479, 122, 511, 95, 516" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="108" points="98, 525, 120, 514, 142, 514, 161, 524, 160, 540, 144, 546, 108, 535" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="201" points="402, 55, 402, 70, 407, 80, 416, 81, 420, 63, 414, 51" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="202" points="425, 67, 435, 52, 445, 53, 445, 63, 435, 85, 423, 83" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="203" points="448, 64, 467, 65, 463, 97, 444, 98, 442, 77" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="204" points="501, 161, 511, 106, 526, 85, 538, 52, 551, 52, 553, 96, 556, 119, 559, 154, 556, 179, 536, 196, 510, 188, 501, 175" fill="white" stroke-width="4" stroke="black" />
+  <circle id="205" cx="558" cy="242" r="21" stroke="black" stroke-width="4" fill="white" />
+  <polygon id="206" points="558, 336, 548, 315, 560, 303, 582, 308, 612, 367, 611, 383, 586, 386, 568, 367" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="207" points="608, 455, 566, 431, 565, 418, 610, 386, 625, 384, 638, 404, 668, 473, 678, 501, 682, 518, 670, 525, 655, 516, 629, 489" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="208" points="618, 524, 652, 516, 673, 530, 667, 543, 623, 551, 616, 539" fill="white" stroke-width="4" stroke="black" />
+  <circle id="301" cx="395" cy="1303" r="11" stroke="black" stroke-width="4" fill="white" />
+  <circle id="302" cx="419" cy="1302" r="10" stroke="black" stroke-width="4" fill="white" />
+  <circle id="303" cx="441" cy="1298" r="11" stroke="black" stroke-width="4" fill="white" />
+  <polygon id="304" points="437, 1256, 449, 1284, 485, 1299, 536, 1295, 543, 1288, 497, 1252, 476, 1213, 466, 1212, 450, 1220, 439, 1235" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="305" points="502, 1088, 522, 1052, 535, 1044, 544, 1065, 524, 1105, 509, 1112, 500, 1101" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="306" points="533, 1034, 531, 1017, 543, 982, 556, 970, 570, 972, 572, 991, 568, 1017, 561, 1030, 547, 1043" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="307" points="549, 941, 559, 927, 569, 885, 599, 859, 612, 860, 619, 873, 607, 923, 577, 968, 559, 965, 549, 954" fill="white" stroke-width="4" stroke="black" />
+  <circle id="401" cx="370" cy="1303" r="11" stroke="black" stroke-width="4" fill="white" />
+  <circle id="402" cx="346" cy="1302" r="10" stroke="black" stroke-width="4" fill="white" />
+  <circle id="403" cx="321" cy="1298" r="11" stroke="black" stroke-width="4" fill="white" />
+  <polygon id="404" points="219, 1284, 267, 1256, 280, 1228, 291, 1212, 309, 1209, 328, 1249, 312, 1283, 286, 1295, 249, 1296, 223, 1293" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="405" points="242, 1109, 218, 1050, 227, 1042, 241, 1044, 265, 1091, 264, 1104" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="406" points="194, 1013, 190, 972, 203, 967, 215, 971, 232, 1007, 230, 1025, 217, 1037, 200, 1029" fill="white" stroke-width="4" stroke="black" />
+  <polygon id="407" points="161, 927, 143, 893, 144, 863, 152, 855, 172, 859, 189, 870, 205, 924, 216, 940, 203, 965, 171, 952" fill="white" stroke-width="4" stroke="black" />
+  Sorry, your browser does not support inline SVG.
+</svg> 

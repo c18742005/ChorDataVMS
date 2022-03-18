@@ -1,0 +1,6 @@
+polygon:hover,
+circle:hover {
+  stroke-width: 10;
+  stroke: rgba(72, 223, 145, 0.6);
+  cursor: pointer;
+}
