@@ -24,7 +24,7 @@ const XrayTable = ({ data, clinicId, staffId, updateXray }) => {
   }
 
   return (
-    <Box align="center" justify="start" fill="horizontal" direction="column">
+    <Box align="center" justify="start" fill direction="column">
       <DataTable
         columns={[{
             header: <Text color="white" weight="bold">Date</Text>, 
@@ -33,6 +33,9 @@ const XrayTable = ({ data, clinicId, staffId, updateXray }) => {
             header: <Text color="white" weight="bold">Patient</Text>, 
             property: "patient_name", 
           }, {
+            header: <Text color="white" weight="bold">Microchip</Text>, 
+            property: "patient_microchip", 
+          } ,{
             header: <Text color="white" weight="bold">Staff</Text>, 
             property: "staff_username", 
           }, {

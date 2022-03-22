@@ -28,13 +28,14 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
     xray_kV: data.xray_kv,
     xray_mAs: data.xray_mas,
     xray_position: data.xray_position,
-    xray_patient_name: data.patient_name
+    xray_patient_name: data.patient_name + ' - ' + data.patient_microchip,
+    xray_patient_microchip: data.patient_microchip
   };
   
   // Set the state of the edit xray form values and patients
   const [values, setValues] = useState(defaultValues);
   const [patients, setPatients] = useState([]);
-  const [patientId, setPatientId] = useState(0);
+  const [patientId, setPatientId] = useState(data.xray_patient_id);
 
   // Fetch clients data from the server
   useEffect(() => {
@@ -174,7 +175,7 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
           <FormField  name="xray_patient_name" required>
             <Select 
               name="xray_patient_name" 
-              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
+              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))}
               placeholder="Patient" 
               value={xray_patient_name} 
               plain

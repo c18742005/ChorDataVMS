@@ -72,7 +72,7 @@ const Xrays = ({ clinic_id, staff_id }) => {
   }, []);
 
   return (
-    <Box align="center" justify="start" direction="column" pad="small" fill="horizontal">
+    <Box align="center" justify="start" direction="column" pad="small" fill>
       <Box 
         align="center" 
         justify="end" 

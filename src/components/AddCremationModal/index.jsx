@@ -9,6 +9,7 @@ import {
   FormField, 
   Heading, 
   Layer, 
+  RadioButtonGroup, 
   Select, 
   TextInput } from 'grommet';
 
@@ -16,19 +17,17 @@ import {
   props:
     (String): clinicId: ID of the clinic staff that is currently logged in 
     (String): staffId: ID of the staff member currently logged in
-    (Fn: Xrays) addXray: Function to add an xray to the Xray state
-    (Fn: Xrays) closeForm: Function to close the add xray modal
+    (Fn: Cremation) addCremation: Function to add a cremation to the cremation state
+    (Fn: Cremation) closeForm: Function to close the add cremation modal
 */
-const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
+const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
   const defaultValues = {
-    xray_date: new Date().toISOString(),
-    xray_image_quality: "",
-    xray_kV: "",
-    xray_mAs: "",
-    xray_position: "",
-    xray_patient_id: 0,
-    xray_staff_id: 0,
-    xray_clinic_id: 0
+    cremation_date_collected: '',
+    cremation_date_ashes_returned_practice: '',
+    cremation_date_ashes_returned_owner: '',
+    cremation_form: 'Scatter Tube',
+    cremation_owner_contacted: 'No',
+    cremation_patient_id: 0
   };
   
   // Set state for the form values, patients and current selected patient
@@ -62,38 +61,37 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
 
   // Destructure state values
   const { 
-    xray_date,
-    xray_image_quality,
-    xray_kV,
-    xray_mAs,
-    xray_position,
-    xray_patient_id } = values;
+    cremation_date_collected,
+    cremation_date_ashes_returned_practice,
+    cremation_date_ashes_returned_owner,
+    cremation_form,
+    cremation_owner_contacted,
+    cremation_patient_id } = values;
 
-  // Function to handle submission of the add xray form
+  // Function to handle submission of the add cremation form
   const onSubmitForm = async e => {
     e.preventDefault();
-    const add_xray_url = `${process.env.REACT_APP_API_END_POINT}/api/xrays`;
+    const add_cremation_url = `${process.env.REACT_APP_API_END_POINT}/api/cremations`;
 
-    // Try to send xray data to the server 
+    // Try to send cremation data to the server 
     try {
-      await axios.post(add_xray_url, {
-        xray_date: xray_date,
-        xray_image_quality: xray_image_quality,
-        xray_kV: xray_kV,
-        xray_mAs: xray_mAs,
-        xray_position: xray_position,
-        xray_patient_id: patientId,
-        xray_staff_id: staffId,
-        xray_clinic_id: clinicId
+      await axios.post(add_cremation_url, {
+        cremation_date_collected: cremation_date_collected,
+        cremation_date_ashes_returned_practice: cremation_date_ashes_returned_practice,
+        cremation_date_ashes_returned_owner: cremation_date_ashes_returned_owner,
+        cremation_form: cremation_form,
+        cremation_owner_contacted: cremation_owner_contacted,
+        cremation_patient_id: patientId,
+        cremation_clinic_id: clinicId
       },
       {
         headers: {
           'token': localStorage.token
       }})
       .then((response) => {
-        // Success: Add new xray to state
+        // Success: Add new cremation to state
         // Close form and send success message
-        addXray(response.data.body);
+        addCremation(response.data.body);
         closeForm();
         toast.success(response.data.message);
       }, (error) => {
@@ -117,7 +115,7 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
 
   return (
     <Layer animate modal onClickOutside={closeForm} position="center">
-      <Heading level="2" textAlign="center">Add Xray</Heading>
+      <Heading level="2" textAlign="center">Add Cremation</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
         <Form 
           onSubmit={onSubmitForm}
@@ -125,61 +123,53 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
             setValues(nextValue);
           }}
         >
-          <FormField name="xray_date" label="X-ray Date Taken" required>
+          <FormField name="cremation_date_collected" label="Date Remains Collected">
             <DateInput
               format="yyyy/mm/dd"
-              value={(new Date(values.xray_date)).toISOString()}
-              name="xray_date"
-              placeholder='X-ray Date'
+              value={cremation_date_collected === '' ? '' : (new Date(values.cremation_date_collected)).toISOString()}
+              name="cremation_date_collected"
+              placeholder='Date Remains Collected'
             />
           </FormField>
-          <FormField  name="xray_image_quality" required>
-            <Select 
-              options={["Overexposed", "Underexposed", "Good", "Excellent"]} 
-              closeOnChange 
-              placeholder="Image Quality" 
-              value={xray_image_quality} 
-              name="xray_image_quality" 
+          <FormField name="cremation_date_ashes_returned_practice" label="Date Returned to Practice">
+            <DateInput
+              format="yyyy/mm/dd"
+              value={cremation_date_ashes_returned_practice === '' ? '' : (new Date(values.cremation_date_ashes_returned_practice)).toISOString()}
+              name="cremation_date_ashes_returned_practice"
+              placeholder='Date Returned to Practice'
+            />
+          </FormField>
+          <FormField name="cremation_date_ashes_returned_owner" label="Date Returned to Owner">
+            <DateInput
+              format="yyyy/mm/dd"
+              value={cremation_date_ashes_returned_owner === '' ? '' : (new Date(values.cremation_date_ashes_returned_owner)).toISOString()}
+              name="cremation_date_ashes_returned_owner"
+              placeholder='Date Returned to Owner'
+            />
+          </FormField>
+          <FormField  name="cremation_form" label="Form of Cremation" required>
+            <RadioButtonGroup
+              options={["Scatter Tube", "Tribute Box", "Urn"]} 
+              value={cremation_form} 
+              name="cremation_form" 
               plain 
             />
           </FormField>
-          <FormField name="xray_kV" required>
-            <TextInput 
-              placeholder="kV" 
-              size="medium" 
-              type="text" 
-              value={xray_kV} 
-              name="xray_kV" 
+          <FormField  name="cremation_owner_contacted" label="Owner Contacted?" required>
+            <RadioButtonGroup
+              options={["Yes", "No"]} 
+              value={cremation_owner_contacted} 
+              name="cremation_owner_contacted" 
               plain 
             />
           </FormField>
-          <FormField name="xray_mAs" required>
-            <TextInput 
-              placeholder="mAs" 
-              size="medium" 
-              type="text" 
-              value={xray_mAs} 
-              name="xray_mAs" 
-              plain 
-            />
-          </FormField>
-          <FormField name="xray_position" required>
-            <TextInput 
-              placeholder="Position" 
-              size="medium" 
-              type="text" 
-              value={xray_position} 
-              name="xray_position" 
-              plain 
-            />
-          </FormField>
-          <FormField  name="xray_patient_id" required>
+          <FormField  name="cremation_patient_id" required>
             <Select 
               options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
               closeOnChange 
               placeholder="Patient" 
-              value={xray_patient_id} 
-              name="xray_patient_id" 
+              value={cremation_patient_id} 
+              name="cremation_patient_id" 
               plain 
               onChange={({ option }) => {
                 let sep = " - "
@@ -207,8 +197,9 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
           </Box>
         </Form>
       </Box>
+      {console.log(values)}
     </Layer>
   )
 }
 
-export default AddXrayModal 
+export default AddCremationModal 

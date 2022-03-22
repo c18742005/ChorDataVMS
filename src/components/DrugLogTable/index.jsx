@@ -20,6 +20,9 @@ const DrugLogTable = ({ data }) => {
           header: <Text color="white" weight="bold">Patient</Text>,
           property: "patient_name", 
         }, {
+          header: <Text color="white" weight="bold">Microchip</Text>,
+          property: "patient_microchip", 
+        }, {
           header: <Text color="white" weight="bold">Batch #</Text>,
           property: "drug_batch_id", 
         }, {
@@ -35,7 +38,7 @@ const DrugLogTable = ({ data }) => {
       }} 
       margin={{"top": "small"}}
       fill="horizontal"
-      step={10}
+      step={8}
       paginate
       resizeable 
     />
