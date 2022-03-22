@@ -9,45 +9,47 @@ import {
   FormField, 
   Heading, 
   Layer, 
-  RadioButtonGroup, 
+  RadioButtonGroup,
   Select } from 'grommet';
 
 /*
   props:
-    (String): clinicId: ID of the clinic staff that is currently logged in 
-    (String): staffId: ID of the staff member currently logged in
-    (Fn: Cremation) addCremation: Function to add a cremation to the cremation state
-    (Fn: Cremation) closeForm: Function to close the add cremation modal
+    (Object) data: Holds info about the cremation i.e. date collected, date returned, patient, etc.
+    (String) clinicId: ID of the clinic the cremation belongs to
+    (Fn: CremationTable) updateCremation: Function to update a cremation info in the cremation state
+    (Fn: CremationTable) deleteCremation: Function to delete a cremation from the cremation state
+    (Fn: CremationTable) closeForm: Function to close the edit cremation modal
 */
-const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
+const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, deleteCremation }) => {
+  // Set the default values for the state
   const defaultValues = {
-    cremation_date_collected: '',
-    cremation_date_ashes_returned_practice: '',
-    cremation_date_ashes_returned_owner: '',
-    cremation_form: 'Scatter Tube',
-    cremation_owner_contacted: 'No',
-    cremation_patient_id: 0
+    cremation_date_collected: data.cremation_date_collected,
+    cremation_date_ashes_returned_practice: data.cremation_date_ashes_returned_practice,
+    cremation_date_ashes_returned_owner: data.cremation_date_ashes_returned_owner,
+    cremation_form: data.cremation_form,
+    cremation_owner_contacted: data.cremation_owner_contacted,
+    cremation_patient_name: data.patient_name + ' - ' + data.patient_microchip
   };
   
-  // Set state for the form values, patients and current selected patient
+  // Set the state of the edit cremation form values and patients
   const [values, setValues] = useState(defaultValues);
   const [patients, setPatients] = useState([]);
-  const [patientId, setPatientId] = useState(0);
+  const [patientId, setPatientId] = useState(data.cremation_patient_id);
 
-  // Fetch patient data
+  // Fetch clients data from the server
   useEffect(() => {
     const fetchData = async () => {
       const get_patients_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/clinic/${clinicId}`;
 
       try {
-        await axios.get(
-          get_patients_url, {
+        await axios.get(get_patients_url, {
             headers: {
               'token': localStorage.token
             }
           }
         )
         .then(res => {
+          // Success: set patients state
           setPatients(res.data);
         })
       } catch (error) {
@@ -58,39 +60,37 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
     fetchData();
   }, []);
 
-  // Destructure state values
+  // Destructure form values state
   const { 
     cremation_date_collected,
     cremation_date_ashes_returned_practice,
     cremation_date_ashes_returned_owner,
     cremation_form,
     cremation_owner_contacted,
-    cremation_patient_id } = values;
+    cremation_patient_name } = values;
 
-  // Function to handle submission of the add cremation form
+  // Function to handle submission of the edit cremation form
   const onSubmitForm = async e => {
     e.preventDefault();
-    const add_cremation_url = `${process.env.REACT_APP_API_END_POINT}/api/cremations`;
+
+    const update_cremation_url = `${process.env.REACT_APP_API_END_POINT}/api/cremations/${data.cremation_id}`;
 
     // Try to send cremation data to the server 
     try {
-      await axios.post(add_cremation_url, {
-        cremation_date_collected: cremation_date_collected,
-        cremation_date_ashes_returned_practice: cremation_date_ashes_returned_practice,
-        cremation_date_ashes_returned_owner: cremation_date_ashes_returned_owner,
+      await axios.put(update_cremation_url, {
+        cremation_date_collected: cremation_date_collected === '' ? null : cremation_date_collected,
+        cremation_date_ashes_returned_practice: cremation_date_ashes_returned_practice  === '' ? null : cremation_date_ashes_returned_practice,
+        cremation_date_ashes_returned_owner: cremation_date_ashes_returned_owner  === '' ? null : cremation_date_ashes_returned_owner,
         cremation_form: cremation_form,
         cremation_owner_contacted: cremation_owner_contacted,
-        cremation_patient_id: patientId,
-        cremation_clinic_id: clinicId
-      },
-      {
+        cremation_patient_id: patientId
+      }, {
         headers: {
           'token': localStorage.token
       }})
       .then((response) => {
-        // Success: Add new cremation to state
-        // Close form and send success message
-        addCremation(response.data.body);
+        // Success: update the cremation state, close the form and display success message
+        updateCremation(response.data.body);
         closeForm();
         toast.success(response.data.message);
       }, (error) => {
@@ -103,7 +103,7 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
             toast.error(err.msg);
           })
         } else {
-          // Display single error to user
+          // Display single error message to user
           toast.error(error.response.data);
         }
       });   
@@ -112,11 +112,45 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
     }
   }
 
+    // Function to handle the removal of a cremation
+    const removeCremation = async e => {
+      const remove_cremation_url = `${process.env.REACT_APP_API_END_POINT}/api/cremations/${data.cremation_id}`;
+  
+      // Try to send cremation data to the server 
+      try {
+        await axios.delete(remove_cremation_url, {
+          headers: {
+            'token': localStorage.token
+        }})
+        .then((response) => {
+          // Success: update the cremation state, close the form and display success message
+          deleteCremation(response.data.cremationId);
+          closeForm();
+          toast.success(response.data.message);
+        }, (error) => {
+          // Error: Check error type
+          if(error.response.status === 422) {
+            // Display validation errors to user
+            const errors = error.response.data.errors
+  
+            errors.forEach((err) => {
+              toast.error(err.msg);
+            })
+          } else {
+            // Display single error message to user
+            toast.error(error.response.data);
+          }
+        });   
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
+
   return (
     <Layer animate modal onClickOutside={closeForm} position="center">
-      <Heading level="2" textAlign="center">Add Cremation</Heading>
+      <Heading level="2" textAlign="center">Edit Cremation</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
-        <Form 
+      <Form 
           onSubmit={onSubmitForm}
           onChange={(nextValue) => {
             setValues(nextValue);
@@ -125,7 +159,7 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
           <FormField name="cremation_date_collected" label="Date Remains Collected">
             <DateInput
               format="yyyy/mm/dd"
-              value={cremation_date_collected === '' ? '' : (new Date(values.cremation_date_collected)).toISOString()}
+              value={cremation_date_collected}
               name="cremation_date_collected"
               placeholder='Date Remains Collected'
             />
@@ -133,7 +167,7 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
           <FormField name="cremation_date_ashes_returned_practice" label="Date Returned to Practice">
             <DateInput
               format="yyyy/mm/dd"
-              value={cremation_date_ashes_returned_practice === '' ? '' : (new Date(values.cremation_date_ashes_returned_practice)).toISOString()}
+              value={cremation_date_ashes_returned_practice}
               name="cremation_date_ashes_returned_practice"
               placeholder='Date Returned to Practice'
             />
@@ -141,7 +175,7 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
           <FormField name="cremation_date_ashes_returned_owner" label="Date Returned to Owner">
             <DateInput
               format="yyyy/mm/dd"
-              value={cremation_date_ashes_returned_owner === '' ? '' : (new Date(values.cremation_date_ashes_returned_owner)).toISOString()}
+              value={cremation_date_ashes_returned_owner}
               name="cremation_date_ashes_returned_owner"
               placeholder='Date Returned to Owner'
             />
@@ -167,7 +201,7 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
               options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
               closeOnChange 
               placeholder="Patient" 
-              value={cremation_patient_id} 
+              value={cremation_patient_name} 
               name="cremation_patient_id" 
               plain 
               onChange={({ option }) => {
@@ -185,7 +219,14 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
-            <Button label="Add" primary hoverIndicator type="submit"/>
+            <Button label="Edit Cremation" primary hoverIndicator type="submit"/>
+            <Button 
+              label="Remove Cremation" 
+              color="status-critical" 
+              onClick={removeCremation}
+              primary 
+              hoverIndicator 
+            />
             <Button 
               label="Cancel" 
               color="accent-4" 
@@ -200,4 +241,4 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
   )
 }
 
-export default AddCremationModal 
+export default EditCremationModal

@@ -13,7 +13,7 @@ import CremationTable from '../../components/CremationTable'
     (String) clinic_id: ID of the clinic the staff currently logged in is part of
     (String) staff_id: ID of the staff currently logged in
 */
-const Cremations = ({ clinic_id, staff_id }) => {
+const Cremations = ({ clinic_id }) => {
   // Set state of cremation modal (show/hide)
   const [showCremationModal, setShowCremationModal] = useState(false);
   // Set state of xrays for table
@@ -40,11 +40,32 @@ const Cremations = ({ clinic_id, staff_id }) => {
     // Create a temp array to store the updated values
     let newCremations = cremations.slice();
 
-    // Change the date to a formatted string
-    updatedCremation.cremation_date = new Date(updatedCremation.cremation_date).toLocaleDateString("en-US");
+    // Change dates to a formatted string
+    if(updatedCremation.cremation_date_collected !== null) {
+      updatedCremation.cremation_date_collected = new Date(updatedCremation.cremation_date_collected).toLocaleDateString("en-US");
+    }
+    if(updatedCremation.cremation_date_ashes_returned_practice !== null) {
+      updatedCremation.cremation_date_ashes_returned_practice = new Date(updatedCremation.cremation_date_ashes_returned_practice).toLocaleDateString("en-US");
+    }
+    if(updatedCremation.cremation_date_ashes_returned_owner !== null) {
+      updatedCremation.cremation_date_ashes_returned_owner = new Date(updatedCremation.cremation_date_ashes_returned_owner).toLocaleDateString("en-US");
+    }
+    if(updatedCremation.cremation_owner_contacted === true) {
+      updatedCremation.cremation_owner_contacted = 'Yes';
+    } else {
+      updatedCremation.cremation_owner_contacted = 'No';
+    }
 
     // Update the state
     newCremations[index] = updatedCremation;
+    setCremations(newCremations);
+  }
+
+  // Delete a cremation in the state
+  const deleteCremation = (cremationId) => {
+    const newCremations = cremations.filter(cremation => cremation.cremation_id !== cremationId)
+
+    // Update the state
     setCremations(newCremations);
   }
 
@@ -60,10 +81,27 @@ const Cremations = ({ clinic_id, staff_id }) => {
         // Success: store cremation data in state
         const cremations = res.data;
 
-        // Format date to a string
+        // Format dates and Booleans to a string
         cremations.forEach(element => {
-          element.cremation_date = new Date(element.cremation_date).toLocaleDateString("en-US");
+          if(element.cremation_date_collected !== null) {
+            element.cremation_date_collected = new Date(element.cremation_date_collected).toLocaleDateString("en-US");
+          }
+
+          if(element.cremation_date_ashes_returned_practice !== null) {
+            element.cremation_date_ashes_returned_practice = new Date(element.cremation_date_ashes_returned_practice).toLocaleDateString("en-US");
+          }
+
+          if(element.cremation_date_ashes_returned_owner !== null) {
+            element.cremation_date_ashes_returned_owner = new Date(element.cremation_date_ashes_returned_owner).toLocaleDateString("en-US");
+          }
+
+          if(element.cremation_owner_contacted === true) {
+            element.cremation_owner_contacted = 'Yes';
+          } else {
+            element.cremation_owner_contacted = 'No';
+          }
         });
+
         setCremations(cremations);
       })
     }
@@ -95,16 +133,15 @@ const Cremations = ({ clinic_id, staff_id }) => {
       <CremationTable 
         data={cremations} 
         clinicId={clinic_id} 
-        staffId={staff_id} 
         updateCremation={updateCremations} 
+        deleteCremation={deleteCremation}
       />
       { // Show add cremation modal if selected
         showCremationModal && (
           <AddCremationModal
             closeForm={closeForms} 
             addCremation={addCremation} 
-            clinicId={clinic_id} 
-            staffId={staff_id}
+            clinicId={clinic_id}
           />
       )}
     </Box>
