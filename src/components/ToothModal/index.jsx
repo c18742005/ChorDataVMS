@@ -20,7 +20,7 @@ import {
 const ToothModal = ({ tooth, updateTooth, closeForm }) => {
   const defaultValues = {
     tooth_id: tooth.tooth_id,
-    tooth_problem: tooth.tooth_problem === null ? "" : tooth.tooth_problem,
+    tooth_problem: tooth.tooth_problem === null ? "Healthy" : tooth.tooth_problem,
     tooth_note: tooth.tooth_note === null ? "" : tooth.tooth_note,
     tooth_patient_id: tooth.tooth_patient_id
   };
@@ -118,7 +118,7 @@ const ToothModal = ({ tooth, updateTooth, closeForm }) => {
               size="medium" 
               type="text" 
               value={tooth_note} 
-              name="tooth_note" 
+              name="tooth_note"
               plain 
             />
           </FormField>

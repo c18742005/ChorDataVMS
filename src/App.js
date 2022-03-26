@@ -111,7 +111,7 @@ function App() {
                   isAuthenticated ? (
                     <Navigate to="/" />
                   ) : (
-                    <Login setAuth={setAuth} isAuth={isAuthenticated} />
+                    <Login setAuth={setAuth} />
                   )}  
                 />
                 <Route path="/register" element={

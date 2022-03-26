@@ -6,7 +6,6 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 // Components
 import ClientTable from '../../components/ClientTable'
-import SearchBar from '../../components/SearchBar'
 import AddClientForm from '../../components/AddClientForm'
 
 /*
@@ -55,7 +54,6 @@ const Clients = ({ clinic }) => {
         direction="row" 
         pad="medium"
       >
-        <SearchBar />
         <Button 
           label="Add Client"
           icon={<FontAwesomeIcon icon={faUserPlus} size='2x' />} 

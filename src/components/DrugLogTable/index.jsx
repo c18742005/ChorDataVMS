@@ -32,10 +32,8 @@ const DrugLogTable = ({ data }) => {
       ]}
       data={data} 
       pad="small"
-      background={{
-        "header":{"color":"brand"},
-        "body":["white", "border"]
-      }} 
+      background={{"header":{"color":"brand"}}} 
+      border="horizontal"
       margin={{"top": "small"}}
       fill="horizontal"
       step={8}

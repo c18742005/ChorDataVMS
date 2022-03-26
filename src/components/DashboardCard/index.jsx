@@ -7,7 +7,7 @@ import { Box, Card, Heading } from "grommet"
 */
 const DashboardCard = ({ title, image }) => {
   return (
-    <Card hoverIndicator flex='shrink' fill>
+    <Card direction="column" justify="center" align="center" fill elevation="medium">
       <Heading level="3" textAlign="center">
         {title}
       </Heading>

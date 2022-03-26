@@ -54,10 +54,8 @@ const XrayTable = ({ data, clinicId, staffId, updateXray }) => {
         ]}
         data={data} 
         pad="small"
-        background={{
-          "header":{"color":"brand"},
-          "body":["white", "border"]
-        }} 
+        background={{"header":{"color":"brand"}}} 
+        border="horizontal"
         fill="horizontal"
         onClickRow={({ datum }) => {
           setXray(datum);

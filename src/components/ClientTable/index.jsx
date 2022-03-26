@@ -32,9 +32,9 @@ const ClientTable = ({ data }) => {
       data={data} 
       pad="small"
       background={{
-        "header":{"color":"brand"},
-        "body":["white", "border"]
+        "header":{"color":"brand"}
       }} 
+      border="horizontal"
       sortable
       resizeable 
       fill="horizontal"

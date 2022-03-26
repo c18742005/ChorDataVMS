@@ -28,7 +28,7 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
     cremation_date_ashes_returned_owner: data.cremation_date_ashes_returned_owner,
     cremation_form: data.cremation_form,
     cremation_owner_contacted: data.cremation_owner_contacted,
-    cremation_patient_name: data.patient_name + ' - ' + data.patient_microchip
+    cremation_patient_id: data.patient_name + ' - ' + data.patient_microchip
   };
   
   // Set the state of the edit cremation form values and patients
@@ -36,11 +36,12 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
   const [patients, setPatients] = useState([]);
   const [patientId, setPatientId] = useState(data.cremation_patient_id);
 
-  // Fetch clients data from the server
+  // Fetch patients data from the server
   useEffect(() => {
     const fetchData = async () => {
       const get_patients_url = `${process.env.REACT_APP_API_END_POINT}/api/patients/clinic/${clinicId}`;
 
+      // Try get the patient data from the server
       try {
         await axios.get(get_patients_url, {
             headers: {
@@ -67,7 +68,7 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
     cremation_date_ashes_returned_owner,
     cremation_form,
     cremation_owner_contacted,
-    cremation_patient_name } = values;
+    cremation_patient_id } = values;
 
   // Function to handle submission of the edit cremation form
   const onSubmitForm = async e => {
@@ -78,9 +79,18 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
     // Try to send cremation data to the server 
     try {
       await axios.put(update_cremation_url, {
-        cremation_date_collected: cremation_date_collected === '' ? null : cremation_date_collected,
-        cremation_date_ashes_returned_practice: cremation_date_ashes_returned_practice  === '' ? null : cremation_date_ashes_returned_practice,
-        cremation_date_ashes_returned_owner: cremation_date_ashes_returned_owner  === '' ? null : cremation_date_ashes_returned_owner,
+        cremation_date_collected: cremation_date_collected === '' ? (
+          null) : (
+          cremation_date_collected
+        ),
+        cremation_date_ashes_returned_practice: cremation_date_ashes_returned_practice  === '' ? (
+          null) : (
+          cremation_date_ashes_returned_practice
+        ),
+        cremation_date_ashes_returned_owner: cremation_date_ashes_returned_owner  === '' ? (
+          null) : (
+          cremation_date_ashes_returned_owner
+        ),
         cremation_form: cremation_form,
         cremation_owner_contacted: cremation_owner_contacted,
         cremation_patient_id: patientId
@@ -116,7 +126,7 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
     const removeCremation = async e => {
       const remove_cremation_url = `${process.env.REACT_APP_API_END_POINT}/api/cremations/${data.cremation_id}`;
   
-      // Try to send cremation data to the server 
+      // Try to remove cremation data from the server 
       try {
         await axios.delete(remove_cremation_url, {
           headers: {
@@ -150,13 +160,16 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
     <Layer animate modal onClickOutside={closeForm} position="center">
       <Heading level="2" textAlign="center">Edit Cremation</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
-      <Form 
+        <Form 
           onSubmit={onSubmitForm}
           onChange={(nextValue) => {
             setValues(nextValue);
           }}
         >
-          <FormField name="cremation_date_collected" label="Date Remains Collected">
+          <FormField 
+            name="cremation_date_collected" 
+            label="Date Remains Collected"
+          >
             <DateInput
               format="yyyy/mm/dd"
               value={cremation_date_collected}
@@ -164,7 +177,10 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
               placeholder='Date Remains Collected'
             />
           </FormField>
-          <FormField name="cremation_date_ashes_returned_practice" label="Date Returned to Practice">
+          <FormField 
+            name="cremation_date_ashes_returned_practice" 
+            label="Date Returned to Practice"
+          >
             <DateInput
               format="yyyy/mm/dd"
               value={cremation_date_ashes_returned_practice}
@@ -172,7 +188,10 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
               placeholder='Date Returned to Practice'
             />
           </FormField>
-          <FormField name="cremation_date_ashes_returned_owner" label="Date Returned to Owner">
+          <FormField 
+            name="cremation_date_ashes_returned_owner" 
+            label="Date Returned to Owner"
+          >
             <DateInput
               format="yyyy/mm/dd"
               value={cremation_date_ashes_returned_owner}
@@ -201,7 +220,7 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
               options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
               closeOnChange 
               placeholder="Patient" 
-              value={cremation_patient_name} 
+              value={cremation_patient_id} 
               name="cremation_patient_id" 
               plain 
               onChange={({ option }) => {

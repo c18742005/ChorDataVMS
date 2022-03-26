@@ -77,7 +77,7 @@ const Client = () => {
         }}).then(res => {
           // Success: set client state
           const client_data = res.data;
-          setClient(client_data[0]);
+          setClient(client_data);
         }).catch((e) => console.log(e.response.data));
 
         await axios.get(patients_url, {
@@ -187,6 +187,7 @@ const Client = () => {
                 {property: "patient_breed", header: <Text color="white" weight="bold">Breed</Text>}
               ]}
               background={{"header": {"color":"brand"}}} 
+              border="horizontal"
               onClickRow={({ datum }) => {navigate(`/patient/${datum.patient_id}`)}} 
               data={patients} 
               step={10}

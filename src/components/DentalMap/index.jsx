@@ -70,7 +70,7 @@ const DentalMap = ({ patient_id, species }) => {
                 svgTooth.style.fill = "#01739D"
                 break;
               case "Furcation":
-                svgTooth.style.fil = "#02C781"
+                svgTooth.style.fill = "#02C781"
                 break;
               case "FORL":
                 svgTooth.style.fill = "#3D148C"

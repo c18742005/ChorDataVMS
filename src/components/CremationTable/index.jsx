@@ -49,10 +49,8 @@ const CremationTable = ({ data, clinicId, updateCremation, deleteCremation }) =>
         ]}
         data={data} 
         pad="small"
-        background={{
-          "header":{"color":"brand"},
-          "body":["white", "border"]
-        }} 
+        background={{"header":{"color":"brand"}}} 
+        border="horizontal"
         fill="horizontal"
         onClickRow={({ datum }) => {
           setCremation(datum);

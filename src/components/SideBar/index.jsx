@@ -53,6 +53,7 @@ const SideBar = ({ isAuth }) => {
       pad='none'
       justify="center" 
       fill="vertical"
+      overflow="auto"
       flex='shrink' 
     >
       <Heading 

@@ -50,7 +50,7 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
         .then(res => {
           setPatients(res.data);
         })
-      } catch (error) {
+      } catch(error) {
         console.error(error.message);
       }
     }
@@ -125,7 +125,10 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
           <FormField name="cremation_date_collected" label="Date Remains Collected">
             <DateInput
               format="yyyy/mm/dd"
-              value={cremation_date_collected === '' ? '' : (new Date(values.cremation_date_collected)).toISOString()}
+              value={cremation_date_collected === '' ? (
+                '') : (
+                (new Date(values.cremation_date_collected)).toISOString()
+              )}
               name="cremation_date_collected"
               placeholder='Date Remains Collected'
             />
@@ -133,7 +136,10 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
           <FormField name="cremation_date_ashes_returned_practice" label="Date Returned to Practice">
             <DateInput
               format="yyyy/mm/dd"
-              value={cremation_date_ashes_returned_practice === '' ? '' : (new Date(values.cremation_date_ashes_returned_practice)).toISOString()}
+              value={cremation_date_ashes_returned_practice === '' ? (
+                '') : (
+                (new Date(values.cremation_date_ashes_returned_practice)).toISOString()
+              )}
               name="cremation_date_ashes_returned_practice"
               placeholder='Date Returned to Practice'
             />
@@ -141,7 +147,10 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
           <FormField name="cremation_date_ashes_returned_owner" label="Date Returned to Owner">
             <DateInput
               format="yyyy/mm/dd"
-              value={cremation_date_ashes_returned_owner === '' ? '' : (new Date(values.cremation_date_ashes_returned_owner)).toISOString()}
+              value={cremation_date_ashes_returned_owner === '' ? (
+                '') : (
+                (new Date(values.cremation_date_ashes_returned_owner)).toISOString()
+              )}
               name="cremation_date_ashes_returned_owner"
               placeholder='Date Returned to Owner'
             />

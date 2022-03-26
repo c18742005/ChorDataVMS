@@ -40,15 +40,21 @@ const Cremations = ({ clinic_id }) => {
     // Create a temp array to store the updated values
     let newCremations = cremations.slice();
 
-    // Change dates to a formatted string
+    // Change dates and Booleans to a formatted string
     if(updatedCremation.cremation_date_collected !== null) {
-      updatedCremation.cremation_date_collected = new Date(updatedCremation.cremation_date_collected).toLocaleDateString("en-US");
+      updatedCremation.cremation_date_collected = (
+        new Date(updatedCremation.cremation_date_collected).toLocaleDateString("en-US")
+      );
     }
     if(updatedCremation.cremation_date_ashes_returned_practice !== null) {
-      updatedCremation.cremation_date_ashes_returned_practice = new Date(updatedCremation.cremation_date_ashes_returned_practice).toLocaleDateString("en-US");
+      updatedCremation.cremation_date_ashes_returned_practice = (
+        new Date(updatedCremation.cremation_date_ashes_returned_practice).toLocaleDateString("en-US")
+      );
     }
     if(updatedCremation.cremation_date_ashes_returned_owner !== null) {
-      updatedCremation.cremation_date_ashes_returned_owner = new Date(updatedCremation.cremation_date_ashes_returned_owner).toLocaleDateString("en-US");
+      updatedCremation.cremation_date_ashes_returned_owner = (
+        new Date(updatedCremation.cremation_date_ashes_returned_owner).toLocaleDateString("en-US")
+      );
     }
     if(updatedCremation.cremation_owner_contacted === true) {
       updatedCremation.cremation_owner_contacted = 'Yes';
@@ -74,36 +80,41 @@ const Cremations = ({ clinic_id }) => {
     const fetch_data = async () => {
       const url = `${process.env.REACT_APP_API_END_POINT}/api/cremations/clinic/${clinic_id}`;
 
-      await axios.get(url, {
-        headers: {
-          'token': localStorage.token
-      }}).then(res => {
-        // Success: store cremation data in state
-        const cremations = res.data;
-
-        // Format dates and Booleans to a string
-        cremations.forEach(element => {
-          if(element.cremation_date_collected !== null) {
-            element.cremation_date_collected = new Date(element.cremation_date_collected).toLocaleDateString("en-US");
-          }
-
-          if(element.cremation_date_ashes_returned_practice !== null) {
-            element.cremation_date_ashes_returned_practice = new Date(element.cremation_date_ashes_returned_practice).toLocaleDateString("en-US");
-          }
-
-          if(element.cremation_date_ashes_returned_owner !== null) {
-            element.cremation_date_ashes_returned_owner = new Date(element.cremation_date_ashes_returned_owner).toLocaleDateString("en-US");
-          }
-
-          if(element.cremation_owner_contacted === true) {
-            element.cremation_owner_contacted = 'Yes';
-          } else {
-            element.cremation_owner_contacted = 'No';
-          }
-        });
-
-        setCremations(cremations);
-      })
+      // Attempt to get cremations from server
+      try {
+        await axios.get(url, {
+          headers: {
+            'token': localStorage.token
+        }}).then(res => {
+          // Success: store cremation data in state
+          const cremations = res.data;
+  
+          // Format dates and Booleans to a string
+          cremations.forEach(element => {
+            if(element.cremation_date_collected !== null) {
+              element.cremation_date_collected = new Date(element.cremation_date_collected).toLocaleDateString("en-US");
+            }
+  
+            if(element.cremation_date_ashes_returned_practice !== null) {
+              element.cremation_date_ashes_returned_practice = new Date(element.cremation_date_ashes_returned_practice).toLocaleDateString("en-US");
+            }
+  
+            if(element.cremation_date_ashes_returned_owner !== null) {
+              element.cremation_date_ashes_returned_owner = new Date(element.cremation_date_ashes_returned_owner).toLocaleDateString("en-US");
+            }
+  
+            if(element.cremation_owner_contacted === true) {
+              element.cremation_owner_contacted = 'Yes';
+            } else {
+              element.cremation_owner_contacted = 'No';
+            }
+          });
+  
+          setCremations(cremations);
+        })
+      } catch(error) {
+        console.error(error.message);
+      }
     }
 
     fetch_data();
