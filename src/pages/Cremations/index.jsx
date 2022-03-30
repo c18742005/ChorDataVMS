@@ -24,11 +24,34 @@ const Cremations = ({ clinic_id }) => {
     setShowCremationModal(false);
   }
 
+  const formatOutput = (crem) => {
+    if(crem.cremation_date_collected !== null) {
+      crem.cremation_date_collected_f =
+        new Date(crem.cremation_date_collected).toLocaleDateString("en-IE");
+    }
+    if(crem.cremation_date_ashes_returned_practice !== null) {
+      crem.cremation_date_ashes_returned_practice_f = 
+        new Date(crem.cremation_date_ashes_returned_practice).toLocaleDateString("en-IE");
+    }
+    if(crem.cremation_date_ashes_returned_owner !== null) {
+      crem.cremation_date_ashes_returned_owner_f = 
+      new Date(crem.cremation_date_ashes_returned_owner).toLocaleDateString("en-IE");
+    }
+    if(crem.cremation_owner_contacted === true) {
+      crem.cremation_owner_contacted = 'Yes';
+    } else {
+      crem.cremation_owner_contacted = 'No';
+    }
+
+    return crem;
+  }
+
   // Add a new cremation to the state
   const addCremation = (newCremation) => {
     // Change the date to a formatted string
-    newCremation.cremation_date = new Date(newCremation.cremation_date).toLocaleDateString("en-US");
-    
+    // Change dates and Booleans to a formatted string
+    newCremation = formatOutput(newCremation);
+
     setCremations([...cremations, newCremation])
   }
 
@@ -41,26 +64,7 @@ const Cremations = ({ clinic_id }) => {
     let newCremations = cremations.slice();
 
     // Change dates and Booleans to a formatted string
-    if(updatedCremation.cremation_date_collected !== null) {
-      updatedCremation.cremation_date_collected = (
-        new Date(updatedCremation.cremation_date_collected).toLocaleDateString("en-US")
-      );
-    }
-    if(updatedCremation.cremation_date_ashes_returned_practice !== null) {
-      updatedCremation.cremation_date_ashes_returned_practice = (
-        new Date(updatedCremation.cremation_date_ashes_returned_practice).toLocaleDateString("en-US")
-      );
-    }
-    if(updatedCremation.cremation_date_ashes_returned_owner !== null) {
-      updatedCremation.cremation_date_ashes_returned_owner = (
-        new Date(updatedCremation.cremation_date_ashes_returned_owner).toLocaleDateString("en-US")
-      );
-    }
-    if(updatedCremation.cremation_owner_contacted === true) {
-      updatedCremation.cremation_owner_contacted = 'Yes';
-    } else {
-      updatedCremation.cremation_owner_contacted = 'No';
-    }
+    updatedCremation = formatOutput(updatedCremation);
 
     // Update the state
     newCremations[index] = updatedCremation;
@@ -91,23 +95,7 @@ const Cremations = ({ clinic_id }) => {
   
           // Format dates and Booleans to a string
           cremations.forEach(element => {
-            if(element.cremation_date_collected !== null) {
-              element.cremation_date_collected = new Date(element.cremation_date_collected).toLocaleDateString("en-US");
-            }
-  
-            if(element.cremation_date_ashes_returned_practice !== null) {
-              element.cremation_date_ashes_returned_practice = new Date(element.cremation_date_ashes_returned_practice).toLocaleDateString("en-US");
-            }
-  
-            if(element.cremation_date_ashes_returned_owner !== null) {
-              element.cremation_date_ashes_returned_owner = new Date(element.cremation_date_ashes_returned_owner).toLocaleDateString("en-US");
-            }
-  
-            if(element.cremation_owner_contacted === true) {
-              element.cremation_owner_contacted = 'Yes';
-            } else {
-              element.cremation_owner_contacted = 'No';
-            }
+            element = formatOutput(element);
           });
   
           setCremations(cremations);

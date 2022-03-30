@@ -22,7 +22,7 @@ const CremationTable = ({ data, clinicId, updateCremation, deleteCremation }) =>
   }
 
   return (
-    <Box align="center" justify="start" fill direction="column">
+    <Box align="center" justify="start" direction="column" fill>
       <DataTable
         columns={[ {
           header: <Text color="white" weight="bold">Patient</Text>, 
@@ -35,20 +35,19 @@ const CremationTable = ({ data, clinicId, updateCremation, deleteCremation }) =>
             property: "cremation_form", 
           }, {
             header: <Text color="white" weight="bold">Date Collected</Text>, 
-            property: "cremation_date_collected", 
+            property: "cremation_date_collected_f", 
           }, {
             header: <Text color="white" weight="bold">Date Returned Practice</Text>, 
-            property: "cremation_date_ashes_returned_practice", 
+            property: "cremation_date_ashes_returned_practice_f", 
           }, {
             header: <Text color="white" weight="bold">Date Returned Owner</Text>, 
-            property: "cremation_date_ashes_returned_owner", 
+            property: "cremation_date_ashes_returned_owner_f", 
           }, {
             header: <Text color="white" weight="bold">Owner Contacted</Text>, 
             property: "cremation_owner_contacted", 
           }, 
         ]}
-        data={data} 
-        pad="small"
+        data={data}
         background={{"header":{"color":"brand"}}} 
         border="horizontal"
         fill="horizontal"

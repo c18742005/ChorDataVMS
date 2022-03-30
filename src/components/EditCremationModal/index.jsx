@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
+import DatePicker from "react-widgets/DatePicker";
+import "react-widgets/styles.css";
 import { 
   Box, 
   Button, 
-  DateInput,
   Form, 
   FormField, 
   Heading, 
@@ -79,18 +80,9 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
     // Try to send cremation data to the server 
     try {
       await axios.put(update_cremation_url, {
-        cremation_date_collected: cremation_date_collected === '' ? (
-          null) : (
-          cremation_date_collected
-        ),
-        cremation_date_ashes_returned_practice: cremation_date_ashes_returned_practice  === '' ? (
-          null) : (
-          cremation_date_ashes_returned_practice
-        ),
-        cremation_date_ashes_returned_owner: cremation_date_ashes_returned_owner  === '' ? (
-          null) : (
-          cremation_date_ashes_returned_owner
-        ),
+        cremation_date_collected: cremation_date_collected,
+        cremation_date_ashes_returned_practice: cremation_date_ashes_returned_practice,
+        cremation_date_ashes_returned_owner: cremation_date_ashes_returned_owner,
         cremation_form: cremation_form,
         cremation_owner_contacted: cremation_owner_contacted,
         cremation_patient_id: patientId
@@ -160,43 +152,38 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
     <Layer animate modal onClickOutside={closeForm} position="center">
       <Heading level="2" textAlign="center">Edit Cremation</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
-        <Form 
-          onSubmit={onSubmitForm}
-          onChange={(nextValue) => {
-            setValues(nextValue);
-          }}
-        >
+        <Form onSubmit={onSubmitForm}>
           <FormField 
             name="cremation_date_collected" 
             label="Date Remains Collected"
           >
-            <DateInput
-              format="yyyy/mm/dd"
-              value={cremation_date_collected}
-              name="cremation_date_collected"
-              placeholder='Date Remains Collected'
+            <DatePicker 
+              name='cremation_date_collected'
+              value={cremation_date_collected === null ? null : new Date(cremation_date_collected)}
+              placeholder="DD/MM/YYYY" 
+              onChange={value => setValues({...values, cremation_date_collected: value.toISOString()})}
             />
           </FormField>
           <FormField 
             name="cremation_date_ashes_returned_practice" 
             label="Date Returned to Practice"
           >
-            <DateInput
-              format="yyyy/mm/dd"
-              value={cremation_date_ashes_returned_practice}
-              name="cremation_date_ashes_returned_practice"
-              placeholder='Date Returned to Practice'
+            <DatePicker 
+              name='cremation_date_ashes_returned_practice'
+              value={cremation_date_ashes_returned_practice === null ? null : new Date(cremation_date_ashes_returned_practice)}
+              placeholder="DD/MM/YYYY" 
+              onChange={value => setValues({...values, cremation_date_ashes_returned_practice: value.toISOString()})}
             />
           </FormField>
           <FormField 
             name="cremation_date_ashes_returned_owner" 
             label="Date Returned to Owner"
           >
-            <DateInput
-              format="yyyy/mm/dd"
-              value={cremation_date_ashes_returned_owner}
-              name="cremation_date_ashes_returned_owner"
-              placeholder='Date Returned to Owner'
+            <DatePicker 
+              name='cremation_date_ashes_returned_owner'
+              value={cremation_date_ashes_returned_owner === null ? null : new Date(cremation_date_ashes_returned_owner)}
+              placeholder="DD/MM/YYYY" 
+              onChange={value => setValues({...values, cremation_date_ashes_returned_owner: value.toISOString()})}
             />
           </FormField>
           <FormField  name="cremation_form" label="Form of Cremation" required>
@@ -204,6 +191,7 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
               options={["Scatter Tube", "Tribute Box", "Urn"]} 
               value={cremation_form} 
               name="cremation_form" 
+              onChange={evt => setValues({...values, cremation_form: evt.target.value})}
               plain 
             />
           </FormField>
@@ -212,6 +200,7 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
               options={["Yes", "No"]} 
               value={cremation_owner_contacted} 
               name="cremation_owner_contacted" 
+              onChange={evt => setValues({...values, cremation_owner_contacted: evt.target.value})}
               plain 
             />
           </FormField>
@@ -227,11 +216,12 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
                 let sep = " - "
                 let name = option.substring(0, option.indexOf(sep));
                 let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
-                // Loop through patients state to find selected drug
+                // Loop through patients state to find selected patient
                 for(let item in patients) {
                   if(patients[item].patient_name === name 
                     && patients[item].patient_microchip === microchip){
-                    setPatientId(patients[item].patient_id)
+                      setValues({...values, cremation_patient_id: option})
+                      setPatientId(patients[item].patient_id)
                   }
                 }
               }}
