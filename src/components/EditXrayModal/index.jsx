@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
+import DatePicker from "react-widgets/DatePicker";
+import "react-widgets/styles.css";
 import { 
   Box, 
   Button, 
@@ -120,66 +122,67 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
       <Box align="center" justify="center" direction="column" margin="medium">
         <Form 
           onSubmit={onSubmitForm}
-          onChange={(nextValue) => {
-            setValues(nextValue);
-          }}
         >
-          <FormField name="xray_date" label="X-ray Date Taken" required>
-            <DateInput
-              name="xray_date"
-              value={(new Date(values.xray_date)).toISOString()}
-              format="yyyy/mm/dd"
-              placeholder='X-ray Date'
+          <FormField name="xray_date" label="X-ray Date Taken">
+            <DatePicker 
+              name='xray_date'
+              value={xray_date === null ? null : new Date(xray_date)}
+              placeholder="DD/MM/YYYY" 
+              onChange={value => setValues({...values, xray_date: value.toISOString()})}
             />
           </FormField>
           <FormField  name="xray_image_quality" required>
             <Select 
-              name="xray_image_quality" 
-              value={xray_image_quality} 
               options={["Overexposed", "Underexposed", "Good", "Excellent"]} 
-              placeholder="Image Quality" 
               closeOnChange 
+              placeholder="Image Quality" 
+              value={xray_image_quality} 
+              name="xray_image_quality" 
+              onChange={evt => setValues({...values, xray_image_quality: evt.target.value})}
               plain 
             />
           </FormField>
           <FormField name="xray_kV" required>
             <TextInput 
-              name="xray_kV" 
-              value={xray_kV} 
               placeholder="kV" 
               size="medium" 
               type="text" 
+              value={xray_kV} 
+              name="xray_kV" 
+              onChange={evt => setValues({...values, xray_kV: evt.target.value})}
               plain 
             />
           </FormField>
           <FormField name="xray_mAs" required>
             <TextInput 
-              name="xray_mAs" 
-              value={xray_mAs} 
               placeholder="mAs" 
               size="medium" 
               type="text" 
+              value={xray_mAs} 
+              name="xray_mAs" 
+              onChange={evt => setValues({...values, xray_mAs: evt.target.value})}
               plain 
             />
           </FormField>
           <FormField name="xray_position" required>
             <TextInput 
-              name="xray_position" 
-              value={xray_position} 
               placeholder="Position" 
               size="medium" 
               type="text" 
+              value={xray_position} 
+              name="xray_position" 
+              onChange={evt => setValues({...values, xray_position: evt.target.value})}
               plain 
             />
           </FormField>
           <FormField  name="xray_patient_name" required>
             <Select 
-              name="xray_patient_name" 
-              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))}
+              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
+              closeOnChange 
               placeholder="Patient" 
               value={xray_patient_name} 
-              plain
-              closeOnChange 
+              name="xray_patient_name" 
+              plain 
               onChange={({ option }) => {
                 let sep = " - "
                 let name = option.substring(0, option.indexOf(sep));
@@ -188,7 +191,8 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
                 for(let item in patients) {
                   if(patients[item].patient_name === name 
                     && patients[item].patient_microchip === microchip){
-                    setPatientId(patients[item].patient_id)
+                      setValues({...values, xray_patient_name: option})
+                      setPatientId(patients[item].patient_id)
                   }
                 }
               }}

@@ -27,7 +27,7 @@ const Xrays = ({ clinic_id, staff_id }) => {
   // Add a new xray to the state
   const addXrays = (newXray) => {
     // Change the date to a formatted string
-    newXray.xray_date = new Date(newXray.xray_date).toLocaleDateString("en-US");
+    newXray.xray_date_f = new Date(newXray.xray_date).toLocaleDateString("en-IE");
     
     setXrays([...xrays, newXray])
   }
@@ -41,7 +41,7 @@ const Xrays = ({ clinic_id, staff_id }) => {
     let newXrays = xrays.slice();
 
     // Change the date to a formatted string
-    newXray.xray_date = new Date(newXray.xray_date).toLocaleDateString("en-US");
+    newXray.xray_date_f = new Date(newXray.xray_date).toLocaleDateString("en-IE");
 
     // Update the state
     newXrays[index] = newXray;
@@ -62,7 +62,7 @@ const Xrays = ({ clinic_id, staff_id }) => {
 
         // Format date to a string
         xrays.forEach(element => {
-          element.xray_date = new Date(element.xray_date).toLocaleDateString("en-US");
+          element.xray_date_f = new Date(element.xray_date).toLocaleDateString("en-IE");
         });
         setXrays(xrays)
       })

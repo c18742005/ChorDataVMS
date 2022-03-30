@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
+import DatePicker from "react-widgets/DatePicker";
+import "react-widgets/styles.css";
 import { 
   Box, 
   Button, 
-  DateInput,
   Form, 
   FormField, 
   Heading, 
@@ -21,14 +22,14 @@ import {
 */
 const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
   const defaultValues = {
-    xray_date: new Date().toISOString(),
+    xray_date: null,
     xray_image_quality: "",
     xray_kV: "",
     xray_mAs: "",
     xray_position: "",
-    xray_patient_id: 0,
-    xray_staff_id: 0,
-    xray_clinic_id: 0
+    xray_patient_id: null,
+    xray_staff_id: staffId,
+    xray_clinic_id: clinicId
   };
   
   // Set state for the form values, patients and current selected patient
@@ -121,16 +122,13 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
       <Box align="center" justify="center" direction="column" margin="medium">
         <Form 
           onSubmit={onSubmitForm}
-          onChange={(nextValue) => {
-            setValues(nextValue);
-          }}
         >
-          <FormField name="xray_date" label="X-ray Date Taken" required>
-            <DateInput
-              format="yyyy/mm/dd"
-              value={(new Date(values.xray_date)).toISOString()}
-              name="xray_date"
-              placeholder='X-ray Date'
+          <FormField name="xray_date" label="X-ray Date Taken">
+            <DatePicker 
+              name='xray_date'
+              value={xray_date === null ? null : new Date(xray_date)}
+              placeholder="DD/MM/YYYY" 
+              onChange={value => setValues({...values, xray_date: value.toISOString()})}
             />
           </FormField>
           <FormField  name="xray_image_quality" required>
@@ -140,6 +138,7 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
               placeholder="Image Quality" 
               value={xray_image_quality} 
               name="xray_image_quality" 
+              onChange={evt => setValues({...values, xray_image_quality: evt.target.value})}
               plain 
             />
           </FormField>
@@ -150,6 +149,7 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
               type="text" 
               value={xray_kV} 
               name="xray_kV" 
+              onChange={evt => setValues({...values, xray_kV: evt.target.value})}
               plain 
             />
           </FormField>
@@ -160,6 +160,7 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
               type="text" 
               value={xray_mAs} 
               name="xray_mAs" 
+              onChange={evt => setValues({...values, xray_mAs: evt.target.value})}
               plain 
             />
           </FormField>
@@ -170,6 +171,7 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
               type="text" 
               value={xray_position} 
               name="xray_position" 
+              onChange={evt => setValues({...values, xray_position: evt.target.value})}
               plain 
             />
           </FormField>
@@ -189,7 +191,8 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
                 for(let item in patients) {
                   if(patients[item].patient_name === name 
                     && patients[item].patient_microchip === microchip){
-                    setPatientId(patients[item].patient_id)
+                      setValues({...values, xray_patient_id: option})
+                      setPatientId(patients[item].patient_id)
                   }
                 }
               }}
