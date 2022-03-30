@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Button } from 'grommet';
+import { Box, Button, Heading } from 'grommet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -46,20 +46,21 @@ const Clients = ({ clinic }) => {
   }, []);
 
   return (
-    <Box align="center" justify="start" direction="column" pad="small" fill="horizontal">
+    <Box align="start" justify="start" direction="column" fill="horizontal" gap="small">
       <Box 
         align="center" 
         justify="between" 
         fill="horizontal" 
         direction="row" 
-        pad="medium"
+        gap="small"
+        pad="small"
       >
+        <Heading level="2" pad="none" margin="none" gap="none">Clients</Heading>
         <Button 
           label="Add Client"
           icon={<FontAwesomeIcon icon={faUserPlus} size='2x' />} 
           color="status-ok" 
           size="small"  
-          margin={{"left":"medium"}} 
           onClick={() => setShowClientAdd(true)} 
           hoverIndicator 
           reverse 

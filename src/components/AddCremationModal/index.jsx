@@ -117,6 +117,39 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
       <Heading level="2" textAlign="center">Add Cremation</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
         <Form onSubmit={onSubmitForm}>
+          <FormField  name="cremation_patient_id" required>
+            <Select 
+              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
+              closeOnChange 
+              placeholder="Patient" 
+              value={cremation_patient_id} 
+              name="cremation_patient_id" 
+              plain 
+              onChange={({ option }) => {
+                let sep = " - "
+                let name = option.substring(0, option.indexOf(sep));
+                let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
+                // Loop through patients state to find selected patient
+                for(let item in patients) {
+                  if(patients[item].patient_name === name 
+                    && patients[item].patient_microchip === microchip){
+                      setValues({...values, cremation_patient_id: option})
+                      setPatientId(patients[item].patient_id)
+                  }
+                }
+              }}
+            />
+          </FormField>
+          <FormField  name="cremation_form" label="Form of Cremation" required>
+            <RadioButtonGroup
+              options={["Scatter Tube", "Tribute Box", "Urn"]} 
+              value={cremation_form} 
+              name="cremation_form" 
+              onChange={evt => setValues({...values, cremation_form: evt.target.value})}
+              disabled={cremation_date_ashes_returned_practice !== null}
+              plain 
+            />
+          </FormField>
           <FormField 
             name="cremation_date_collected" 
             label="Date Remains Collected"
@@ -162,17 +195,21 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
               placeholder="DD/MM/YYYY" 
               onChange={value => {
                 const newVal = value === null ? null : value.toISOString()
-                setValues({...values, cremation_date_ashes_returned_owner: newVal})
+
+                // if new value is set, then owner must have been contacted
+                if(newVal === null) {
+                  setValues({
+                    ...values,
+                    cremation_date_ashes_returned_owner: newVal
+                  })
+                } else {
+                  setValues({
+                    ...values, 
+                    cremation_owner_contacted: 'Yes',
+                    cremation_date_ashes_returned_owner: newVal
+                  })
+                }
               }}
-            />
-          </FormField>
-          <FormField  name="cremation_form" label="Form of Cremation" required>
-            <RadioButtonGroup
-              options={["Scatter Tube", "Tribute Box", "Urn"]} 
-              value={cremation_form} 
-              name="cremation_form" 
-              onChange={evt => setValues({...values, cremation_form: evt.target.value})}
-              plain 
             />
           </FormField>
           <FormField  name="cremation_owner_contacted" label="Owner Contacted?" required>
@@ -182,29 +219,6 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
               name="cremation_owner_contacted" 
               onChange={evt => setValues({...values, cremation_owner_contacted: evt.target.value})}
               plain 
-            />
-          </FormField>
-          <FormField  name="cremation_patient_id" required>
-            <Select 
-              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
-              closeOnChange 
-              placeholder="Patient" 
-              value={cremation_patient_id} 
-              name="cremation_patient_id" 
-              plain 
-              onChange={({ option }) => {
-                let sep = " - "
-                let name = option.substring(0, option.indexOf(sep));
-                let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
-                // Loop through patients state to find selected patient
-                for(let item in patients) {
-                  if(patients[item].patient_name === name 
-                    && patients[item].patient_microchip === microchip){
-                      setValues({...values, cremation_patient_id: option})
-                      setPatientId(patients[item].patient_id)
-                  }
-                }
-              }}
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">

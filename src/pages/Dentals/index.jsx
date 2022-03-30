@@ -68,7 +68,17 @@ const Dentals = ({ clinic_id }) => {
   }, []);
 
   return (
-    <Box align="start" justify="start" fill direction="column" gap="small" pad="small">
+    <Box align="start" justify="start" fill direction="column" gap="small">
+      <Box 
+        align="center" 
+        justify="between" 
+        fill="horizontal" 
+        direction="row" 
+        gap="small"
+        pad="small"
+      >
+        <Heading level="2" pad="none" margin="none" gap="none">Dental Record</Heading>
+      </Box>
       <Select 
         placeholder="Select Patient" 
         options={patients.map((option) => `${option.patient_name} - ${option.patient_microchip}`)}

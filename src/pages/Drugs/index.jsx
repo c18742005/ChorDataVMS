@@ -124,10 +124,19 @@ const Drugs = ({ clinic_id, staff_id }) => {
       align="start" 
       justify="start" 
       direction="column" 
-      gap="small" 
-      pad="small"
+      gap="small"
       fill 
     >
+      <Box 
+        align="center" 
+        justify="between" 
+        fill="horizontal" 
+        direction="row" 
+        gap="small"
+        pad="small"
+      >
+        <Heading level="2" pad="none" margin="none" gap="none">Drugs</Heading>
+      </Box>
       <Select
         label="Select Drug" 
         placeholder="Select Drug"
@@ -144,7 +153,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
       />
       { // Only show data when a drug is selected otherwise show an info message
         drug.drug_name !== "" ? (<>
-          <Heading level="2" >
+          <Heading level="3" margin="small" gap="none">
             {drug.drug_name}
           </Heading>
           <Box 

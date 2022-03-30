@@ -124,7 +124,32 @@ const AdministerDrugModal = (props) => {
         <Form
           onSubmit={onSubmitForm}
         >
-           <FormField name="drug_date_given" label="Date Administered">
+          <FormField name="patient_administered" required>
+            <Select
+              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))}
+              placeholder="Patient" 
+              size="medium" 
+              plain 
+              name="patient_administered" 
+              value={patient_administered}
+              onChange={({ option }) => {
+                let sep = " - "
+                let name = option.substring(0, option.indexOf(sep));
+                let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
+
+                // Loop through patients and find correct patient
+                for(let item in patients) {
+                  if(patients[item].patient_name === name 
+                    && patients[item].patient_microchip === microchip){
+                      setValues({...values, patient_administered: option})
+                      setPatient(patients[item].patient_id)
+                  }
+                }
+                
+              }}
+            />
+          </FormField>
+          <FormField name="drug_date_given" label="Date Administered">
             <DatePicker 
               name='drug_date_given'
               value={drug_date_given === null ? null : new Date(drug_date_given)}
@@ -168,31 +193,6 @@ const AdministerDrugModal = (props) => {
               />
             </FormField>
           </Box>
-          <FormField name="patient_administered" required>
-            <Select
-              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))}
-              placeholder="Patient Receiving" 
-              size="medium" 
-              plain 
-              name="patient_administered" 
-              value={patient_administered}
-              onChange={({ option }) => {
-                let sep = " - "
-                let name = option.substring(0, option.indexOf(sep));
-                let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
-
-                // Loop through patients and find correct patient
-                for(let item in patients) {
-                  if(patients[item].patient_name === name 
-                    && patients[item].patient_microchip === microchip){
-                      setValues({...values, patient_administered: option})
-                      setPatient(patients[item].patient_id)
-                  }
-                }
-                
-              }}
-            />
-          </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
             <Button label="Add" primary hoverIndicator type="submit"/>
             <Button label="Cancel" primary hoverIndicator color="accent-4" onClick={props.closeForm}/>

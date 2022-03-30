@@ -31,6 +31,8 @@ export const cat_breeds = [
   "Cymric",
   "Cyprus",
   "Devon Rex",
+  "Domestic Longhair",
+  "Domestic Shorthair",
   "Donskoy",
   "Dragon Li",
   "Dwarf cat",

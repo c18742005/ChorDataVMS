@@ -1,4 +1,4 @@
-import { Box, Button } from 'grommet';
+import { Box, Button, Heading } from 'grommet';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -109,20 +109,21 @@ const Cremations = ({ clinic_id }) => {
   }, []);
 
   return (
-    <Box align="center" justify="start" direction="column" pad="small" fill>
+    <Box align="start" justify="start" direction="column" pad="small" fill>
       <Box 
         align="center" 
-        justify="end" 
+        justify="between" 
         fill="horizontal" 
         direction="row" 
-        pad="medium"
+        gap="small"
+        pad="small"
       >
+        <Heading level="2" pad="none" margin="none" gap="none">Cremation Tracker</Heading>
         <Button 
           label="Add Cremation"
           icon={<FontAwesomeIcon icon={faPlus} size='2x' />} 
           color="status-ok" 
           size="small"  
-          margin={{"left":"medium"}} 
           onClick={() => setShowCremationModal(true)} 
           hoverIndicator 
           reverse 

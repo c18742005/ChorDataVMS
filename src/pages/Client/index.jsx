@@ -184,7 +184,8 @@ const Client = () => {
                 {header:<Text color="white" weight="bold">Name</Text>, property: "patient_name", primary: true},
                 {header: <Text color="white" weight="bold">Age</Text>, property: "patient_age"},
                 {property: "patient_species", header: <Text color="white" weight="bold">Species</Text>},
-                {property: "patient_breed", header: <Text color="white" weight="bold">Breed</Text>}
+                {property: "patient_breed", header: <Text color="white" weight="bold">Breed</Text>},
+                {property: "patient_reason_inactive", header: <Text color="white" weight="bold">Status</Text>},
               ]}
               background={{"header": {"color":"brand"}}} 
               border="horizontal"

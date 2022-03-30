@@ -31,7 +31,7 @@ const DrugStockTable = ({ data }) => {
       border="horizontal"
       margin={{"top": "small"}}
       fill="horizontal"
-      step={10}
+      step={7}
       sortable
       resizeable 
       paginate

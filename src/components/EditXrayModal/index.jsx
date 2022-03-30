@@ -122,6 +122,29 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
         <Form 
           onSubmit={onSubmitForm}
         >
+          <FormField  name="xray_patient_name" required>
+            <Select 
+              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
+              closeOnChange 
+              placeholder="Patient" 
+              value={xray_patient_name} 
+              name="xray_patient_name" 
+              plain 
+              onChange={({ option }) => {
+                let sep = " - "
+                let name = option.substring(0, option.indexOf(sep));
+                let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
+                // Loop through patients state to find selected drug
+                for(let item in patients) {
+                  if(patients[item].patient_name === name 
+                    && patients[item].patient_microchip === microchip){
+                      setValues({...values, xray_patient_name: option})
+                      setPatientId(patients[item].patient_id)
+                  }
+                }
+              }}
+            />
+          </FormField>
           <FormField name="xray_date" label="X-ray Date Taken">
             <DatePicker 
               name='xray_date'
@@ -129,17 +152,6 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
               value={xray_date === null ? null : new Date(xray_date)}
               placeholder="DD/MM/YYYY" 
               onChange={value => setValues({...values, xray_date: value.toISOString()})}
-            />
-          </FormField>
-          <FormField  name="xray_image_quality" required>
-            <Select 
-              options={["Overexposed", "Underexposed", "Good", "Excellent"]} 
-              closeOnChange 
-              placeholder="Image Quality" 
-              value={xray_image_quality} 
-              name="xray_image_quality" 
-              onChange={evt => setValues({...values, xray_image_quality: evt.target.value})}
-              plain 
             />
           </FormField>
           <FormField name="xray_kV" required>
@@ -175,27 +187,15 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
               plain 
             />
           </FormField>
-          <FormField  name="xray_patient_name" required>
+          <FormField  name="xray_image_quality" required>
             <Select 
-              options={patients.map((option) => (`${option.patient_name} - ${option.patient_microchip}`))} 
+              options={["Overexposed", "Underexposed", "Good", "Excellent"]} 
               closeOnChange 
-              placeholder="Patient" 
-              value={xray_patient_name} 
-              name="xray_patient_name" 
+              placeholder="Image Quality" 
+              value={xray_image_quality} 
+              name="xray_image_quality" 
+              onChange={evt => setValues({...values, xray_image_quality: evt.target.value})}
               plain 
-              onChange={({ option }) => {
-                let sep = " - "
-                let name = option.substring(0, option.indexOf(sep));
-                let microchip = option.substring(option.indexOf(sep) + sep.length, option.length)
-                // Loop through patients state to find selected drug
-                for(let item in patients) {
-                  if(patients[item].patient_name === name 
-                    && patients[item].patient_microchip === microchip){
-                      setValues({...values, xray_patient_name: option})
-                      setPatientId(patients[item].patient_id)
-                  }
-                }
-              }}
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap="small">
