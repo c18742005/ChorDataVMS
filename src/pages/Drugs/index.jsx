@@ -71,7 +71,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
           // Success: Format date and set drug state
           const drug_stock = res.data;
           drug_stock.forEach(element => {
-            element.drug_expiry_date = new Date(element.drug_expiry_date).toLocaleDateString("en-US");
+            element.drug_expiry_date_f = new Date(element.drug_expiry_date).toLocaleDateString("en-IE");
           });
           
           setDrugStock(drug_stock);
@@ -86,7 +86,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
           // Success: Format date and set drug log state
           const drug_log = res.data;
           drug_log.forEach(element => {
-            element.drug_date_administered = new Date(element.drug_date_administered).toLocaleDateString("en-US");
+            element.drug_date_administered_f = new Date(element.drug_date_administered).toLocaleDateString("en-IE");
           });
         
           setDrugLog(drug_log);
@@ -95,12 +95,12 @@ const Drugs = ({ clinic_id, staff_id }) => {
   
       fetch_data();
     }
-  }, [drug, drugLog]);
+  }, [drug]);
 
   // Function to add stock to the drugStock state
   const addToDrugStock = (newStock) => {
     // Change the date to a formatted string
-    newStock.drug_expiry_date = new Date(newStock.drug_expiry_date).toLocaleDateString("en-US");
+    newStock.drug_expiry_date_f = new Date(newStock.drug_expiry_date).toLocaleDateString("en-IE");
 
     setDrugStock([...drugStock, newStock]);
   }
@@ -108,9 +108,9 @@ const Drugs = ({ clinic_id, staff_id }) => {
   // Function to add a log to the drugLog state
   const addToDrugLog = (newLog) => {
     // Change the date to a formatted string
-    newLog.drug_date_administered = new Date(newLog.drug_date_administered).toLocaleDateString("en-US");
+    newLog.drug_date_administered_f = new Date(newLog.drug_date_administered).toLocaleDateString("en-IE");
 
-    setDrugLog([...drugLog, newLog]);
+    setDrugLog([newLog, ...drugLog]);
   }
 
   // Function to close add drug and administer drug modals

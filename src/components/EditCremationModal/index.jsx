@@ -159,9 +159,13 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
           >
             <DatePicker 
               name='cremation_date_collected'
+              max={new Date()}
               value={cremation_date_collected === null ? null : new Date(cremation_date_collected)}
               placeholder="DD/MM/YYYY" 
-              onChange={value => setValues({...values, cremation_date_collected: value.toISOString()})}
+              onChange={value => {
+                const newVal = value === null ? null : value.toISOString()
+                setValues({...values, cremation_date_collected: newVal})
+              }}
             />
           </FormField>
           <FormField 
@@ -170,9 +174,15 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
           >
             <DatePicker 
               name='cremation_date_ashes_returned_practice'
+              max={new Date()}
+              min={new Date(cremation_date_collected)}
+              disabled={cremation_date_collected === null}
               value={cremation_date_ashes_returned_practice === null ? null : new Date(cremation_date_ashes_returned_practice)}
               placeholder="DD/MM/YYYY" 
-              onChange={value => setValues({...values, cremation_date_ashes_returned_practice: value.toISOString()})}
+              onChange={value => {
+                const newVal = value === null ? null : value.toISOString()
+                setValues({...values, cremation_date_ashes_returned_practice: newVal})
+              }}
             />
           </FormField>
           <FormField 
@@ -181,9 +191,15 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
           >
             <DatePicker 
               name='cremation_date_ashes_returned_owner'
+              max={new Date()}
+              min={new Date(cremation_date_ashes_returned_practice)}
+              disabled={cremation_date_ashes_returned_practice === null}
               value={cremation_date_ashes_returned_owner === null ? null : new Date(cremation_date_ashes_returned_owner)}
               placeholder="DD/MM/YYYY" 
-              onChange={value => setValues({...values, cremation_date_ashes_returned_owner: value.toISOString()})}
+              onChange={value => {
+                const newVal = value === null ? null : value.toISOString()
+                setValues({...values, cremation_date_ashes_returned_owner: newVal})
+              }}
             />
           </FormField>
           <FormField  name="cremation_form" label="Form of Cremation" required>

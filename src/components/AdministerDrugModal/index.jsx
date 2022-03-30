@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
+import DatePicker from "react-widgets/DatePicker";
+import "react-widgets/styles.css";
 import { 
   Box, 
   Button, 
@@ -121,15 +123,14 @@ const AdministerDrugModal = (props) => {
       <Box align="center" justify="center" direction="column" margin="medium">
         <Form
           onSubmit={onSubmitForm}
-          onChange={(nextValue) => {
-            setValues(nextValue);
-          }}
         >
-           <FormField name="drug_date_given" label="Date Administered" required>
-            <DateInput
-              format="yyyy/mm/dd"
-              value={(new Date(values.drug_date_given)).toISOString()}
-              name="drug_date_given"
+           <FormField name="drug_date_given" label="Date Administered">
+            <DatePicker 
+              name='drug_date_given'
+              value={drug_date_given === null ? null : new Date(drug_date_given)}
+              max={new Date()}
+              placeholder="DD/MM/YYYY" 
+              onChange={value => setValues({...values, drug_date_given: value.toISOString()})}
             />
           </FormField>
           <FormField name="drug_batch_number" required>
@@ -140,6 +141,7 @@ const AdministerDrugModal = (props) => {
               plain 
               name="drug_batch_number" 
               value={drug_batch_number} 
+              onChange={evt => setValues({...values, drug_batch_number: evt.target.value})}
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap='medium'>
@@ -151,6 +153,7 @@ const AdministerDrugModal = (props) => {
                 plain 
                 name="drug_quantity" 
                 value={drug_quantity} 
+                onChange={evt => setValues({...values, drug_quantity: evt.target.value})}
               />
             </FormField>
             <FormField name="drug_quantity_measure" required>
@@ -161,6 +164,7 @@ const AdministerDrugModal = (props) => {
                 placeholder="Measure" 
                 plain
                 size="medium" 
+                onChange={evt => setValues({...values, drug_quantity_measure: evt.target.value})}
               />
             </FormField>
           </Box>
@@ -181,7 +185,8 @@ const AdministerDrugModal = (props) => {
                 for(let item in patients) {
                   if(patients[item].patient_name === name 
                     && patients[item].patient_microchip === microchip){
-                    setPatient(patients[item].patient_id)
+                      setValues({...values, patient_administered: option})
+                      setPatient(patients[item].patient_id)
                   }
                 }
                 

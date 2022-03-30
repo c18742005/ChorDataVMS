@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import DatePicker from "react-widgets/DatePicker";
+import "react-widgets/styles.css";
 import { 
   Box, 
-  Button, 
-  DateInput,
+  Button,
   Form, 
   FormField, 
   Heading, 
@@ -21,7 +22,7 @@ import {
 */
 const AddDrugStock = (props) => {
   const defaultValues = {
-    drug_expiry_date: new Date(),
+    drug_expiry_date: new Date().toISOString(),
     drug_batch_number: "",
     drug_quantity: "",
     drug_quantity_measure: "",
@@ -95,18 +96,13 @@ const AddDrugStock = (props) => {
     <Layer animate modal onClickOutside={props.closeForm} position="center">
       <Heading level="2" textAlign="center">Add {props.drug.drug_name}</Heading>
       <Box align="center" justify="center" direction="column" margin="medium">
-        <Form
-          onSubmit={onSubmitForm}
-          onChange={(nextValue) => {
-            setValues(nextValue);
-          }}
-        >
-          <FormField name="drug_expiry_date" label="Expiry Date" required>
-            <DateInput
-              format="yyyy/mm/dd"
-              value={(new Date(values.drug_expiry_date)).toISOString()}
-              name="drug_expiry_date"
-              placeholder='Drug Expiry Date'
+        <Form onSubmit={onSubmitForm}>
+          <FormField name="drug_expiry_date" label="Expiry Date">
+            <DatePicker 
+              name='drug_expiry_date'
+              value={drug_expiry_date === null ? null : new Date(drug_expiry_date)}
+              placeholder="DD/MM/YYYY" 
+              onChange={value => setValues({...values, drug_expiry_date: value.toISOString()})}
             />
           </FormField>
           <FormField name="drug_batch_number" required>
@@ -117,6 +113,7 @@ const AddDrugStock = (props) => {
               plain 
               name="drug_batch_number" 
               value={drug_batch_number} 
+              onChange={evt => setValues({...values, drug_batch_number: evt.target.value})}
             />
           </FormField>
           <Box align="center" justify="center" direction="row" gap='medium'>
@@ -128,6 +125,7 @@ const AddDrugStock = (props) => {
                 plain 
                 name="drug_quantity" 
                 value={drug_quantity} 
+                onChange={evt => setValues({...values, drug_quantity: evt.target.value})}
               />
             </FormField>
             <FormField name="drug_quantity_measure" required>
@@ -138,6 +136,7 @@ const AddDrugStock = (props) => {
                 placeholder="Measure" 
                 plain
                 size="medium" 
+                onChange={evt => setValues({...values, drug_quantity_measure: evt.target.value})}
               />
             </FormField>
           </Box>
@@ -150,6 +149,7 @@ const AddDrugStock = (props) => {
                 plain 
                 name="drug_concentration_1" 
                 value={drug_concentration_1} 
+                onChange={evt => setValues({...values, drug_concentration_1: evt.target.value})}
               />
             </FormField>
             <FormField name="drug_concentration_2" required>
@@ -160,6 +160,7 @@ const AddDrugStock = (props) => {
                 placeholder="xx per xx" 
                 plain
                 size="medium" 
+                onChange={evt => setValues({...values, drug_concentration_2: evt.target.value})}
               />
             </FormField>
           </Box>

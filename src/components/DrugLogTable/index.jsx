@@ -9,7 +9,7 @@ const DrugLogTable = ({ data }) => {
     <DataTable
       columns={[{
           header: <Text color="white" weight="bold">Date</Text>, 
-          primary: true, property: "drug_date_administered"
+          primary: true, property: "drug_date_administered_f"
         }, {
           header: <Text color="white" weight="bold">Quantity Given</Text>, 
           property: "drug_quantity_given"

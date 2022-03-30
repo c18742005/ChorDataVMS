@@ -127,6 +127,7 @@ const AddXrayModal = ({ clinicId, staffId, addXray, closeForm }) => {
             <DatePicker 
               name='xray_date'
               value={xray_date === null ? null : new Date(xray_date)}
+              max={new Date()}
               placeholder="DD/MM/YYYY" 
               onChange={value => setValues({...values, xray_date: value.toISOString()})}
             />

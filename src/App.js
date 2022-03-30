@@ -189,7 +189,7 @@ function App() {
                     <Navigate to="/login" />
                   )} 
                 />
-                <Route path="*" element={<Box><Heading level={3}>There's nothing here: 404!</Heading></Box>} />
+                <Route path="*" element={<Box><Heading level={3}>404: Feature Coming Soon</Heading></Box>} />
               </Routes>
             </Box>
           </Box>

@@ -5,8 +5,7 @@ import DatePicker from "react-widgets/DatePicker";
 import "react-widgets/styles.css";
 import { 
   Box, 
-  Button, 
-  DateInput,
+  Button,
   Form, 
   FormField, 
   Heading, 
@@ -126,6 +125,7 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
           <FormField name="xray_date" label="X-ray Date Taken">
             <DatePicker 
               name='xray_date'
+              max={new Date()}
               value={xray_date === null ? null : new Date(xray_date)}
               placeholder="DD/MM/YYYY" 
               onChange={value => setValues({...values, xray_date: value.toISOString()})}

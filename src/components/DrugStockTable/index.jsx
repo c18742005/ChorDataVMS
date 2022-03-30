@@ -13,7 +13,7 @@ const DrugStockTable = ({ data }) => {
           property: "drug_batch_id", 
         }, {
           header: <Text color="white" weight="bold">Expiry Date</Text>, 
-          property: "drug_expiry_date"
+          property: "drug_expiry_date_f"
         }, {
           header: <Text color="white" weight="bold">Quantity Remaining</Text>,
           property: "drug_quantity_remaining"
