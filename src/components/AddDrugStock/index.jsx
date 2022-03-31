@@ -59,7 +59,7 @@ const AddDrugStock = (props) => {
         drug_batch_id: drug_batch_number,
         drug_quantity: drug_quantity,
         drug_quantity_measure: drug_quantity_measure,
-        drug_concentration: drug_concentration_1 + drug_concentration_2,
+        drug_concentration: `${drug_concentration_1} ${drug_concentration_2}`,
         drug_stock_drug_id: drug_id,
         drug_stock_clinic_id: clinic_id
       },
@@ -101,6 +101,7 @@ const AddDrugStock = (props) => {
             <DatePicker 
               name='drug_expiry_date'
               value={drug_expiry_date === null ? null : new Date(drug_expiry_date)}
+              min={new Date()}
               placeholder="DD/MM/YYYY" 
               onChange={value => setValues({...values, drug_expiry_date: value.toISOString()})}
             />
