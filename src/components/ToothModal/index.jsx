@@ -42,7 +42,7 @@ const ToothModal = ({ tooth, updateTooth, closeForm }) => {
 
     // Try to update tooth data on the DB
     try {
-      await axios.post(update_tooth_url, {
+      await axios.put(update_tooth_url, {
         tooth_note: tooth_note,
         tooth_problem: tooth_problem
       }, {

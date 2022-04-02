@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import DatePicker from "react-widgets/DatePicker";
-import "react-widgets/styles.css";
+import "react-widgets/scss/styles.scss";
 import { 
   Box, 
   Button, 
