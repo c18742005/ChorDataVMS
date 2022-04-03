@@ -12,6 +12,18 @@ const DentalMap = ({ patient_id, species }) => {
   const [teeth, setTeeth] = useState([]);
   const [tooth, setTooth] = useState({});
   const [showToothModal, setShowToothModal] = useState(false);
+
+  // Function to control what happens when a tooth is clicked
+  const clicked = tooth_id => {
+    // Loop through each tooth to find selected tooth
+    teeth.forEach(tooth => {
+      // Once found set that tooth to be selected and show the tooth modal
+      if(tooth_id === tooth.tooth_id) {
+        setTooth(tooth);
+        setShowToothModal(true);
+      }
+    })
+  }
   
   // Decide which patient dental to load
   useEffect(() => {
@@ -90,19 +102,8 @@ const DentalMap = ({ patient_id, species }) => {
     }
 
     loadColors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teeth]);
-
-  // Function to control what happens when a tooth is clicked
-  const clicked = tooth_id => {
-    // Loop through each tooth to find selected tooth
-    teeth.forEach(tooth => {
-      // Once found set that tooth to be selected and show the tooth modal
-      if(tooth_id === tooth.tooth_id) {
-        setTooth(tooth);
-        setShowToothModal(true);
-      }
-    })
-  }
 
   // Function to update the selected tooth
   const updateTooth = (updatedTooth) => {

@@ -106,7 +106,7 @@ const Cremations = ({ clinic_id }) => {
     }
 
     fetch_data();
-  }, []);
+  }, [clinic_id]);
 
   return (
     <Box align="start" justify="start" direction="column" pad="small" fill>

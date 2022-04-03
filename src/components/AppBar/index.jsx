@@ -1,7 +1,9 @@
 import { toast } from 'react-toastify';
-import { Box, Button, Heading, Menu, Header } from 'grommet';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Heading, Menu, Header, Avatar } from 'grommet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBars, faUserGear } from '@fortawesome/free-solid-svg-icons';
+import logo from '../../assets/logo.svg'
 
 /*
   props:
@@ -13,6 +15,8 @@ import { faArrowLeft, faBars, faUserGear } from '@fortawesome/free-solid-svg-ico
     (Fn: App) setUser: Function to change user state
 */
 const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
+  const navigate = useNavigate();
+
   // function to handle a user logging out of the app
   const logout = () => {
     try {
@@ -55,21 +59,24 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
             data-testid="appbar-button"
           />
         )}
-        <Heading 
-          level="1" 
-          color="white" 
-          textAlign="center" 
-          margin="small"
-        >
-          ChorData
-        </Heading>
+        <Box align="center" justify="center" direction="row" onClick={() => navigate('/')} focusIndicator={false}>
+          <Avatar flex={false} round="none" src={logo} size="medium"/>
+          <Heading 
+            level="1" 
+            color="white" 
+            textAlign="center" 
+            margin="small"
+          >
+            ChorData
+          </Heading>
+        </Box>
         { // Display menu if user is authenticated
         isAuth && (
           <Menu 
             data-testid="appbar-menu"
             icon={<FontAwesomeIcon icon={faUserGear} style={{color: "#FFF"}} size='lg' />} 
             items={[
-              {"label": "Current User: " + user},
+              {"label": "Current User: " + user, onClick: () => navigate(`/info`)},
               {"label":"Logout", onClick: () => logout()}]
             }
           />)

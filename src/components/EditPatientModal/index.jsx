@@ -75,7 +75,7 @@ const EditPatientModal = (props) => {
       default:
         setBreed([]);
     }
-  }, []);
+  }, [patient_species]);
 
    // Function to handle submission of the edit patient form
    const onSubmitForm = async e => {

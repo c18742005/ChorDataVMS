@@ -60,7 +60,7 @@ const EditXrayModal = ({ clinicId, staffId, closeForm, data, updateXray }) => {
     }
 
     fetchData();
-  }, []);
+  }, [clinicId]);
 
   // Destructure form values state
   const { 

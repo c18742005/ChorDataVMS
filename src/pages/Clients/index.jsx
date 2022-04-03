@@ -43,7 +43,7 @@ const Clients = ({ clinic }) => {
     }
 
     fetch_data();
-  }, []);
+  }, [clinic]);
 
   return (
     <Box align="start" justify="start" direction="column" fill="horizontal" gap="small">

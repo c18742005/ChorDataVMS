@@ -60,7 +60,7 @@ const EditCremationModal = ({ clinicId, closeForm, data, updateCremation, delete
     }
 
     fetchData();
-  }, []);
+  }, [clinicId]);
 
   // Destructure form values state
   const { 

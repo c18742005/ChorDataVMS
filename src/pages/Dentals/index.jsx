@@ -65,7 +65,7 @@ const Dentals = ({ clinic_id }) => {
     }
 
     fetchData();
-  }, []);
+  }, [clinic_id]);
 
   return (
     <Box align="start" justify="start" fill direction="column" gap="small">

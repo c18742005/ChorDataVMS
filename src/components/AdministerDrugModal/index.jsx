@@ -5,8 +5,7 @@ import DatePicker from "react-widgets/DatePicker";
 import "react-widgets/scss/styles.scss";
 import { 
   Box, 
-  Button, 
-  DateInput,
+  Button,
   Form, 
   FormField, 
   Heading, 
@@ -62,7 +61,7 @@ const AdministerDrugModal = (props) => {
     }
 
     fetchData();
-  }, []);
+  }, [clinic_id]);
 
   // Destructure values state
   const { 

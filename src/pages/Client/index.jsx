@@ -95,7 +95,7 @@ const Client = () => {
     }
 
     fetch_data();
-  }, []);
+  }, [clientId]);
 
   // Function to handle the reactivation of a client acc
   const onReactivation = async e => {

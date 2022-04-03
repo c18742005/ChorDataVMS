@@ -57,7 +57,7 @@ const AddCremationModal = ({ clinicId, addCremation, closeForm }) => {
     }
 
     fetchData();
-  }, []);
+  }, [clinicId]);
 
   // Destructure state values
   const { 

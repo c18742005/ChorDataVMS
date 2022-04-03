@@ -1,4 +1,5 @@
 import { Box, Card, Heading } from "grommet"
+import './style.css';
 
 /*
   props:
@@ -7,7 +8,13 @@ import { Box, Card, Heading } from "grommet"
 */
 const DashboardCard = ({ title, image }) => {
   return (
-    <Card direction="column" justify="center" align="center" fill elevation="medium">
+    <Card 
+      direction="column" 
+      justify="center" 
+      align="center" 
+      fill 
+      elevation="medium"
+      className="dashboard-card">
       <Heading level="3" textAlign="center">
         {title}
       </Heading>

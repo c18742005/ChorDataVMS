@@ -8,8 +8,7 @@ import {
   DataTable, 
   Heading, 
   NameValueList, 
-  NameValuePair, 
-  Pagination, 
+  NameValuePair,
   Tab, 
   Tabs, 
   Text } from 'grommet';
@@ -71,7 +70,7 @@ const Patient = () => {
     }
    
     fetch_data();
-  }, []);
+  }, [patientId]);
 
   // Fetch patient clinical history from the server
   useEffect(() => {
@@ -99,7 +98,7 @@ const Patient = () => {
     }
    
     fetch_history();
-  }, []);
+  }, [patientId]);
 
   // Function to handle the reactivation of a patient acc
   const onReactivation = async e => {
