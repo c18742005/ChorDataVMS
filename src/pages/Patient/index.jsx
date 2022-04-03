@@ -28,6 +28,8 @@ const Patient = () => {
   const [showPatientDeactivate, setShowPatientDeactivate] = useState(false);
   // Store patient state
   const [patient, setPatient] = useState({});
+  // Store patient history
+  const [history, setHistory] = useState([]);
 
   // Function to close modals if open
   const closeForms = () => {
@@ -69,6 +71,34 @@ const Patient = () => {
     }
    
     fetch_data();
+  }, []);
+
+  // Fetch patient clinical history from the server
+  useEffect(() => {
+    const fetch_history = async () => {
+      const patient_history = `${process.env.REACT_APP_API_END_POINT}/api/patients/history/${patientId}`;
+
+      try {
+        await axios.get(patient_history, {
+          headers: {
+            'token': localStorage.token
+        }}).then(res => {
+          // Success: set history state to the patient history retrieved
+          const history_data = res.data;
+
+          // Format date to a string
+          history_data.forEach(element => {
+            element.date_completed_f = new Date(element.date_completed).toLocaleDateString("en-IE");
+          });
+
+          setHistory(history_data);
+        }).catch(e => console.log(e.response.data));
+      } catch(err) {
+        console.log(err);
+      }
+    }
+   
+    fetch_history();
   }, []);
 
   // Function to handle the reactivation of a patient acc
@@ -167,37 +197,21 @@ const Patient = () => {
             <DataTable
               columns={[{ 
                 header:<Text color="white" weight="bold">Procedure</Text>, 
-                property: "procedure", 
+                property: "vet_procedure", 
                 primary: true
               }, {
                 header:<Text color="white" weight="bold">Date</Text>, 
-                property: "date"
+                property: "date_completed_f"
               }]}
-              data={[{
-                  "procedure": "Anaesthetic Monitoring",
-                  "date": "02/02/2022"
-                }, {
-                  "procedure": "Dental Chart",
-                  "date": "01/01/2022"
-                }, {
-                  "procedure": "X-Ray",
-                  "date": "25/12/2021"
-                }, {
-                  "procedure": "Drug Administered",
-                  "date": "22/12/2021"
-                }, {
-                  "procedure": "Drug Administered",
-                  "date": "22/12/2021"
-                }
-              ]} 
+              data={history} 
               fill="horizontal"
               pad="small" 
-              background={{"header":{"color":"brand"}}} 
+              background={{"header": {"color":"brand"}}} 
+              step={10}
               paginate 
               sortable 
               resizeable 
             />
-            <Pagination size="small" numberItems={50} />
           </Box>
         </Tab>
         <Tab title="Other">
