@@ -58,7 +58,7 @@ const SideBar = ({ isAuth }) => {
     >
       <Heading 
         id='sideBarHeading'
-        data-testid="sideBar-heading"
+        data-testid="sidebar-heading"
         level="3" 
         textAlign="center" 
         margin="small" 

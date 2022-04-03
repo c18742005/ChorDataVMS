@@ -1,40 +1,57 @@
 import { render } from "@testing-library/react";
 import AppBar from ".";
 
-describe('Component: AppBar', () => { 
-  it("Rendered AppBar", () => {
-    const { getByTestId } = render(<AppBar />);
-    const appBar = getByTestId("appBar");
-    expect(appBar).toBeTruthy();
-  });
+describe('Component AppBar', () => {
+  test('Heading should be in the document', () => {
+    const component = render(<AppBar />);
+    const heading = component.getByText('ChorData');
 
-  it("Rendered heading", () => {
-    const { getByTestId } = render(<AppBar />);
-    const heading = getByTestId("appBar-heading");
-    expect(heading).toBeTruthy();
-  });
+    expect(heading).toBeInTheDocument();
+  })
 
-  it("Render appbar button when authenticated", () => {
-    const { getByTestId } = render(<AppBar isAuth={true}/>);
-    const button = getByTestId("appBar-button");
-    expect(button).toBeTruthy();
-  });
+  test('When isAuth is true, button should be in the document', () => {
+    const component = render(<AppBar isAuth={true}/>);
+    const button = component.getByTestId('appbar-button');
 
-  it("Do not render appbar button when not authenticated", () => {
-    const { queryByTestId } = render(<AppBar isAuth={false}/>);
-    const button = queryByTestId("appBar-button");
-    expect(button).toBeFalsy();
-  });
+    expect(button).toBeInTheDocument();
+  })
 
-  it("Render menu button when authenticated", () => {
-    const { getByTestId } = render(<AppBar isAuth={true}/>);
-    const menu = getByTestId("appBar-menu");
-    expect(menu).toBeTruthy();
-  });
+  test('When isAuth is false, button should not be in the document', () => {
+    const component = render(<AppBar isAuth={false}/>);
+    const button = component.queryByTestId('appbar-button');
 
-  it("Do not render menu button when unauthenticated", () => {
-    const { queryByTestId } = render(<AppBar isAuth={false}/>);
-    const menu = queryByTestId("appBar-menu");
-    expect(menu).toBeFalsy();
-  });
+    expect(button).not.toBeInTheDocument();
+  })
+
+  test('When isAuth is true and menuOpen is true, correct icon should be displayed on button', () => {
+    const component = render(<AppBar isAuth={true} menuOpen={true}/>);
+    const arrowLeft = component.queryByTestId('button-1');
+    const bars = component.queryByTestId('button-2');
+
+    expect(arrowLeft).toBeInTheDocument();
+    expect(bars).not.toBeInTheDocument();
+  })
+
+  test('When isAuth is true and menuOpen is false, correct icon should be displayed on button', () => {
+    const component = render(<AppBar isAuth={true} menuOpen={false}/>);
+    const arrowLeft = component.queryByTestId('button-1');
+    const bars = component.queryByTestId('button-2');
+
+    expect(arrowLeft).not.toBeInTheDocument();
+    expect(bars).toBeInTheDocument();
+  })
+
+  test('When isAuth is false, menu should be hidden', () => {
+    const component = render(<AppBar isAuth={false} />);
+    const menu = component.queryByTestId('appbar-menu');
+
+    expect(menu).not.toBeInTheDocument();
+  })
+
+  test('When isAuth is true, menu should be shown', () => {
+    const component = render(<AppBar isAuth={true} />);
+    const menu = component.queryByTestId('appbar-menu');
+
+    expect(menu).toBeInTheDocument();
+  })
 });

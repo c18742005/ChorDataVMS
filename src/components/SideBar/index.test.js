@@ -1,8 +1,5 @@
 import { render, unmountComponentAtNode } from "react-dom";
-import { wait } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
 import { Router } from 'react-router-dom';
-import mockedAxios from 'axios';
 import { createMemoryHistory } from 'history';
 import SideBar from ".";
 
@@ -25,16 +22,14 @@ describe('Component: SideBar', () => {
     container = null;
   });
 
-  it("SideBar Renders", () => {
-    const history = createMemoryHistory({ initialEntries: ['/', '/clients', '/drugs', '/xrays', '/cremations', '/anaesthetic'] });
+  test("SideBar Renders", () => {
+    const history = createMemoryHistory({ initialEntries: ['/', '/clients', '/drugs', '/xrays', '/cremations', '/anaesthetic'] })
+    const sidebar = render( 
+      <Router location={history.location} navigator={history} >
+        <SideBar />
+      </Router>, container
+    );
 
-    act(() => {
-      render( 
-        <Router location={history.location} navigator={history} >
-          <SideBar />
-        </Router>, container
-      );
-    });
-    expect(container.SideBar).not.toBeNull();
+    expect(sidebar).toBeDefined();
   });
 });

@@ -36,7 +36,6 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
       fill="horizontal"
     >
       <Header 
-        data-testid="appBar-header"
         align="center" 
         direction="row" 
         justify={isAuth ? "between" : "center"}
@@ -48,11 +47,12 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
         { // Display button if user is authenticated
         isAuth && (
           <Button icon={menuOpen ? 
-            (<FontAwesomeIcon icon={faArrowLeft} style={{color: "#FFF"}} size='lg' />) : 
-            (<FontAwesomeIcon icon={faBars} style={{color: "#FFF"}} size='lg' />)} 
+            (<FontAwesomeIcon icon={faArrowLeft} style={{color: "#FFF"}} size='lg' data-testid="button-1"/>) : 
+            (<FontAwesomeIcon icon={faBars} style={{color: "#FFF"}} size='lg' data-testid="button-2"/>)} 
+            name="appbar-button"
             hoverIndicator 
             onClick={handleMenu} 
-            data-testid="appBar-button"
+            data-testid="appbar-button"
           />
         )}
         <Heading 
@@ -60,14 +60,13 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
           color="white" 
           textAlign="center" 
           margin="small"
-          data-testid="appBar-heading"
         >
           ChorData
         </Heading>
         { // Display menu if user is authenticated
         isAuth && (
           <Menu 
-            data-testid="appBar-menu"
+            data-testid="appbar-menu"
             icon={<FontAwesomeIcon icon={faUserGear} style={{color: "#FFF"}} size='lg' />} 
             items={[
               {"label": "Current User: " + user},
