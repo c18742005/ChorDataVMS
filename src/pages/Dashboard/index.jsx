@@ -3,8 +3,8 @@ import DashboardCard from '../../components/DashboardCard';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  faCross, 
-  faHeartPulse, 
+  faCross,
+  faInfoCircle, 
   faPills, 
   faRadiation, 
   faTooth, 
@@ -57,10 +57,10 @@ const Dashboard = () => {
              image={<FontAwesomeIcon icon={faCross} size='6x' />} 
           />
         </Link>
-        <Link to="/anaesthetic" style={linkStyle}>
+        <Link to="/info" style={linkStyle}>
           <DashboardCard 
-            title="Anaesthetic Monitoring" 
-            image={<FontAwesomeIcon icon={faHeartPulse} size='6x' />} 
+            title="System Information" 
+            image={<FontAwesomeIcon icon={faInfoCircle} size='6x' />} 
           />
         </Link>
       </Box>

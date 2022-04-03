@@ -21,6 +21,7 @@ import Drugs from "./pages/Drugs";
 import Xrays from "./pages/Xrays";
 import Dentals from "./pages/Dentals";
 import Cremations from "./pages/Cremations";
+import Info from "./pages/Info";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(true); // Set state of the sidebar
@@ -184,6 +185,15 @@ function App() {
                     <Cremations
                       clinic_id={user.staff_clinic_id} 
                       staff_id={user.staff_member_id}
+                    />
+                  ) : (
+                    <Navigate to="/login" />
+                  )} 
+                />
+                <Route path="/info" element={
+                  isAuthenticated ? (
+                    <Info
+                      userInfo={user}
                     />
                   ) : (
                     <Navigate to="/login" />

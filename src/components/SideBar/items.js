@@ -1,9 +1,9 @@
 // File that holds the items to be displayed in the sidebar
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-  faCross, 
-  faHeartPulse, 
+  faCross,
   faHome, 
+  faInfoCircle, 
   faPills, 
   faRadiation, 
   faTooth, 
@@ -41,8 +41,8 @@ export const Items = [
     icon: <FontAwesomeIcon icon={faCross} />,
   },
   {
-    title: 'Anaesthetic Monitoring',
-    path: '/anaesthetic',
-    icon: <FontAwesomeIcon icon={faHeartPulse} />,
+    title: 'System Information',
+    path: '/info',
+    icon: <FontAwesomeIcon icon={faInfoCircle} />,
   },
 ];
