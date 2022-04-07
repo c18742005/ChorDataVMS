@@ -46,7 +46,13 @@ const Clients = ({ clinic }) => {
   }, [clinic]);
 
   return (
-    <Box align="start" justify="start" direction="column" fill="horizontal" gap="small">
+    <Box 
+      align="start" 
+      justify="start" 
+      direction="column" 
+      fill="horizontal" 
+      gap="small"
+    >
       <Box 
         align="center" 
         justify="between" 

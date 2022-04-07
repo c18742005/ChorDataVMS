@@ -51,15 +51,30 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
         { // Display button if user is authenticated
         isAuth && (
           <Button icon={menuOpen ? 
-            (<FontAwesomeIcon icon={faArrowLeft} style={{color: "#FFF"}} size='lg' data-testid="button-1"/>) : 
-            (<FontAwesomeIcon icon={faBars} style={{color: "#FFF"}} size='lg' data-testid="button-2"/>)} 
+            (<FontAwesomeIcon 
+              icon={faArrowLeft} 
+              style={{color: "#FFF"}} 
+              size='lg' 
+              data-testid="button-1"
+            />) : 
+            (<FontAwesomeIcon 
+              icon={faBars} 
+              style={{color: "#FFF"}} 
+              size='lg' 
+              data-testid="button-2"
+            />)} 
             name="appbar-button"
             hoverIndicator 
             onClick={handleMenu} 
             data-testid="appbar-button"
           />
         )}
-        <Box align="center" justify="center" direction="row" onClick={() => navigate('/')} focusIndicator={false}>
+        <Box 
+          align="center" 
+          justify="center" 
+          direction="row" 
+          onClick={() => navigate('/')} focusIndicator={false}
+        >
           <Avatar flex={false} round="none" src={logo} size="medium"/>
           <Heading 
             level="1" 

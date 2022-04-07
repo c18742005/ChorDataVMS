@@ -119,11 +119,21 @@ const Client = () => {
 
   return (
     <Box align="start" justify="start" direction="column" pad="small" fill>
-      <Heading level="2" textAlign="center" color={client.client_inactive ? "border" : "black"}>
+      <Heading 
+        level="2" 
+        textAlign="center" 
+        color={client.client_inactive ? "border" : "black"}
+      >
         {`${client.client_surname}, ${client.client_forename}`}
       </Heading>
       {client.client_inactive && (
-        <Heading level="4" textAlign="center" color="red" margin="none" gap="none">
+        <Heading 
+          level="4" 
+          textAlign="center" 
+          color="red" 
+          margin="none" 
+          gap="none"
+        >
           {`Client is deactivated: ${client.client_reason_inactive}`}
         </Heading>)
       }

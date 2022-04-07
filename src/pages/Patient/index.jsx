@@ -13,7 +13,11 @@ import {
   Tabs, 
   Text } from 'grommet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faCircleInfo, faPencil, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faCheck, 
+  faCircleInfo, 
+  faPencil, 
+  faXmark } from '@fortawesome/free-solid-svg-icons';
 
 // Components
 import EditPatientModal from '../../components/EditPatientModal';

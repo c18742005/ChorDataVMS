@@ -99,7 +99,13 @@ function App() {
         ))}
         
         <Box align="center" justify="start" direction="column" fill>
-          <Box align="center" justify="start" direction="column" gap="none" fill>
+          <Box 
+            align="center" 
+            justify="start" 
+            direction="column" 
+            gap="none" 
+            fill
+          >
             <AppBar 
               handleMenu={handleMenu} 
               menuOpen={menuOpen} 
@@ -218,7 +224,12 @@ function App() {
                     <Navigate to="/login" />
                   )} 
                 />
-                <Route path="*" element={<Box><Heading level={3}>404: Feature Coming Soon</Heading></Box>} />
+                <Route 
+                  path="*" 
+                  element={
+                    <Box><Heading level={3}>404: Feature Coming Soon</Heading></Box>
+                  } 
+                />
               </Routes>
             </Box>
           </Box>

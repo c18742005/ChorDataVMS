@@ -109,7 +109,13 @@ const Cremations = ({ clinic_id }) => {
   }, [clinic_id]);
 
   return (
-    <Box align="start" justify="start" direction="column" pad="small" fill>
+    <Box 
+      align="start" 
+      justify="start" 
+      direction="column" 
+      pad="small" 
+      fill
+    >
       <Box 
         align="center" 
         justify="between" 
@@ -118,7 +124,9 @@ const Cremations = ({ clinic_id }) => {
         gap="small"
         pad="small"
       >
-        <Heading level="2" pad="none" margin="none" gap="none">Cremation Tracker</Heading>
+        <Heading level="2" pad="none" margin="none" gap="none">
+          Cremation Tracker
+        </Heading>
         <Button 
           label="Add Cremation"
           icon={<FontAwesomeIcon icon={faPlus} size='2x' />} 

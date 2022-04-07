@@ -81,7 +81,9 @@ const Xrays = ({ clinic_id, staff_id }) => {
         gap="small"
         pad="small"
       >
-        <Heading level="2" pad="none" margin="none" gap="none">X-Ray Exposure Log</Heading>
+        <Heading level="2" pad="none" margin="none" gap="none">
+          X-Ray Exposure Log
+        </Heading>
         <Button 
           label="Add X-Ray"
           icon={<FontAwesomeIcon icon={faPlus} size='2x' />} 

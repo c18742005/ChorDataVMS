@@ -77,7 +77,9 @@ const Dentals = ({ clinic_id }) => {
         gap="small"
         pad="small"
       >
-        <Heading level="2" pad="none" margin="none" gap="none">Dental Record</Heading>
+        <Heading level="2" pad="none" margin="none" gap="none">
+          Dental Record
+        </Heading>
       </Box>
       <Select 
         placeholder="Select Patient" 
@@ -106,7 +108,13 @@ const Dentals = ({ clinic_id }) => {
             <Heading level="2">
               {`${patient_name}'s Dental`}
             </Heading>
-            <Box align="start" justify="start" direction="row" gap="medium" responsive>
+            <Box 
+              align="start" 
+              justify="start" 
+              direction="row" 
+              gap="medium" 
+              responsive
+            >
               <DentalMap patient_id={patient_id} species={patient_species} />
               <Box align="center" justify="center" alignSelf="center" responsive>
                 <ImageLegend />

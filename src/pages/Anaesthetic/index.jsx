@@ -148,7 +148,14 @@ const Anaesthetic = ({ clinic_id, staff_id }) => {
 
         // Initialise new data for the table and chart then set its state
         let newChartData = {name: prop, hr: parseInt(values.hr), rr: parseInt(values.rr)};
-        setData([newHrColumn, newRrColumn, newOxyColumn, newAnaestheticColumn, newEyePosColumn, newReflexesColumn])
+        setData([
+          newHrColumn, 
+          newRrColumn, 
+          newOxyColumn, 
+          newAnaestheticColumn, 
+          newEyePosColumn, 
+          newReflexesColumn
+        ]);
         setChartData([...chartData, newChartData]);
       }, (error) => {
         // Error: Check error type
@@ -223,7 +230,11 @@ const Anaesthetic = ({ clinic_id, staff_id }) => {
     });
 
     // Reset column and data values
-    setDataColumns([{header: <Text color="white" weight="bold">Parameter</Text>, property: "value", primary: true}])
+    setDataColumns([{
+      header: <Text color="white" weight="bold">Parameter</Text>, 
+      property: "value", 
+      primary: true
+    }]);
     setHrColumn({"value":"Heart Rate (BPM)"});
     setRrColumn({"value":"Resp. Rate (BPM)"});
     setOxygenColumn({"value":"Oxygen Flow (L)"});
@@ -376,8 +387,18 @@ const Anaesthetic = ({ clinic_id, staff_id }) => {
                   onChange={evt => setValues({...values, reflexes: evt.target.value})} 
                 />
               </FormField>
-              <Box align="center" justify="center" direction="column" gap="none" margin="xsmall">
-                <Button label="Submit Values" primary hoverIndicator onClick={() => addToTable()} />
+              <Box 
+                align="center" 
+                justify="center" 
+                direction="column" 
+                gap="none" 
+                margin="xsmall"
+              >
+                <Button 
+                  label="Submit Values" 
+                  primary hoverIndicator 
+                  onClick={() => addToTable()} 
+                />
               </Box>
             </Form>
           </Box>
