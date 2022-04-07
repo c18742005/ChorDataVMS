@@ -135,7 +135,7 @@ const Drugs = ({ clinic_id, staff_id }) => {
         gap="small"
         pad="small"
       >
-        <Heading level="2" pad="none" margin="none" gap="none">Drugs</Heading>
+        <Heading level="2" pad="none" margin="none" gap="none">Drug Record</Heading>
       </Box>
       <Select
         label="Select Drug" 

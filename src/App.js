@@ -22,6 +22,8 @@ import Xrays from "./pages/Xrays";
 import Dentals from "./pages/Dentals";
 import Cremations from "./pages/Cremations";
 import Info from "./pages/Info";
+import Anaesthetic from "./pages/Anaesthetic";
+import AnaestheticSheet from "./pages/AnaestheticSheet";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(true); // Set state of the sidebar
@@ -189,6 +191,23 @@ function App() {
                   ) : (
                     <Navigate to="/login" />
                   )} 
+                />
+                <Route path="/anaesthetic" element={
+                  isAuthenticated ? (
+                    <Anaesthetic
+                      clinic_id={user.staff_clinic_id} 
+                      staff_id={user.staff_member_id}
+                    />
+                  ) : (
+                    <Navigate to="/login" />
+                  )} 
+                />
+                <Route path="/anaesthetic/:anaestheticId" element={
+                  isAuthenticated ? (
+                    <AnaestheticSheet />
+                  ) : (
+                    <Navigate to="/login" />
+                  )}
                 />
                 <Route path="/info" element={
                   isAuthenticated ? (

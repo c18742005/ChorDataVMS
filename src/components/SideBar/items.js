@@ -2,6 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCross,
+  faHeartPulse,
   faHome, 
   faInfoCircle, 
   faPills, 
@@ -21,14 +22,14 @@ export const Items = [
     icon: <FontAwesomeIcon icon={faUsers} />,
   },
   {
-    title: 'Drug Record',
-    path: '/drugs',
-    icon: <FontAwesomeIcon icon={faPills} />,
+    title: 'Anaesthetic',
+    path: '/anaesthetic',
+    icon: <FontAwesomeIcon icon={faHeartPulse}  />,
   },
   {
-    title: 'X-Ray Record',
-    path: '/xrays',
-    icon: <FontAwesomeIcon icon={faRadiation} />,
+    title: 'Cremations',
+    path: '/cremations',
+    icon: <FontAwesomeIcon icon={faCross} />,
   },
   {
     title: 'Dental Record',
@@ -36,9 +37,14 @@ export const Items = [
     icon: <FontAwesomeIcon icon={faTooth} />,
   },
   {
-    title: 'Cremations',
-    path: '/cremations',
-    icon: <FontAwesomeIcon icon={faCross} />,
+    title: 'Drug Record',
+    path: '/drugs',
+    icon: <FontAwesomeIcon icon={faPills} />,
+  },
+  {
+    title: 'X-Ray Exposure',
+    path: '/xrays',
+    icon: <FontAwesomeIcon icon={faRadiation} />,
   },
   {
     title: 'System Information',
