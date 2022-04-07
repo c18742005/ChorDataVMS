@@ -102,15 +102,15 @@ const Anaesthetic = ({ clinic_id, staff_id }) => {
   const addToTable = async () => {
     const add_period_url = `${process.env.REACT_APP_API_END_POINT}/api/anaesthetic/period`;
 
-    // Attempt to add anaesthetic sheet to DB
+    // Attempt to add anaesthetic period to DB
     try {
       await axios.post(add_period_url, {
         id: values.anaesthetic_id,
         interval: values.interval,
         hr: values.hr,
         rr: values.rr,
-        oxygen: values.oxygen,
-        agent: values.anaesthetic,
+        oxygen: parseFloat(values.oxygen),
+        agent: parseFloat(values.anaesthetic),
         eye_pos: values.eyePos,
         reflexes: values.reflexes
       }, {
@@ -150,6 +150,19 @@ const Anaesthetic = ({ clinic_id, staff_id }) => {
         let newChartData = {name: prop, hr: parseInt(values.hr), rr: parseInt(values.rr)};
         setData([newHrColumn, newRrColumn, newOxyColumn, newAnaestheticColumn, newEyePosColumn, newReflexesColumn])
         setChartData([...chartData, newChartData]);
+      }, (error) => {
+        // Error: Check error type
+        if(error.response.status === 422) {
+          // Output validation errors to the user
+          const errors = error.response.data.errors
+
+          errors.forEach((err) => {
+            toast.error(err.msg);
+          })
+        } else {
+          // Output single error to user
+          toast.error(error.response.data);
+        }
       })
     } catch (error) {
       toast.error(error.message);

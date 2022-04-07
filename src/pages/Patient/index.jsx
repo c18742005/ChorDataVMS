@@ -63,9 +63,9 @@ const Patient = () => {
           // Success: set patient state to the patient retrieved
           const patient_data = res.data;
           setPatient(patient_data[0]);
-        }).catch(e => console.log(e.response.data));
+        }).catch(e => console.error(e.response.data));
       } catch(err) {
-        console.log(err);
+        console.error(err);
       }
     }
    
@@ -91,9 +91,9 @@ const Patient = () => {
           });
 
           setHistory(history_data);
-        }).catch(e => console.log(e.response.data));
+        }).catch(e => console.error(e.response.data));
       } catch(err) {
-        console.log(err);
+        console.error(err);
       }
     }
    

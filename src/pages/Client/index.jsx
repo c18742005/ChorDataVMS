@@ -78,7 +78,7 @@ const Client = () => {
           // Success: set client state
           const client_data = res.data;
           setClient(client_data);
-        }).catch((e) => console.log(e.response.data));
+        }).catch((e) => console.error(e.response.data));
 
         await axios.get(patients_url, {
           headers: {
@@ -87,10 +87,10 @@ const Client = () => {
           // Success: set patients state
           const patient_data = res.data;
           setPatients(patient_data);
-        }).catch((e) => console.log(e.response.data));
+        }).catch((e) => console.error(e.response.data));
 
       } catch(err) {
-        console.log(err);
+        console.error(err);
       }
     }
 
