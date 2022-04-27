@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { Box, Button, Heading, Menu, Header, Avatar } from 'grommet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBars, faUserGear } from '@fortawesome/free-solid-svg-icons';
@@ -16,6 +17,26 @@ import logo from '../../assets/logo.svg'
 */
 const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
   const navigate = useNavigate();
+
+  const [mobileView, setMobileView] = useState(false);
+
+  // Check width of screen
+  useEffect(() => {
+    window.innerWidth < 426 ? setMobileView(true) : setMobileView(false)
+  }, []);
+
+  // Check width of screen
+  useEffect(() => {
+    const handleResize = () => {
+      window.innerWidth < 426 ? setMobileView(true) : setMobileView(false)
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, []);
 
   // function to handle a user logging out of the app
   const logout = () => {
@@ -75,15 +96,17 @@ const AppBar = ( { setAuth, isAuth, menuOpen, handleMenu, user, setUser } ) => {
           direction="row" 
           onClick={() => navigate('/')} focusIndicator={false}
         >
-          <Avatar flex={false} round="none" src={logo} size="medium"/>
-          <Heading 
-            level="1" 
-            color="white" 
-            textAlign="center" 
-            margin="small"
-          >
-            ChorData
-          </Heading>
+          <Avatar flex={false} round="none" src={logo} size="medium" margin="small"/>
+          {!mobileView && (
+            <Heading 
+              level="1" 
+              color="white" 
+              textAlign="center" 
+              margin="small"
+            >
+              ChorData
+            </Heading>
+          )}
         </Box>
         { // Display menu if user is authenticated
         isAuth && (
