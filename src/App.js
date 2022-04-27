@@ -114,7 +114,7 @@ function App() {
               user={user.staff_username}
               setUser={setUser}
             />
-            <Box align="start" justify="start" direction="column" pad="medium" fill>
+            <Box align="start" justify="start" direction="column" pad="medium" overflow="auto" fill>
               <Routes>
                 <Route path="/login" element={
                   isAuthenticated ? (
