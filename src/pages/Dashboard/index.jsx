@@ -24,13 +24,13 @@ const Dashboard = () => {
 
   // Check width of screen
   useEffect(() => {
-    window.innerWidth < 769 ? setMobileView(true) : setMobileView(false)
+    window.innerWidth < 1025 ? setMobileView(true) : setMobileView(false)
   }, []);
 
   // Check width of screen
   useEffect(() => {
     const handleResize = () => {
-      window.innerWidth < 769 ? setMobileView(true) : setMobileView(false)
+      window.innerWidth < 1025 ? setMobileView(true) : setMobileView(false)
     }
 
     window.addEventListener('resize', handleResize);
